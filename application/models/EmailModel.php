@@ -59,16 +59,16 @@ class EmailModel extends CI_Model {
         <head>
             <title></title>
             <h1>
+                <img src=\"ASPA_logo.png\">
                 ASPA 2020
             </h1>
         </head>
         <body>
-            <img src=\"ASPA_logo.png\">
             <div> 
                 <h1>
+                    <img src=\"" . $TICK_IMAGE . "\">
                     Payment Successful!
                 </h1>
-                <img src=\"" . $TICK_IMAGE . "\"
             </div>
             <p>
                 Thank you for signing up to" . $EVENT_NAME . "\r\n
@@ -95,7 +95,7 @@ class EmailModel extends CI_Model {
             $mail->Host       = 'smtp.gmail.com';                    // Set the SMTP server to send through
             $mail->SMTPAuth   = true;                                   // Enable SMTP authentication
             $mail->Username   = 'uoawdcc@gmail.com';                     // SMTP username
-            $mail->Password   = 'wdcc123456';                               // SMTP password
+            $mail->Password   = 'orkyhxoabrnpqeri';                               // SMTP password
             // $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;         // Enable TLS encryption; `PHPMailer::ENCRYPTION_SMTPS` encouraged
             $mail->Port       = 587;                                    // TCP port to connect to, use 465 for `PHPMailer::ENCRYPTION_SMTPS` above
 
