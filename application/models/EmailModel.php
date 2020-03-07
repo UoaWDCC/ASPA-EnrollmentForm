@@ -71,10 +71,6 @@ class EmailModel extends CI_Model {
         </body>
         </html>";
 
-        if (mail($to,$subject,$message,$headers)) {
-            echo "Success";
-        } else {
-            echo "Failed attempt";
-        }
+        mail($to,$subject,$message,$headers);
 	}
 }
