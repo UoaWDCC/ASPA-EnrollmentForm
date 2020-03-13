@@ -244,6 +244,10 @@
   align-items: center;
 }
 
+.div-okbtn.div-submit {
+  position: static;
+}
+
 .p-ok-btn-confirm {
   margin-right: 20px;
   margin-bottom: 0px;
@@ -634,6 +638,9 @@
 }
 
 @media screen and (max-width: 991px) {
+  .div-okbtn.div-submit {
+    position: static;
+  }
   .p-ok-btn-confirm.p {
     display: none;
   }
@@ -648,6 +655,15 @@
 }
 
 @media screen and (max-width: 767px) {
+  .div-block.page2 {
+    display: none;
+  }
+  .div-block.page3 {
+    display: none;
+  }
+  .div-block.page4 {
+    display: none;
+  }
   .p.p-paymentbutton {
     font-size: 15px;
   }
