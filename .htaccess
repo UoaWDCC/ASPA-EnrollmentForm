@@ -1,0 +1,11 @@
+RewriteEngine on
+RewriteBase /
+
+# Rewrite if the file does not exists
+RewriteCond %{REQUEST_FILENAME} !-f
+
+# Rewrite only if the URI does not starts with assets
+RewriteCond %{REQUEST_URI} !^/assets
+
+# Rewrite any assets file
+RewriteRule ([^/]*).(css|js|png|jpe?g)$ assets/$1.$2 [L]
