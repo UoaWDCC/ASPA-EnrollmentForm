@@ -1,3 +1,4 @@
+<IfModule mod_rewrite.c>
 RewriteEngine on
 RewriteBase /
 
@@ -9,3 +10,4 @@ RewriteCond %{REQUEST_URI} !^/assets
 
 # Rewrite any assets file
 RewriteRule ([^/]*).(css|js|png|jpe?g)$ assets/$1.$2 [L]
+</IfModule>
