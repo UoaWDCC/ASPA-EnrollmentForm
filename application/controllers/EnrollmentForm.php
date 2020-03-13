@@ -11,8 +11,9 @@ class EnrollmentForm extends CI_Controller {
 
 	public function index()
 	{
-		$this->load->view('EnrollmentForm');
+        $this->load->model('Gsheet_Interface_Model');
+        $this->Gsheet_Interface_Model->google_test();
+		// $this->load->view('EnrollmentForm');
 	}
 
-	
 }
