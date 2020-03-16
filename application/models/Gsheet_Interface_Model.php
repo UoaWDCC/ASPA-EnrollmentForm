@@ -1,10 +1,13 @@
-<? php
-
+<?php
+defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Gsheet_Interface_Model extends CI_Model {
 
     function getCurrentWorkingDir() {
-        $dir = shell_exec('pwd');
+        // For Windows 
+        $dir = shell_exec('echo %cd%');
+        // For MacOS / Linux / CentOS server
+        // $dir = shell_exec('pwd');
         $stripped = trim($dir);
         return $stripped;
     }
@@ -16,7 +19,7 @@ class Gsheet_Interface_Model extends CI_Model {
         $client->setApplicationName('Google Sheets and PHP');
         $client->setScopes([\Google_Service_Sheets::SPREADSHEETS]);
         $client->setAccessType('offline');
-        $client->setAuthConfig(__DIR__ . '/credentials.json');
+        $client->setAuthConfig($this->getCurrentWorkingDir() . '/credentials.json');
 
         $service = new Google_Service_Sheets($client);
         $spreadsheetId = '1NJ3gFsf1qP_-5NF2XyistqUzkug99S656I30oa8-iLU';

@@ -12,7 +12,8 @@
 	},
 	"require": {
 		"php": ">=5.3.7",
-		"google/apiclient": "^2.0"
+		"google/apiclient": "^2.0",
+		"guzzlehttp/guzzle": "~5.3.3"
 	},
 	"suggest": {
 		"paragonie/random_compat": "Provides better randomness in PHP 5.x"
@@ -22,3 +23,5 @@
 		"phpunit/phpunit": "4.* || 5.*"
 	}
 }
+
+
