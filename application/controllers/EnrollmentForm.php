@@ -14,5 +14,10 @@ class EnrollmentForm extends CI_Controller {
 		$this->load->view('EnrollmentForm');
 	}
 
-	
+	public function sheetsapi_test()
+	{
+        $this->load->model('Gsheet_Interface_Model');
+        $this->Gsheet_Interface_Model->google_test();
+	}
+
 }
