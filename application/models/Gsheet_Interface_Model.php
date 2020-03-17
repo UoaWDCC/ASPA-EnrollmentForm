@@ -38,4 +38,9 @@ class Gsheet_Interface_Model extends CI_Model {
             }
         }
     }
+
+
+    function test_push_for_protected_branch() {
+        echo "This is only for testing";
+    }
 }
