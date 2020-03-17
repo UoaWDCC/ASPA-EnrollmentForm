@@ -7,7 +7,10 @@ class Gsheet_Interface_Model extends CI_Model {
     private $service = FALSE;
     private $spreadsheetId = FALSE;
 
+<<<<<<< HEAD
     // Setting up current client
+=======
+>>>>>>> [ASPA-008 & ASPA-011] SheetsAPI streamline and tidy-up
     function __construct()
     {
         $this->client = $this->client_setup();
@@ -15,7 +18,10 @@ class Gsheet_Interface_Model extends CI_Model {
         $this->spreadsheetId = $this->client[1];
     }
 
+<<<<<<< HEAD
     // Setting up client function
+=======
+>>>>>>> [ASPA-008 & ASPA-011] SheetsAPI streamline and tidy-up
     function client_setup()
     {
         require $this->getCurrentWorkingDir() . '/vendor/autoload.php';
