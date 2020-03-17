@@ -17,7 +17,11 @@ class EnrollmentForm extends CI_Controller {
 	public function sheetsapi_test()
 	{
         $this->load->model('Gsheet_Interface_Model');
-        $this->Gsheet_Interface_Model->google_test();
-	}
 
+        // Prints any value from spreadsheet
+        echo $this->Gsheet_Interface_Model->get_from_sheet("A", 1);
+
+        // Records a user to spreadsheet
+        $this->Gsheet_Interface_Model->record_to_sheet('testemail@gmail.com', 'Test Person', '0405402033', 'UPI ID', 'CASH', TRUE);
+	}
 }
