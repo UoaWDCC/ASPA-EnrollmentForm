@@ -60,10 +60,7 @@ class Gsheet_Interface_Model extends CI_Model {
     // record_to_sheet(email_address, full_name, uoa_id, uoa_upi, payment_type=CASH, BANK, ONLINE, paymentmade=TRUE/FALSE)
     function record_to_sheet($email, $fullname, $paymenttype, $paymentmade)
     {
-        // Finding the size of the gsheet
-        $range = 'Sheet1!A2:A';
-        $response = $this->service->spreadsheets_values->get($this->spreadsheetId, $range);
-        $size = sizeof($response->getValues());
+        $size = $this->get_sheet_size();
         $newrange = 'Sheet1!A' . ($size + 2);
 
         // Creating an array for record
@@ -113,11 +110,19 @@ class Gsheet_Interface_Model extends CI_Model {
         }
     }
 
-    // Get value from sheet, e.g get_from_sheet('A', 1).
-    // NB: row can be string or text input
-    function get_from_sheet($column, $row)
+    // Returns size of gsheet as a numerical value
+    function get_sheet_size()
     {
-        $range = 'Sheet1!' . $column . $row . ":" . $column . $row;
+        $range = 'Sheet1!A2:A';
+        $response = $this->service->spreadsheets_values->get($this->spreadsheetId, $range);
+        return sizeof($response->getValues());
+    }
+
+    // Get value from sheet, e.g get_from_sheet('A1', 'B5').
+    // NB: row can be string or text input
+    function get_from_sheet($leftcorner, $rightcorner)
+    {
+        $range = 'Sheet1!' . $leftcorner . ":" . $rightcorner;
 
         $response = $this->service->spreadsheets_values->get($this->spreadsheetId, $range);
 
@@ -126,7 +131,10 @@ class Gsheet_Interface_Model extends CI_Model {
         if (empty($values)) {
             return "ERROR: No data!";
         } else {
-            return $values[0][0];
+
+            // Values returned as an array...
+            // e.g input: ('A1', 'B3'), output: [[A1, A2, A3], [B1, B2, B3]]
+            return $values;
         }
     }
 }
