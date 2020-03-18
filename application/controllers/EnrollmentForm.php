@@ -22,6 +22,6 @@ class EnrollmentForm extends CI_Controller {
         echo $this->Gsheet_Interface_Model->get_from_sheet("A", 1);
 
         // Records a user to spreadsheet
-        $this->Gsheet_Interface_Model->record_to_sheet('testemail@gmail.com', 'Test Person', '0405402033', 'UPI ID', 'CASH', TRUE);
+        $this->Gsheet_Interface_Model->record_to_sheet('testemail@gmail.com', 'Test Person', 'CASH', TRUE);
 	}
 }

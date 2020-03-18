@@ -58,7 +58,7 @@ class Gsheet_Interface_Model extends CI_Model {
 
     // Recording a new user to the sheet, with format
     // record_to_sheet(email_address, full_name, uoa_id, uoa_upi, payment_type=CASH, BANK, ONLINE, paymentmade=TRUE/FALSE)
-    function record_to_sheet($email, $fullname, $uoaID, $uoaupi, $paymenttype, $paymentmade)
+    function record_to_sheet($email, $fullname, $paymenttype, $paymentmade)
     {
         // Finding the size of the gsheet
         $range = 'Sheet1!A2:A';
@@ -68,7 +68,7 @@ class Gsheet_Interface_Model extends CI_Model {
 
         // Creating an array for record
         $timestamp = strval(date("d/m/Y h:i:s"));
-        $values = [[$timestamp, $email, $fullname, $uoaID, $uoaupi, $paymenttype]];
+        $values = [[$timestamp, $email, $fullname, '','', $paymenttype]];
         $body = new Google_Service_Sheets_ValueRange(['values' => $values]);
 
         // Setting input option to RAW text format (i.e no format parsing)
