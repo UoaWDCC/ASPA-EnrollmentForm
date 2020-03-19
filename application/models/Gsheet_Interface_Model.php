@@ -27,9 +27,8 @@ class Gsheet_Interface_Model extends CI_Model {
         $client->setAuthConfig($this->getCurrentWorkingDir() . '/credentials.json');
 
         $service = new Google_Service_Sheets($client);
-        $spreadsheetId = '1NJ3gFsf1qP_-5NF2XyistqUzkug99S656I30oa8-iLU';
 
-        return [$service, $spreadsheetId];
+        return [$service, SPREADSHEETID];
     }
 
     // Switches any numerical value (between 1 to 26)
