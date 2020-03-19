@@ -9,6 +9,12 @@ let ok2 = document.getElementById("ok2"); // get ok button from page 2
 let ok3 = document.getElementById("ok3"); // get ok button from page 3
 let buttonSubmit = document.getElementById("submit"); // get submit button from page 4
 
+// get name and email inputs
+let inputName = document.getElementById("field");
+console.log("inputName", inputName);
+let inputEmail = document.getElementById("field-2");
+console.log("inputEmail", inputEmail);
+
 // Enter key (keycode 13) triggers the click event of the appropriate buttons to go to next page.
 window.addEventListener("keypress", function(e) {
 	if (e.keyCode === 13) {
@@ -46,6 +52,15 @@ function nextPage() {
 			page4.style.display = "none";
 			break;
 		case 2:
+			console.log("Input name value", inputName.value);
+			if (inputName.value.length === 0) {
+				console.log("Name has no value", inputName);
+				return;
+			}
+			if (inputEmail.value.length === 0) {
+				console.log("Email has no value", inputEmail);
+				return;
+			}
 			page1.style.display = "none";
 			page2.style.display = "none";
 			page3.style.display = "flex";
