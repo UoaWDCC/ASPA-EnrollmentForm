@@ -9,10 +9,20 @@ let ok2 = document.getElementById("ok2"); // get ok button from page 2
 let ok3 = document.getElementById("ok3"); // get ok button from page 3
 let buttonSubmit = document.getElementById("submit"); // get submit button from page 4
 
-// Enter key (keycode 13) goes to the next page.
+// Enter key (keycode 13) triggers the click event of the appropriate buttons to go to next page.
 window.addEventListener("keypress", function(e) {
 	if (e.keyCode === 13) {
-		nextPage();
+		switch (findActivePage()) {
+			case 1:
+				buttonReg.click();
+				break;
+			case 2:
+				ok2.click();
+				break;
+			case 3:
+				ok3.click();
+				break;
+		}
 	}
 });
 
@@ -97,3 +107,21 @@ tick.style.display = "none";
 exclamation.style.display = "none";
 loading.style.display = "none";
 errorMsgs[0].style.display = "none";
+
+// // get the button elements (they are divs)
+// let payCash = document.getElementById("w-node-2922c9864b4c-724d7631");
+// let payTransfer = document.getElementById("w-node-b3c547ea4b4f-724d7631");
+// let payWeChat = document.getElementById("w-node-79804cf717f6-724d7631");
+// let payAli = document.getElementById("w-node-b10b15011cf4-724d7631");
+// let payCard = document.getElementById("w-node-ccd45ade939b-724d7631");
+// let payPoli = document.getElementById("w-node-1287f971e519-724d7631");
+
+// // find the button being used for payment
+// let buttonInUse;
+// [payCash, payTransfer, payWeChat, payAli, payCard, payPoli].forEach(button, index => {
+// 	button.addEventListener("click", function() {
+// 		console.log(button);
+// 		button.classList.add()
+// 		buttonInUse = index;
+// 	});
+// });
