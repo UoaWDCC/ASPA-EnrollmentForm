@@ -7,6 +7,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
   <meta charset="utf-8">
   <title>ASPA</title>
   <meta content="width=device-width, initial-scale=1" name="viewport">
+  <link href="assets/css/enrollmentForm.css" rel="stylesheet">
   <link href="assets/css/normalize.css" rel="stylesheet" type="text/css">
   <link href="assets/css/webflow.css" rel="stylesheet" type="text/css">
   <link href="assets/css/aspa-ddafc5.webflow.css" rel="stylesheet" type="text/css">
@@ -27,7 +28,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             <div class="div-main-page-right">
               <h1 class="heading">Welcome</h1>
               <h1 class="heading-2">ASPA 2020 Welcome Event</h1>
-              <div class="div-main-page"><a data-w-id="dfbe5add-65ea-95a7-6380-331c1db905e2" href="#" class="button w-button">Register</a>
+              <div class="div-main-page"><a id="register" data-w-id="dfbe5add-65ea-95a7-6380-331c1db905e2" href="#" class="button w-button">Register</a>
                 <p class="paragraph-pressenter">press <strong class="bold-enter">Enter ↵</strong></p>
               </div>
             </div>
@@ -37,17 +38,17 @@ defined('BASEPATH') OR exit('No direct script access allowed');
               <p class="p">Bring your cue skills, friends, and pool rivals to ASPA&#x27;s first event for 2019!<br><br>Limited availability so sign up to confirm your spot!<br>‍<br>(this form will close upon reaching capacity so if you&#x27;re reading this its not too late :D)<br>‍<br>When: Thursday 14th March 6:30pm - 8:00pm<br>‍<br>Where: Orange Pool Club (Corner of Liverpool St and City Rd)<br>‍<br>Make sure you are.<br>‍</p>
             </div>
             <div class="div-okbtn">
-              <div class="div-placeholder ok-btn-spaceholder"></div><a data-w-id="9bf4b69b-3e76-a6f8-a909-2eb2c799c775" href="#" class="button btn-ok w-button">OK ✓</a>
+              <div class="div-placeholder ok-btn-spaceholder"></div><a id="ok2" data-w-id="9bf4b69b-3e76-a6f8-a909-2eb2c799c775" href="#" class="button btn-ok w-button">OK ✓</a>
               <p class="p-ok-btn-confirm p">Press<strong> Enter ↵</strong></p>
             </div>
           </div>
           <div class="div-block page3">
             <div class="div-name-email">
               <div class="div div-name">
-                <p class="p p-firstname">Your first and last name:</p><input type="text" class="entry w-input" maxlength="256" name="field" data-name="Field" placeholder="Enter your first name" id="field" required=""></div>
+                <p class="p p-firstname">Your first and last name: <span class="asterisk">*</span></p><input type="text" class="entry w-input" maxlength="256" name="field" data-name="Field" placeholder="Enter your first name" id="field" required=""></div>
               <div class="div div-email">
-                <p class="p p-lastname">Email address: </p><input type="text" class="entry entry-lastname w-input" maxlength="256" name="field-2" data-name="Field 2" placeholder="Enter your last name" id="field-2" required="">
-                <div class="div-block-4"><img src="assets/images/green-tick.png" width="40" alt="" class="image-3"><img src="assets/images/exclamation.png" width="30" srcset="assets/images/exclamation-p-500.png 500w, images/exclamation.png 777w" sizes="(max-width: 767px) 100vw, 30px" alt="" class="image"><img src="assets/images/Spinner-1s-200px-2.svg" width="50" alt="" class="image-2"></div>
+                <p class="p p-lastname">Email address: <span class="asterisk">*</span></p><input type="text" class="entry entry-lastname w-input" maxlength="256" name="field-2" data-name="Field 2" placeholder="Enter your last name" id="field-2" required="">
+                <div class="div-block-4"><img id="tick" src="assets/images/green-tick.png" width="40" alt="" class="image-3"><img id="exclamation" src="assets/images/exclamation.png" width="30" srcset="assets/images/exclamation-p-500.png 500w, images/exclamation.png 777w" sizes="(max-width: 767px) 100vw, 30px" alt="" class="image"><img id="loading" src="assets/images/Spinner-1s-200px-2.svg" width="50" alt="" class="image-2"></div>
               </div>
               <div class="div div-errormsg">
                 <p class="p p-errormessage">Unrecognized email, please use the email you signed up to ASPA with.<br></p>
@@ -55,7 +56,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
               </div>
             </div>
             <div class="div-okbtn">
-              <div class="div-placeholder ok-btn-spaceholder"></div><a data-w-id="ca7b1509-24a9-effc-9e1e-24dfb568363f" href="#" class="button btn-ok w-button">OK ✓</a>
+              <div class="div-placeholder ok-btn-spaceholder"></div><a id="ok3" data-w-id="ca7b1509-24a9-effc-9e1e-24dfb568363f" href="#" class="button btn-ok w-button">OK ✓</a>
               <p class="p-ok-btn-confirm p">Press<strong> Enter ↵</strong></p>
             </div>
           </div>
@@ -94,7 +95,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
               </div>
             </div>
             <div class="div-okbtn div-submit">
-              <div class="div-placeholder ok-btn-spaceholder btn-submit"></div><a data-w-id="e789d92c-5d47-387a-12e6-10a0e389e4ba" href="#" class="button btn-submit w-button">SUBMIT</a>
+              <div class="div-placeholder ok-btn-spaceholder btn-submit"></div><a id="submit" data-w-id="e789d92c-5d47-387a-12e6-10a0e389e4ba" href="#" class="button btn-submit w-button">SUBMIT</a>
               <p class="p-ok-btn-confirm p">Press<strong> Enter ↵</strong></p>
             </div>
           </div>
@@ -110,6 +111,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
   </div>
   <script src="https://d3e54v103j8qbb.cloudfront.net/js/jquery-3.4.1.min.220afd743d.js" type="text/javascript" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
   <script src="assets/js/webflow.js" type="text/javascript"></script>
+  <script src="assets/js/enrollmentForm.js"></script>
   <!-- [if lte IE 9]><script src="https://cdnjs.cloudflare.com/ajax/libs/placeholders/3.0.2/placeholders.min.js"></script><![endif] -->
 </body>
 </html>
