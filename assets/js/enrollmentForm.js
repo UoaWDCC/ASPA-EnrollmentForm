@@ -4,6 +4,11 @@ let page2 = document.getElementsByClassName("page2")[0];
 let page3 = document.getElementsByClassName("page3")[0];
 let page4 = document.getElementsByClassName("page4")[0];
 
+let buttonReg = document.getElementById("register"); // get register button from page 1
+let ok2 = document.getElementById("ok2"); // get ok button from page 2
+let ok3 = document.getElementById("ok3"); // get ok button from page 3
+let buttonSubmit = document.getElementById("submit"); // get submit button from page 4
+
 // Enter key (keycode 13) goes to the next page.
 window.addEventListener("keypress", function(e) {
 	if (e.keyCode === 13) {
@@ -11,38 +16,15 @@ window.addEventListener("keypress", function(e) {
 	}
 });
 
-let buttonReg = document.getElementById("register"); // get register button from page 1
-let ok2 = document.getElementById("ok2"); // get ok button from page 2
-let ok3 = document.getElementById("ok3"); // get ok button from page 3
-let buttonSubmit = document.getElementById("submit"); // get submit button from page 4
-
 // initial state
 page2.style.display = "none";
 page3.style.display = "none";
 page4.style.display = "none";
 
 // each button switches to the next page
-buttonReg.onClick = function() {
-	page1.style.display = "none";
-	page2.style.display = "flex";
-	page3.style.display = "none";
-	page4.style.display = "none";
-};
-ok2.onClick = function() {
-	page1.style.display = "none";
-	page2.style.display = "none";
-	page3.style.display = "flex";
-	page4.style.display = "none";
-};
-ok3.onClick = function() {
-	page1.style.display = "none";
-	page2.style.display = "none";
-	page3.style.display = "none";
-	page4.style.display = "flex";
-};
-buttonSubmit.onClick = function() {
-	// redirect to Green/Grey tick page
-};
+[buttonReg, ok2, ok3].forEach(button => {
+	button.onClick = nextPage;
+});
 
 // go to the next page of the membership system
 function nextPage() {
@@ -68,6 +50,31 @@ function nextPage() {
 	}
 }
 
+// go to the previous page of the membership system
+function previousPage() {
+	switch (findActivePage()) {
+		case 2:
+			page1.style.display = "flex";
+			page2.style.display = "none";
+			page3.style.display = "none";
+			page4.style.display = "none";
+			break;
+		case 3:
+			page1.style.display = "none";
+			page2.style.display = "flex";
+			page3.style.display = "none";
+			page4.style.display = "none";
+			break;
+		case 4:
+			page1.style.display = "none";
+			page2.style.display = "none";
+			page3.style.display = "flex";
+			page4.style.display = "none";
+			break;
+	}
+}
+
+// finds the page that is currently active
 function findActivePage() {
 	if (isActive(page1)) return 1;
 	else if (isActive(page2)) return 2;
