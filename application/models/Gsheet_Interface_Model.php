@@ -82,9 +82,9 @@ class Gsheet_Interface_Model extends CI_Model {
             // Highlight format
             $format = [
                 "backgroundColor" => [
-                    "red" => 1.0,
-                    "green" => 1.0,
-                    "blue" => 0.0
+                    "red" => 0.7,
+                    "green" => 0.9,
+                    "blue" => 0.7
                 ]
             ];
 
