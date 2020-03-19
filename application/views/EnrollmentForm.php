@@ -45,9 +45,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
           <div class="div-block page3">
             <div class="div-name-email">
               <div class="div div-name">
-                <p class="p p-firstname">Your first and last name: <span class="asterisk">*</span></p><input type="text" class="entry w-input" maxlength="256" name="field" data-name="Field" placeholder="Enter your first name" id="field" required=""></div>
+                <p class="p p-firstname">Your first and last name: <span class="asterisk">*</span></p><input type="text" class="entry w-input" maxlength="256" name="field" data-name="Field" placeholder="Enter your first and last name" id="field" required=""></div>
               <div class="div div-email">
-                <p class="p p-lastname">Email address: <span class="asterisk">*</span></p><input type="text" class="entry entry-lastname w-input" maxlength="256" name="field-2" data-name="Field 2" placeholder="Enter your last name" id="field-2" required="">
+                <p class="p p-lastname">Email address: <span class="asterisk">*</span></p><input type="email" class="entry entry-lastname w-input" maxlength="256" name="field-2" data-name="Field 2" placeholder="Enter your email" id="field-2" required="">
                 <div class="div-block-4"><img id="tick" src="assets/images/green-tick.png" width="40" alt="" class="image-3"><img id="exclamation" src="assets/images/exclamation.png" width="30" srcset="assets/images/exclamation-p-500.png 500w, images/exclamation.png 777w" sizes="(max-width: 767px) 100vw, 30px" alt="" class="image"><img id="loading" src="assets/images/Spinner-1s-200px-2.svg" width="50" alt="" class="image-2"></div>
               </div>
               <div class="div div-errormsg">
