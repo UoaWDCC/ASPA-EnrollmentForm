@@ -40,10 +40,13 @@ buttonSubmit.onClick = function() {
 	// redirect to Green/Grey tick page
 };
 
-// email validation messages initially is invisible
+// email validation and error message icons initially are invisible
 let tick = document.getElementById("tick");
 let exclamation = document.getElementById("exclamation");
 let loading = document.getElementById("loading");
+let errorMsgs = document.getElementsByClassName("div-errormsg");
 tick.style.display = "none";
 exclamation.style.display = "none";
 loading.style.display = "none";
+errorMsgs[0].style.display = "none";
+errorMsgs[1].style.display = "none";
