@@ -29,20 +29,21 @@ foreach ($events->autoPagingIterator() as $event) {
   //
   $session = $event->data->object;
 
-  // if ($session->id == sessionID) {
-  //   $hasPaid = True;
-
-  //   $email = $session->customer_email;
+  if ($session->id == $session_id) {
+      
+     $hasPaid = True;
+     $email = $session->customer_email;
     
-  // //   // Fulfill the purchase...
-  // //   handle_checkout_session($session);
+   //   // Fulfill the purchase...
+   //   handle_checkout_session($session);
 
      echo "has paid";
-  //   break;
-  // }
-  // else {
-  //   $hasPaid = false;
-  // }
+     break;
+   }
+   else {
+     $hasPaid = false;
+     echo "error";
+   }
 
 }
 

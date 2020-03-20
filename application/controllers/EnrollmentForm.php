@@ -47,6 +47,7 @@ class EnrollmentForm extends ASPA_Controller
 		}	
 	}
 
+        $this->load->model('Gsheet_Interface_Model');
     }
     
     public function makeStripePayment() {
