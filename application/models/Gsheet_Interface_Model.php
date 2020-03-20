@@ -53,12 +53,46 @@ class Gsheet_Interface_Model extends CI_Model {
         return $stripped;
     }
 
+    // Function to highlight a row a specific colour
+    // IN: row_num (int), colour ([red, green, blue]) where values between 0 and 1
+    function highlight_row($row_num, $colour) {
+
+        $format = [
+            "backgroundColor" => [
+                "red" => $colour[0],
+                "green" => $colour[1],
+                "blue" => $colour[2]
+            ]
+        ];
+
+        $formatRange = [
+            "startRowIndex" => $row_num - 1,
+            "endRowIndex" => $row_num,
+        ];
+
+        // Request body
+        $request = new Google_Service_Sheets_BatchUpdateSpreadsheetRequest([
+            'requests' => [
+                new Google_Service_Sheets_Request([
+                    "repeatCell" => [
+                        "fields" => "userEnteredFormat.backgroundColor",
+                        "range" => $formatRange,
+                        "cell" => [
+                            "userEnteredFormat" => $format
+        ]]])]]);
+
+        // Sends request
+        $response = $this->service->spreadsheets->batchUpdate($this->spreadsheetId, $request);
+
+        return TRUE;
+    }
+
     // Recording a new user to the sheet, with format
     // record_to_sheet(email_address, full_name, uoa_id, uoa_upi, payment_type=CASH, BANK, ONLINE, paymentmade=TRUE/FALSE)
     function record_to_sheet($email, $fullname, $paymenttype, $paymentmade)
     {
-        $size = $this->get_sheet_size();
-        $newrange = $this->sheetName . '!A' . ($size + 2);
+        $size = $this->get_sheet_size() + 2;
+        $newrange = $this->sheetName . '!A' . $size;
 
         // Creating an array for record
         $timestamp = strval(date("d/m/Y h:i:s"));
@@ -74,34 +108,7 @@ class Gsheet_Interface_Model extends CI_Model {
 
         // Checks if payment made (TRUE/FALSE)
         if ($paymentmade) {
-
-            // Highlight format
-            $format = [
-                "backgroundColor" => [
-                    "red" => 0.69803923,
-                    "green" => 0.8980392,
-                    "blue" => 0.69803923
-                ]
-            ];
-
-            $formatRange = [
-                "startRowIndex" => $size + 1,
-                "endRowIndex" => $size + 2,
-            ];
-
-            // Request body
-            $request = new Google_Service_Sheets_BatchUpdateSpreadsheetRequest([
-                'requests' => [
-                    new Google_Service_Sheets_Request([
-                        "repeatCell" => [
-                            "fields" => "userEnteredFormat.backgroundColor",
-                            "range" => $formatRange,
-                            "cell" => [
-                                "userEnteredFormat" => $format
-            ]]])]]);
-
-            // Sends request
-            $response = $this->service->spreadsheets->batchUpdate($this->spreadsheetId, $request);
+            $this->highlight_row($size, [0.69803923, 0.8980392, 0.69803923]);
         }
     }
 
@@ -114,8 +121,7 @@ class Gsheet_Interface_Model extends CI_Model {
     }
 
     // Get colour of cell from sheet
-    // IN:  $cell = 'A1'
-    // OUT: 'ff0000'
+    // IN:  $cell = 'A1'            OUT: 'ff0000'
     function get_cell_colour($cell)
     {
         $range = $this->sheetName . "!" . $cell;
@@ -140,8 +146,7 @@ class Gsheet_Interface_Model extends CI_Model {
         return $hex_string;
     }
 
-    // Get value from sheet, e.g get_from_sheet('A1', 'B5').
-    // NB: row can be string or text input
+    // Get value from sheet, e.g get_from_sheet('A1', 'B5')
     function get_from_sheet($leftcorner, $rightcorner)
     {
         $range = $this->sheetName . '!' . $leftcorner . ":" . $rightcorner;
@@ -151,7 +156,7 @@ class Gsheet_Interface_Model extends CI_Model {
         // Display value received for testing and verification purposes – comment out for final build
         $values = $response->getValues();
         if (empty($values)) {
-            return FALSE;
+            return NULL;
         } else {
 
             // Values returned as an array...

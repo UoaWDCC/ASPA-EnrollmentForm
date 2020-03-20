@@ -19,7 +19,7 @@ class EnrollmentForm extends CI_Controller {
         $this->load->model('Gsheet_Interface_Model');
 
         // // Records a user to spreadsheet
-        // $this->Gsheet_Interface_Model->record_to_sheet('testemail@gmail.com', 'Test Person', 'CASH', TRUE);
+        // $this->Gsheet_Interface_Model->record_to_sheet('testemail@gmail.com', 'Test Person', 'CASH', FALSE);
 
 
         // // Example read request
@@ -35,6 +35,9 @@ class EnrollmentForm extends CI_Controller {
         //     }
         // }
         // echo $this->Gsheet_Interface_Model->get_sheet_size();
+
+        // // Highlighting a test row
+        // $this->Gsheet_Interface_Model->highlight_row(4, [0.69803923, 0.8980392, 0.69803923]);
 
 
         // // Get colour of cell in hex, returns example like 'ffe100'
