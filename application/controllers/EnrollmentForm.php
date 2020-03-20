@@ -21,7 +21,20 @@ class EnrollmentForm extends ASPA_Controller
 
         // Test out functions here
 
-	}
+    }
+    
+    public function makeStripePayment() {
+        
+        // $this->load->('stripe');
+
+    }
+
+    public function LoadPaymentSucessful() {
+        
+        $data['session_id'] = $this->input->get('session_id');
+        $this->load->view('redir.php',$data);
+        
+    }
 }
 
 /* End of file EnrollmentForm.php */
