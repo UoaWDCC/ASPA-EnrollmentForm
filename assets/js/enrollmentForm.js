@@ -44,10 +44,19 @@ page3.style.display = "none";
 page4.style.display = "none";
 
 // validation icons/error message on page 3
-tickEmail.style.display = "none";
-exclamationEmail.style.display = "none";
+// tickEmail.style.display = "none";
+// exclamationEmail.style.display = "none";
 loading.style.display = "none";
-errorMsgs[0].style.display = "none";
+// errorMsgs[0].style.display = "none";
+exclamationEmail.style.visibility = "hidden";
+exclamationEmail.style.opacity = "0";
+exclamationEmail.style.transition = "visibility 0s, opacity 0.2s linear";
+tickEmail.style.visibility = "hidden";
+tickEmail.style.opacity = "0";
+tickEmail.style.transition = "visibility 0s, opacity 0.2s linear";
+errorMsgs[0].style.visibility = "hidden";
+errorMsgs[0].style.opacity = "0";
+errorMsgs[0].style.transition = "visibility 0s, opacity 0.2s linear";
 
 // hide Submit and Proceed Payment buttons on page 4
 submit.style.display = "none";
@@ -59,7 +68,6 @@ proceedPayment.style.display = "none";
 
 // go to the next page of the membership system
 function nextPage() {
-	console.log("Active page", findActivePage());
 	switch (findActivePage()) {
 		case 1:
 			page1.style.display = "none";
@@ -84,7 +92,6 @@ function nextPage() {
 
 // go to the previous page of the membership system
 function previousPage() {
-	console.log("Active page", findActivePage());
 	switch (findActivePage()) {
 		case 2:
 			page1.style.display = "flex";
@@ -93,6 +100,7 @@ function previousPage() {
 			page4.style.display = "none";
 			break;
 		case 3:
+			// page2.classList.add("page-transition");
 			page2.style.opacity = "1";
 			page2.style.transform = "";
 			page1.style.display = "none";
@@ -130,30 +138,38 @@ window.addEventListener("keypress", function(e) {
 	}
 });
 
+// event listener that updates every keypress in the input email to continuously validate the input
+inputEmail.addEventListener("keypress", function(e) {
+	if (validateEmail(e.target.value)) {
+		exclamationEmail.style.visibility = "hidden";
+		exclamationEmail.style.opacity = "0";
+
+		errorMsgs[0].style.visibility = "hidden";
+		errorMsgs[0].style.opacity = "0";
+
+		inputEmail.style.border = "1px solid #00A22C";
+
+		tickEmail.style.visibility = "visible";
+		tickEmail.style.opacity = "1";
+	}
+});
+
 // name/email page (page 3) OK button onclick name and email validation
 ok3.onclick = function() {
-	if (inputName.value.length === 0) {
-		console.log("Name has no value", inputName);
+	if (inputName.value.trim().length === 0) {
+		inputName.style.border = "1px solid red";
 		return;
-	}
-	if (inputEmail.value.length === 0) {
-		console.log("Email has no value", inputEmail);
-		tickEmail.style.display = "none";
-		exclamationEmail.style.display = "block";
-		errorMsgs[0].style.display = "block";
-		return;
+	} else {
+		inputName.style.border = "1px solid #00A22C";
 	}
 	if (!validateEmail(inputEmail.value)) {
-		console.log("Email is not valid!", inputEmail);
-		tickEmail.style.display = "none";
-		exclamationEmail.style.display = "block";
-		errorMsgs[0].style.display = "block";
+		exclamationEmail.style.visibility = "visible";
+		errorMsgs[0].style.visibility = "visible";
+		exclamationEmail.style.opacity = "1";
+		errorMsgs[0].style.opacity = "1";
+		inputEmail.style.border = "1px solid red";
 		return;
 	}
-	tickEmail.style.display = "block";
-	exclamationEmail.style.display = "none";
-	loading.style.display = "none";
-	errorMsgs[0].style.display = "none";
 	nextPage();
 };
 
