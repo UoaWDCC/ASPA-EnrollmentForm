@@ -44,20 +44,35 @@ class EnrollmentForm extends CI_Controller {
         // echo $this->Gsheet_Interface_Model->get_cell_colour('A21');
 	}
 
-    public function test_email_verify()
-    {
-        $this->load->model('Verification');
-        $testEmail = "startofsheet@aucklanduni.ac.nz";
-        // $testEmail = "startplustwo@aucklanduni.ac.nz";
-        // $testEmail = "startplustwo@aucklanduni.ac.nz";
-        echo "test email is: " . $testEmail . "<br>";
+	//this exists purely for testing purposes
+	public function test_email_verify(){
 
-        if ($this->Verification->correct_email_format($testEmail)){
-            echo "is a correct email address.";
-        } else {
-            echo "is NOT a correct email address.";
-        }
-        $placeholder = $this->Verification->is_email_on_sheet($testEmail);
+		$this->load->model('Verification');
 
-    }
+		// $testEmail = "startofsheet@aucklanduni.ac.nz";
+		// $testEmail = "b3@gmail.com";
+		// $testEmail = "b4@gmail.com";
+		$testEmail = "b5@gmail.com";
+		// $testEmail = "doesNotExist@gmail.com";
+		// $testEmail = "wrongFormatEmail.com";
+		// $testEmail = "%^&%*&illegalCharButRightFormat@gmail.com";
+
+		echo "test email is: " . $testEmail . "<br><br>";
+
+		if ($this->Verification->correct_email_format($testEmail)){
+			echo "this is a correctly formatted email address. <br><br>";
+		} else {
+			echo "this is NOT a correctly formatted email address. <br><br>";
+		}
+
+		$placeholder = $this->Verification->is_email_on_sheet($testEmail);
+
+		if ($placeholder){
+			echo "EMAIL OWNER IS A MEMBER <br>";
+		} else {
+			echo "EMAIL OWNER IS NOT A MEMBER <br>";
+		}
+	}
+
+
 }
