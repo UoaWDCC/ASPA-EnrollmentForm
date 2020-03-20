@@ -44,10 +44,7 @@ page3.style.display = "none";
 page4.style.display = "none";
 
 // validation icons/error message on page 3
-// tickEmail.style.display = "none";
-// exclamationEmail.style.display = "none";
 loading.style.display = "none";
-// errorMsgs[0].style.display = "none";
 exclamationEmail.style.visibility = "hidden";
 exclamationEmail.style.opacity = "0";
 exclamationEmail.style.transition = "visibility 0s, opacity 0.2s linear";
@@ -76,12 +73,16 @@ function nextPage() {
 			page4.style.display = "none";
 			break;
 		case 2:
+			page2.classList.remove("page2-appear");
+			page3.classList.add("page3-appear-only-fade");
 			page1.style.display = "none";
 			page2.style.display = "none";
 			page3.style.display = "flex";
 			page4.style.display = "none";
 			break;
 		case 3:
+			page3.classList.remove("page3-appear");
+			page4.classList.add("page4-appear-only-fade");
 			page1.style.display = "none";
 			page2.style.display = "none";
 			page3.style.display = "none";
@@ -93,22 +94,15 @@ function nextPage() {
 // go to the previous page of the membership system
 function previousPage() {
 	switch (findActivePage()) {
-		case 2:
-			page1.style.display = "flex";
-			page2.style.display = "none";
-			page3.style.display = "none";
-			page4.style.display = "none";
-			break;
 		case 3:
-			// page2.classList.add("page-transition");
-			page2.style.opacity = "1";
-			page2.style.transform = "";
+			page2.classList.add("page2-appear");
 			page1.style.display = "none";
 			page2.style.display = "flex";
 			page3.style.display = "none";
 			page4.style.display = "none";
 			break;
 		case 4:
+			page3.classList.add("page3-appear");
 			page1.style.display = "none";
 			page2.style.display = "none";
 			page3.style.display = "flex";
@@ -143,16 +137,17 @@ inputEmail.addEventListener("keypress", function(e) {
 	if (validateEmail(e.target.value)) {
 		exclamationEmail.style.visibility = "hidden";
 		exclamationEmail.style.opacity = "0";
-
 		errorMsgs[0].style.visibility = "hidden";
 		errorMsgs[0].style.opacity = "0";
-
 		inputEmail.style.border = "1px solid #00A22C";
-
 		tickEmail.style.visibility = "visible";
 		tickEmail.style.opacity = "1";
 	}
 });
+
+ok2.onclick = function() {
+	nextPage();
+};
 
 // name/email page (page 3) OK button onclick name and email validation
 ok3.onclick = function() {
