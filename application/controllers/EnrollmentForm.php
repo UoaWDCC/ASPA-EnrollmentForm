@@ -40,4 +40,21 @@ class EnrollmentForm extends CI_Controller {
         // // Get colour of cell in hex, returns example like 'ffe100'
         // echo $this->Gsheet_Interface_Model->get_cell_colour('A21');
 	}
+
+    public function test_email_verify()
+    {
+        $this->load->model('Verification');
+        $testEmail = "startofsheet@aucklanduni.ac.nz";
+        // $testEmail = "startplustwo@aucklanduni.ac.nz";
+        // $testEmail = "startplustwo@aucklanduni.ac.nz";
+        echo "test email is: " . $testEmail . "<br>";
+
+        if ($this->Verification->correct_email_format($testEmail)){
+            echo "is a correct email address.";
+        } else {
+            echo "is NOT a correct email address.";
+        }
+        $placeholder = $this->Verification->is_email_on_sheet($testEmail);
+
+    }
 }

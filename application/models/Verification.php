@@ -4,10 +4,10 @@ include 'Gsheet_Interface_model.php';
 
 class Verification extends CI_Model {
     // include_once 'class.verifyEmail.php';
-    
+
     //returns a boolean value for if email is in correct format
     function correct_email_format($emailAddress){
-        
+
         //removes all illegal characters from email
         $emailAddress = filter_var($emailAddress, FILTER_SANITIZE_EMAIL);
 
@@ -33,7 +33,7 @@ class Verification extends CI_Model {
         $addresses = $this->Gsheet_Interface_Model->get_from_sheet('B2', 'B' . ($sheetSize+1));
 
         // echo gettype($addresses);
-        
+
         // echo '<pre>';
         // print_r($addresses);
         // echo '</pre>';
@@ -63,8 +63,8 @@ class Verification extends CI_Model {
         // echo gettype($testCell[0][0]) . "<br>";
 
             //this takes emailIndex as a parameter
-        $colourIs = $this->Gsheet_Interface_Model->get_cell_colour($emailIndex);
-        
+        $colourIs = $this->Gsheet_Interface_Model->get_cell_colour('B3');
+
         echo gettype($colourIs) . "<br>";
         echo "colour is: " . $colourIs . "<br>";
 
@@ -73,7 +73,7 @@ class Verification extends CI_Model {
         } else {
             echo "colour doesn't exist <br>";
         }
-        
+
 
 
 
@@ -82,4 +82,3 @@ class Verification extends CI_Model {
 
 
 }
-
