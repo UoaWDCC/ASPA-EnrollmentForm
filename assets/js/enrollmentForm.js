@@ -7,7 +7,9 @@ let page4 = document.getElementById("div-page4");
 let buttonReg = document.getElementById("register"); // get register button from page 1
 let ok2 = document.getElementById("ok2"); // get ok button from page 2
 let ok3 = document.getElementById("ok3"); // get ok button from page 3
-let buttonSubmit = document.getElementById("submit"); // get submit button from page 4
+// get the submit / proceed payment buttons from page 4
+let submit = document.getElementById("div-submit");
+let proceedPayment = document.getElementById("div-proceedpayment");
 
 // get the back buttons from page 3 and page 4
 let back3 = document.getElementById("div-back-page3");
@@ -23,13 +25,17 @@ window.addEventListener("keypress", function(e) {
 		console.log("Enter is pressed");
 		switch (findActivePage()) {
 			case 1:
-				buttonReg.click();
+				buttonReg.click(); //buttonReg does not need an onclick function declaration because it is handled by Webflow
 				break;
 			case 2:
-				ok2.click();
+				ok2.click(); //ok2 does not need an onclick function declaration because it is handled by Webflow
 				break;
 			case 3:
 				ok3.click();
+				break;
+			case 4:
+				if (isActive(submit)) submit.click();
+				else if (isActive(proceedPayment)) proceedPayment.click();
 				break;
 		}
 	}
@@ -40,7 +46,7 @@ page2.style.display = "none";
 page3.style.display = "none";
 page4.style.display = "none";
 
-// name/email page (page 3) OK onclick function
+// name/email page (page 3) OK button onclick name and email validation
 ok3.onclick = function() {
 	if (inputName.value.length === 0) {
 		console.log("Name has no value", inputName);
@@ -67,7 +73,15 @@ ok3.onclick = function() {
 	nextPage();
 };
 
-// back buttons onclick functionality
+// TODO: these two buttons must connect to the next step of the enrollment form
+submit.onclick = function() {
+	alert("You have submitted the payment!");
+};
+proceedPayment.onclick = function() {
+	alert("Taking you to proceed payment!");
+};
+
+// back buttons onclick function goes to the previous page
 back3.onclick = function() {
 	previousPage();
 };
@@ -151,25 +165,52 @@ exclamationEmail.style.display = "none";
 loading.style.display = "none";
 errorMsgs[0].style.display = "none";
 
+// validates the email by checking if the input is in the right format (e.g. johnsmith@example.com)
 function validateEmail(email) {
 	var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 	return re.test(String(email).toLowerCase());
 }
 
-// // get the button elements (they are divs)
-// let payCash = document.getElementById("w-node-2922c9864b4c-724d7631");
-// let payTransfer = document.getElementById("w-node-b3c547ea4b4f-724d7631");
-// let payWeChat = document.getElementById("w-node-79804cf717f6-724d7631");
-// let payAli = document.getElementById("w-node-b10b15011cf4-724d7631");
-// let payCard = document.getElementById("w-node-ccd45ade939b-724d7631");
-// let payPoli = document.getElementById("w-node-1287f971e519-724d7631");
+// get the button elements
+let payCash = document.getElementById("btn-cash");
+let payTransfer = document.getElementById("btn-banktransfer");
+let payWeChat = document.getElementById("btn-wechat");
+let payAli = document.getElementById("btn-alipay");
+let payCard = document.getElementById("btn-creditcard");
+let payPoli = document.getElementById("btn-poliay");
 
-// // find the button being used for payment
-// let buttonInUse;
-// [payCash, payTransfer, payWeChat, payAli, payCard, payPoli].forEach(button, index => {
-// 	button.addEventListener("click", function() {
-// 		console.log(button);
-// 		button.classList.add()
-// 		buttonInUse = index;
-// 	});
-// });
+// initially hide Submit and Proceed Payment buttons
+submit.style.display = "none";
+proceedPayment.style.display = "none";
+
+// sets up event listener for button click
+[payCash, payTransfer, payWeChat, payAli, payCard, payPoli].forEach(
+	(item, index) => {
+		item.addEventListener("click", function(e) {
+			toggleButton(item);
+			showButton(index);
+		});
+	}
+);
+
+// make the buttons look like they are toggled
+function toggleButton(buttonInUse) {
+	[payCash, payTransfer, payWeChat, payAli, payCard, payPoli].forEach(
+		button => {
+			if (buttonInUse === button) button.classList.add("toggled");
+			else button.classList.remove("toggled");
+		}
+	);
+}
+
+// show Submit button if user pays using Cash/Bank transfer
+// show proceed payment if user pays using Wechat/AliPay/Credit/Debit/PoLi Pay
+function showButton(index) {
+	if (index === 0 || index === 1) {
+		submit.style.display = "flex";
+		proceedPayment.style.display = "none";
+	} else {
+		submit.style.display = "none";
+		proceedPayment.style.display = "flex";
+	}
+}
