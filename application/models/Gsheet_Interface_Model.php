@@ -80,9 +80,9 @@ class Gsheet_Interface_Model extends CI_Model {
             // Highlight format
             $format = [
                 "backgroundColor" => [
-                    "red" => 0.7,
-                    "green" => 0.9,
-                    "blue" => 0.7
+                    "red" => 0.69803923,
+                    "green" => 0.8980392,
+                    "blue" => 0.69803923
                 ]
             ];
 
@@ -115,6 +115,28 @@ class Gsheet_Interface_Model extends CI_Model {
         return sizeof($response->getValues());
     }
 
+    // Get colour of cell from sheet
+    // IN:  $cell = 'A1'
+    // OUT: 'ff0000'
+    function get_cell_colour($cell)
+    {
+        $range = $this->sheetName . "!" . $cell;
+        $query = [
+            'ranges' => $range,
+            'includeGridData' => True
+        ];
+
+        $response = $this->service->spreadsheets->get($this->spreadsheetId, $query);
+        $spreadsheet = $response->getSheets();
+        $colour_format = $spreadsheet[0]['data'][0]['rowData'][0]['values'][0]["userEnteredFormat"]["backgroundColor"];
+
+        $rgb = [$colour_format["red"], $colour_format["green"], $colour_format["blue"]];
+
+        $hex_string = sprintf("%02x%02x%02x", $rgb[0] * 255, $rgb[1] * 255, $rgb[2] * 255);
+
+        return $hex_string;
+    }
+
     // Get value from sheet, e.g get_from_sheet('A1', 'B5').
     // NB: row can be string or text input
     function get_from_sheet($leftcorner, $rightcorner)
@@ -126,7 +148,7 @@ class Gsheet_Interface_Model extends CI_Model {
         // Display value received for testing and verification purposes – comment out for final build
         $values = $response->getValues();
         if (empty($values)) {
-            return "ERROR: No data!";
+            return FALSE;
         } else {
 
             // Values returned as an array...
