@@ -126,12 +126,14 @@ class Gsheet_Interface_Model extends CI_Model {
 
         $response = $this->service->spreadsheets->get($this->spreadsheetId, $query);
         $spreadsheet = $response->getSheets();
-        $colour_format = $spreadsheet[0]['data'][0]['rowData'][0]['values'][0]["userEnteredFormat"]["backgroundColor"];
+        $colour_format = $spreadsheet[0]['data'][0]['rowData'][0]['values'][0];
 
         $rgb = [0, 0, 0];
-        $rgb[0] = $colour_format["red"] ? $colour_format["red"] : 0;
-        $rgb[1] = $colour_format["green"] ? $colour_format["green"] : 0;
-        $rgb[2] = $colour_format["blue"] ? $colour_format["blue"] : 0;
+        if ($colour_format["userEnteredFormat"]) {
+            $rgb[0] = $colour_format["userEnteredFormat"]["backgroundColor"]["red"];
+            $rgb[1] = $colour_format["userEnteredFormat"]["backgroundColor"]["green"];
+            $rgb[2] = $colour_format["userEnteredFormat"]["backgroundColor"]["blue"];
+        }
 
         $hex_string = sprintf("%02x%02x%02x", $rgb[0] * 255, $rgb[1] * 255, $rgb[2] * 255);
 
