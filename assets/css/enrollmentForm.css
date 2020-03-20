@@ -5,3 +5,9 @@ body {
 .asterisk {
 	color: red;
 }
+
+.toggled {
+	transform: scale(0.85);
+	-webkit-transform: scale(0.85);
+	background-color: lightgrey;
+}
