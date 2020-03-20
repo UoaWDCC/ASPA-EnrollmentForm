@@ -3,20 +3,18 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Gsheet_Interface_Model extends CI_Model {
 
-    private $client = FALSE;
     private $service = FALSE;
-    private $spreadsheetId = FALSE;
+    private $spreadsheetId = SPREADSHEETID;
+    private $sheetName = SHEETNAME;
 
     // Setting up current client
     function __construct()
     {
-        $this->client = $this->client_setup();
-        $this->service = $this->client[0];
-        $this->spreadsheetId = $this->client[1];
+        $this->service = $this->service_setup();
     }
 
-    // Setting up client function
-    function client_setup()
+    // Setting up service function
+    function service_setup()
     {
         require $this->getCurrentWorkingDir() . '/vendor/autoload.php';
 
@@ -28,7 +26,7 @@ class Gsheet_Interface_Model extends CI_Model {
 
         $service = new Google_Service_Sheets($client);
 
-        return [$service, SPREADSHEETID];
+        return $service;
     }
 
     // Switches any numerical value (between 1 to 26)
@@ -60,7 +58,7 @@ class Gsheet_Interface_Model extends CI_Model {
     function record_to_sheet($email, $fullname, $paymenttype, $paymentmade)
     {
         $size = $this->get_sheet_size();
-        $newrange = 'Sheet1!A' . ($size + 2);
+        $newrange = $this->sheetName . '!A' . ($size + 2);
 
         // Creating an array for record
         $timestamp = strval(date("d/m/Y h:i:s"));
@@ -112,7 +110,7 @@ class Gsheet_Interface_Model extends CI_Model {
     // Returns size of gsheet as a numerical value
     function get_sheet_size()
     {
-        $range = 'Sheet1!A2:A';
+        $range = $this->sheetName . '!A2:A';
         $response = $this->service->spreadsheets_values->get($this->spreadsheetId, $range);
         return sizeof($response->getValues());
     }
@@ -121,7 +119,7 @@ class Gsheet_Interface_Model extends CI_Model {
     // NB: row can be string or text input
     function get_from_sheet($leftcorner, $rightcorner)
     {
-        $range = 'Sheet1!' . $leftcorner . ":" . $rightcorner;
+        $range = $this->sheetName . '!' . $leftcorner . ":" . $rightcorner;
 
         $response = $this->service->spreadsheets_values->get($this->spreadsheetId, $range);
 

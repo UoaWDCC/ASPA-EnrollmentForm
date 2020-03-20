@@ -91,3 +91,4 @@ defined('EXIT__AUTO_MAX')      OR define('EXIT__AUTO_MAX', 125); // highest auto
 |
 */
 define('SPREADSHEETID','1NJ3gFsf1qP_-5NF2XyistqUzkug99S656I30oa8-iLU');
+define('SHEETNAME','Sheet1');
