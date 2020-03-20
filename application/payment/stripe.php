@@ -17,10 +17,10 @@ $session = \Stripe\Checkout\Session::create([
     'currency' => 'NZD',
     'quantity' => 1,
   ]],
-  'success_url' => 'http://localhost/Stripe/redir.php',
-  'cancel_url' => 'https://example.com/cancel',
-  'customer_email' => 'example@gmail.com',
-  'customer' => 'John Doe',
+  'success_url' => 'http://localhost/ASPA-EnrollmentForm/index.php/EnrollmentForm/loadPaymentSucessful?session_id={CHECKOUT_SESSION_ID}',
+  'cancel_url' => 'http://localhost',
+  'customer_email' => 'playerEmail@gmail.com',
+
 ]);
 $stripeSession = array($session);
 $sessId = ($stripeSession[0]['id']);

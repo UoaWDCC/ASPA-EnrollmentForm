@@ -18,9 +18,6 @@ class EnrollmentForm extends ASPA_Controller
 	public function sheetsapi_test()
 	{
         $this->load->model('Gsheet_Interface_Model');
-
-        // Test out functions here
-
     }
     
     public function makeStripePayment() {
