@@ -20,11 +20,11 @@ class Welcome extends CI_Controller {
 	 */
 	public function index()
 	{
-		$emailAddress = "willyzhysh@gmail.com";
-		$paymentMethod = "online";
+		// $emailAddress = "willyzhysh@gmail.com";
+		// $paymentMethod = "online";
 
-		$this->load->model('EmailModel');
-		$this->EmailModel->sendEmail($emailAddress, $paymentMethod);
+		// $this->load->model('EmailModel');
+		// $this->EmailModel->sendEmail($emailAddress, $paymentMethod);
 
 		$this->load->view('welcome_message');
 	}
