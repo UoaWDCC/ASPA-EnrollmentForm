@@ -5,6 +5,8 @@ include 'Gsheet_Interface_model.php';
 class Verification extends CI_Model {
     // include_once 'class.verifyEmail.php';
 
+    private $addresses = array();
+
     //pass in emailAddress as a string
     //returns a boolean value for if email is in correct format
     function correct_email_format($emailAddress){
@@ -36,10 +38,8 @@ class Verification extends CI_Model {
         //this gets the sheet size
         $sheetSize = $this->Gsheet_Interface_Model->get_sheet_size();
 
-        // echo $sheetSize . "<br>";
-
-        //get an array of array of column with all existing emails 
-        $addresses = $this->Gsheet_Interface_Model->get_from_sheet('B2', 'B' . ($sheetSize+1));
+        //this is an array of array of all existing emails, i.e. [[email1], [email2], [email3]]
+        $this->addresses = $this->Gsheet_Interface_Model->get_from_sheet('B2', 'B' . ($sheetSize+1));
 
         // echo gettype($addresses);
 
@@ -49,44 +49,52 @@ class Verification extends CI_Model {
 
         // echo gettype($addresses[1][0]);
 
-        //collapse down to simple array 
-        $addresses = array_column($addresses, 0);
-
-        // echo PHP_VERSION; 
+        //collapse down to a simple array
+        $this->addresses = array_column($this->addresses, 0);
 
         // echo '<pre>';
         // print_r($addresses);
         // echo '</pre>';
 
         //returns false to function if email does not exist in google sheet
-        if (!(in_array($emailAddress, $addresses))){
-            //echo "email does not exist in sheet <br><br>"
+        if (!(in_array($emailAddress, $this->addresses))){
+            //echo "email does NOT exist in sheet <br><br>"
             return false;
         }
 
-        //get index of emailAddress given that it exists 
-        $emailKey = array_search($emailAddress, $addresses);
+        // //get index of emailAddress given that it exists 
+        // $emailKey = array_search($emailAddress, $this->addresses);
 
-        // echo "emailKey is: " . $emailKey . "<br>";
-        // $isTouch = empty($emailKey);
-        // echo "ISTOUCH: " . $isTouch . "<br>";
+        // // echo "emailKey is: " . $emailKey . "<br>";
+        // // $isTouch = empty($emailKey);
+        // // echo "ISTOUCH: " . $isTouch . "<br>";
         
-        //convert to sheets readable form
-        $emailIndex = 'B' . ($emailKey+2);
-        // echo "email index is: " . $emailIndex . "<br>";
+        // //convert to sheets readable form
+        // $emailIndex = 'B' . ($emailKey+2);
+        // // echo "email index is: " . $emailIndex . "<br>";
 
-        //checks if email is in the sheet
-        //return false for the function if not
-        if (!(in_array($emailAddress, $addresses))){
-            // echo "this email does NOT exist in the sheet <br><br>";
-            return false;
-        } 
+        // //checks if email is in the sheet
+        // //return false for the function if not
+        // if (!(in_array($emailAddress, $addresses))){
+        //     // echo "this email does NOT exist in the sheet <br><br>";
+        //     return false;
+        // } 
 
         // echo "this email exists in the sheet <br><br>";
 
+        return true;
+    }
+
+
+    function has_user_paid($emailAddress){
+
+        if (!($this->is_email_on_sheet($emailAddress))){
+            return false;
+        }
+
         //given that the email exists in the sheet
         //find its index
-        $emailKey = array_search($emailAddress, $addresses);
+        $emailKey = array_search($emailAddress, $this->addresses);
         // echo "emailKey is: " . $emailKey . "<br>";
         
         //turn into sheets readable form 
@@ -112,8 +120,7 @@ class Verification extends CI_Model {
         } 
 
         return true;
+        
     }
-
-
 
 }

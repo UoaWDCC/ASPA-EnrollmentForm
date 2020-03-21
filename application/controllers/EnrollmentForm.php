@@ -49,28 +49,34 @@ class EnrollmentForm extends CI_Controller {
 
 		$this->load->model('Verification');
 
-		// $testEmail = "startofsheet@aucklanduni.ac.nz";
-		// $testEmail = "b3@gmail.com";
-		// $testEmail = "b4@gmail.com";
-		$testEmail = "b5@gmail.com";
-		// $testEmail = "doesNotExist@gmail.com";
-		// $testEmail = "wrongFormatEmail.com";
-		// $testEmail = "%^&%*&illegalCharButRightFormat@gmail.com";
+		// $testEmail = "b2@aucklanduni.ac.nz"; //-> member, not paid 
+		// $testEmail = "b3@gmail.com";	//-> member, not paid
+		// $testEmail = "b4paid@gmail.com"; //-> member, paid
+		$testEmail = "b5paid@gmail.com"; //-> member, paid
+		// $testEmail = "doesNotExist@gmail.com"; //-> not member, not paid
+		// $testEmail = "wrongFormatEmail.com"; //-> wrong email
+		// $testEmail = "%^&%*&illegalCharButRightFormat@gmail.com"; //-> right email, not member
 
-		echo "test email is: " . $testEmail . "<br><br>";
+		echo "<strong>Test email is: </strong>" . $testEmail . "<br><br>";
 
 		if ($this->Verification->correct_email_format($testEmail)){
-			echo "this is a correctly formatted email address. <br><br>";
+			echo "This is a <strong>correctly formatted</strong> email address. <br><br>";
 		} else {
-			echo "this is NOT a correctly formatted email address. <br><br>";
+			echo "This is <strong>NOT a correctly formatted</strong> email address. <br><br>";
 		}
 
 		$placeholder = $this->Verification->is_email_on_sheet($testEmail);
 
 		if ($placeholder){
-			echo "EMAIL OWNER IS A MEMBER <br>";
+			echo "EMAIL OWNER IS A <strong>MEMBER</strong> <br>";
 		} else {
-			echo "EMAIL OWNER IS NOT A MEMBER <br>";
+			echo "EMAIL OWNER IS <strong>NOT A MEMBER</strong> <br>";
+		}
+
+		if($this->Verification->has_user_paid($testEmail)){
+			echo "EMAIL OWNER HAS <strong>PAID</strong> <br>";
+		} else {
+			echo "EMAIL OWNER HAS <strong>NOT PAID</strong> <br>";
 		}
 	}
 
