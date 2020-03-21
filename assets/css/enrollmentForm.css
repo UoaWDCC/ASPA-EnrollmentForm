@@ -1,0 +1,78 @@
+body {
+	overflow: hidden;
+}
+
+.asterisk {
+	color: red;
+}
+
+.toggled {
+	transform: scale(0.85);
+	-webkit-transform: scale(0.85);
+	background-color: lightgrey;
+}
+
+.page2-appear,
+.page3-appear,
+.page4-appear {
+	display: flex;
+	animation: fade-in 1s forwards;
+	opacity: 1;
+}
+
+.page3-appear-only-fade,
+.page4-appear-only-fade {
+	display: flex;
+	animation: fade-in-appear 1s forwards;
+	opacity: 1;
+}
+
+.page3-slide-out {
+	animation: fade-out 1s forwards;
+	opacity: 0;
+}
+
+@keyframes fade-in {
+	from {
+		opacity: 0;
+		transform: translate3d(0px, -100px, 0px);
+	}
+	to {
+		opacity: 1;
+		transform: translate3d(0px, 0px, 0px);
+	}
+}
+
+@keyframes fade-out {
+	from {
+		opacity: 1;
+		transform: translate3d(0px, 0px, 0px);
+	}
+	to {
+		opacity: 0;
+		transform: translate3d(0px, -100px, 0px);
+	}
+}
+
+@keyframes fade-in-appear {
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
+}
+
+.div-submit,
+.div-proceedpayment {
+	animation: button-fade-in 0.5s forwards;
+}
+
+@keyframes button-fade-in {
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
+}
