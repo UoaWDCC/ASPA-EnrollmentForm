@@ -94,7 +94,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
               </div>
             </div>
             <div class="div-okbtn div-submit">
-              <div class="div-placeholder ok-btn-spaceholder btn-submit"></div><a data-w-id="e789d92c-5d47-387a-12e6-10a0e389e4ba" href="#" class="button btn-submit w-button">SUBMIT</a>
+              <div class="div-placeholder ok-btn-spaceholder btn-submit"></div><a data-w-id="e789d92c-5d47-387a-12e6-10a0e389e4ba" class="button btn-submit w-button" onclick="<?php echo base_url()?>EnrollmentForm/send_email">SUBMIT</a>
               <p class="p-ok-btn-confirm p">Press<strong> Enter ↵</strong></p>
             </div>
           </div>

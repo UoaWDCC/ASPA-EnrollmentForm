@@ -40,4 +40,13 @@ class EnrollmentForm extends CI_Controller {
 
 
 	}
+
+    public function send_email()
+    {
+        $emailAddress = "willyzhysh@gmail.com";
+        $paymentMethod = "cash";
+
+        $this->load->model('EmailModel');
+        $this->EmailModel->sendEmail($emailAddress, $paymentMethod);
+    }
 }
