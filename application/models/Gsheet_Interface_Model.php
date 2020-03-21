@@ -4,13 +4,14 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Gsheet_Interface_Model extends CI_Model {
 
     private $service = FALSE;
-    private $spreadsheetId = SPREADSHEETID;
+    private $spreadsheetId = FALSE;
     private $sheetName = SHEETNAME;
 
     // Setting up current client
-    function __construct()
+    function __construct($spreadsheetId=SPREADSHEETID)
     {
         $this->service = $this->service_setup();
+        $this->spreadsheetId = $spreadsheetId;
     }
 
     // Setting up service function
@@ -163,5 +164,26 @@ class Gsheet_Interface_Model extends CI_Model {
             // e.g input: ('A1', 'B3'), output: [[A1, A2, A3], [B1, B2, B3]]
             return $values;
         }
+    }
+
+
+    // Gets the cell range value by finding an email match
+    // IN: 'bobsmith@gmail.com', 'B'         OUT: 'B4'
+    function get_cellrange($check_str, $column) {
+        $check_str = strtolower($check_str);
+
+        $range = [$column . '2', $column . ($this->get_sheet_size() + 1)];
+        $emails_arr = $this->get_from_sheet($range[0], $range[1]);
+
+        // Will return the cell for the first instance of email
+        for ($i = 0; $i < sizeof($emails_arr); $i++) {
+            if (strtolower($emails_arr[$i][0]) == $check_str) {
+                // echo $emails_arr[$i][0] . ' = ' . $emails_str . "<br />";
+                return $column . ($i + 2);
+            }
+        }
+
+        // If email does not exist in spreadsaheet
+        return NULL;
     }
 }
