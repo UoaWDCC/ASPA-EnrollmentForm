@@ -42,6 +42,9 @@ class EnrollmentForm extends CI_Controller {
 
         // // Get colour of cell in hex, returns example like 'ffe100'
         // echo $this->Gsheet_Interface_Model->get_cell_colour('A21');
+
+        // // Get cell range of an email
+        // echo var_export($this->Gsheet_Interface_Model->get_cellrange('testemail@gmail.com', 'B'));
 	}
 
 	//this exists purely for testing purposes
