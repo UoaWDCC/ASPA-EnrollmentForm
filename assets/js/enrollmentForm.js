@@ -132,7 +132,23 @@ window.addEventListener("keypress", function(e) {
 	}
 });
 
-// event listener that updates every keypress in the input email to continuously validate the input
+ok2.onclick = function() {
+	nextPage();
+};
+
+// back buttons onclick function goes to the previous page
+back3.onclick = function() {
+	previousPage();
+};
+back4.onclick = function() {
+	previousPage();
+};
+
+// ==========================================
+//    Name/Email Page (page 3) Functionality
+// ==========================================
+
+// event listener that continuously validates the email input
 inputEmail.addEventListener("keypress", function(e) {
 	if (validateEmail(e.target.value)) {
 		exclamationEmail.style.visibility = "hidden";
@@ -143,11 +159,8 @@ inputEmail.addEventListener("keypress", function(e) {
 		tickEmail.style.visibility = "visible";
 		tickEmail.style.opacity = "1";
 	}
+	// JAIRU may need to edit this too
 });
-
-ok2.onclick = function() {
-	nextPage();
-};
 
 // name/email page (page 3) OK button onclick name and email validation
 ok3.onclick = function() {
@@ -165,23 +178,16 @@ ok3.onclick = function() {
 		inputEmail.style.border = "1px solid red";
 		return;
 	}
+	// JAIRU'S CODE
+	// if (!isEmailInSpreadsheet) {
+	// exclamationEmail.style.visibility = "visible";
+	// errorMsgs[0].style.visibility = "visible";
+	// exclamationEmail.style.opacity = "1";
+	// errorMsgs[0].style.opacity = "1";
+	// inputEmail.style.border = "1px solid red";
+	// 	return;
+	// }
 	nextPage();
-};
-
-// TODO: these two buttons must connect to the next step of the enrollment form
-submit.onclick = function() {
-	alert("You have submitted the payment!");
-};
-proceedPayment.onclick = function() {
-	alert("Taking you to proceed payment!");
-};
-
-// back buttons onclick function goes to the previous page
-back3.onclick = function() {
-	previousPage();
-};
-back4.onclick = function() {
-	previousPage();
 };
 
 // ==========================================
@@ -219,6 +225,14 @@ function showButton(index) {
 		proceedPayment.style.display = "flex";
 	}
 }
+
+// TODO: these two buttons must connect to the next step of the enrollment form
+submit.onclick = function() {
+	alert("You have submitted the payment!");
+};
+proceedPayment.onclick = function() {
+	alert("Taking you to proceed payment!");
+};
 
 // ==========================================
 //             Helper Functions
