@@ -166,6 +166,26 @@ class Gsheet_Interface_Model extends CI_Model {
         }
     }
 
+    // Returns [column, row] array from coordinate
+    // IN: 'B4'     OUT: ['B', 4],   IN: 'AA45'   OUT: ['AA', 45]
+    function split_column_row($range) {
+        $column = '';
+        for ($i = 0; $i < strlen($range); $i++) {
+            if (ctype_alpha($range[$i])) {
+                $column = $column . $range[$i];
+            }
+        }
+
+        $row = '';
+        for ($i = strlen($range) - 1; $i >= 0; $i--) {
+            if (!ctype_alpha($range[$i])) {
+                $row = $range[$i] . $row;
+            }
+        }
+
+        return [$column, (int) $row];
+    }
+
 
     // Gets the cell range value by finding an email match
     // IN: 'bobsmith@gmail.com', 'B'         OUT: 'B4'
