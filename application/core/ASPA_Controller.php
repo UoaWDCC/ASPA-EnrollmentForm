@@ -20,7 +20,7 @@ class ASPA_Controller extends CI_Controller
 	* @param string 	$message 	A brief description of the output
 	* @param string 	$extra 		Any extra information
 	*/
-    private function create_json($flag = '', $message = '', $extra = [])
+    protected function create_json($flag = '', $message = '', $extra = [])
     {
         $array = array(
             'is_success' => $flag,
