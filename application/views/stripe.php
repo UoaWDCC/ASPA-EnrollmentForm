@@ -33,7 +33,7 @@ $sessId = ($stripeSession[0]['id']);
 
 <script type="text/javascript">
   $(document).ready(function() {
-    var stripe = Stripe('PUBLICKEY');
+    var stripe = Stripe('<?php echo PUBLICKEY ?>');
     var div = document.getElementById("session-id");
     var myData = "<?php echo $sessId ?>";
 
