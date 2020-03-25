@@ -93,5 +93,8 @@ defined('EXIT__AUTO_MAX')      OR define('EXIT__AUTO_MAX', 125); // highest auto
 define('SPREADSHEETID','1NJ3gFsf1qP_-5NF2XyistqUzkug99S656I30oa8-iLU');
 define("SHEETNAME", "Sheet1");
 
-define('SECRETKEY', 'sk_test_OMC00A11yJUakUU4kx6KoGTp0028EYnLBa');
+
 define('PUBLICKEY', 'pk_test_A4wjqVPPn530rgAXv6sHKgSl00opCMVX9A');
+define('SECRETKEY', 'sk_test_OMC00A11yJUakUU4kx6KoGTp0028EYnLBa');
+
+
