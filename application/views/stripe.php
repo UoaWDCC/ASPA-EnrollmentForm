@@ -3,6 +3,9 @@
 
 <div id="session-id" style="display: none;">
 <?php
+
+//Get Email
+
 require_once('vendor/autoload.php');
 session_start();
 
@@ -30,7 +33,7 @@ $sessId = ($stripeSession[0]['id']);
 
 <script type="text/javascript">
   $(document).ready(function() {
-    var stripe = Stripe(PUBLICKEY);
+    var stripe = Stripe('PUBLICKEY');
     var div = document.getElementById("session-id");
     var myData = "<?php echo $sessId ?>";
 
