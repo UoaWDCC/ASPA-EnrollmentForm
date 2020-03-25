@@ -20,7 +20,7 @@ $session = \Stripe\Checkout\Session::create([
     'currency' => 'NZD',
     'quantity' => 1,
   ]],
-  'success_url' => 'http://localhost/ASPA-EnrollmentForm/index.php/EnrollmentForm/loadPaymentSucessful?session_id={CHECKOUT_SESSION_ID}',
+  'success_url' => 'http://localhost/ASPA-EnrollmentForm/EnrollmentForm/loadPaymentSucessful?session_id={CHECKOUT_SESSION_ID}',
   'cancel_url' => 'http://localhost',
   'customer_email' => 'playerEmail@gmail.com',
 

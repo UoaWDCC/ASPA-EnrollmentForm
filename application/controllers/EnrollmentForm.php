@@ -52,7 +52,8 @@ class EnrollmentForm extends ASPA_Controller
     
     public function makeStripePayment() {
         
-        $this->load->view('stripe.php');
+        $data['email'] = $this->input->get('email');
+        $this->load->view('stripe.php', $data);
 
     }
 

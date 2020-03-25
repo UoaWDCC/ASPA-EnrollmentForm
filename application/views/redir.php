@@ -38,6 +38,7 @@ foreach ($events->autoPagingIterator() as $event) {
    //   handle_checkout_session($session);
 
      echo "has paid";
+     echo "<br>";
      echo $email;
      break;
    }
