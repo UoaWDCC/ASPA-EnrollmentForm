@@ -6,7 +6,7 @@
 require_once('vendor/autoload.php');
 session_start();
 
-\Stripe\Stripe::setApiKey('sk_test_OMC00A11yJUakUU4kx6KoGTp0028EYnLBa');
+\Stripe\Stripe::setApiKey(SECRETKEY);
 $session = \Stripe\Checkout\Session::create([
   'payment_method_types' => ['card'],
   'line_items' => [[
@@ -30,10 +30,9 @@ $sessId = ($stripeSession[0]['id']);
 
 <script type="text/javascript">
   $(document).ready(function() {
-    var stripe = Stripe('pk_test_A4wjqVPPn530rgAXv6sHKgSl00opCMVX9A');
+    var stripe = Stripe(PUBLICKEY);
     var div = document.getElementById("session-id");
     var myData = "<?php echo $sessId ?>";
-
 
   stripe.redirectToCheckout({
   // Make the id field from the Checkout Session creation API response

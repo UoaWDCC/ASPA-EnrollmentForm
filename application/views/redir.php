@@ -13,13 +13,13 @@ echo "<hr>";
 
 $hasPaid = False;
 
-\Stripe\Stripe::setApiKey('sk_test_OMC00A11yJUakUU4kx6KoGTp0028EYnLBa');
+\Stripe\Stripe::setApiKey(SECRETKEY);
 
 $events = \Stripe\Event::all([
   'type' => 'checkout.session.completed',
   'created' => [
     // Check for events created in the last 24 hours.
-    'gte' => time() - 1 * 2 * 60,
+    'gte' => time() - 1 * 3 * 60,
   ],
 ]);
 
@@ -38,6 +38,7 @@ foreach ($events->autoPagingIterator() as $event) {
    //   handle_checkout_session($session);
 
      echo "has paid";
+     echo $email;
      break;
    }
    else {
