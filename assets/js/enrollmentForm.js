@@ -231,6 +231,18 @@ submit.onclick = function() {
 	alert("You have submitted the payment!");
 };
 proceedPayment.onclick = function() {
+
+	if (index < 2){
+		//error message
+	}
+	else if (index == 4) {
+		//Stripe Payment
+		document.search-theme-form.action = "/MakeStripePayment";
+		//window.open('http://localhost/ASPA-EnrollmentForm/EnrollmentForm/MakeStripePayment?email=');
+	}
+	else {
+		//IEpay
+	}
 	alert("Taking you to proceed payment!");
 };
 
