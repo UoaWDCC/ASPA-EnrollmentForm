@@ -8,7 +8,6 @@
 
 require_once('vendor/autoload.php');
 session_start();
-
 \Stripe\Stripe::setApiKey(SECRETKEY);
 $session = \Stripe\Checkout\Session::create([
   'payment_method_types' => ['card'],
@@ -20,9 +19,10 @@ $session = \Stripe\Checkout\Session::create([
     'currency' => 'NZD',
     'quantity' => 1,
   ]],
-  'success_url' => 'http://localhost/ASPA-EnrollmentForm/EnrollmentForm/loadPaymentSucessful?session_id={CHECKOUT_SESSION_ID}',
+  'success_url' => base_url().'EnrollmentForm/StripePaymentSucessful?session_id={CHECKOUT_SESSION_ID}',
+  // 'success_url' => 'http://localhost/ASPA-EnrollmentForm/EnrollmentForm/loadPaymentSucessful?session_id={CHECKOUT_SESSION_ID}',
   'cancel_url' => 'http://localhost',
-  'customer_email' => 'playerEmail@gmail.com',
+  'customer_email' => $email,
 
 ]);
 $stripeSession = array($session);
