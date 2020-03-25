@@ -1,7 +1,8 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class EnrollmentForm extends CI_Controller {
+class EnrollmentForm extends ASPA_Controller 
+{
 
 	function __construct() {
 		parent::__construct();
@@ -22,3 +23,6 @@ class EnrollmentForm extends CI_Controller {
 
 	}
 }
+
+/* End of file EnrollmentForm.php */
+/* Location: ./application/controllers/EnrollmentForm.php */
