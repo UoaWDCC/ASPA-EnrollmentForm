@@ -50,18 +50,65 @@ class EnrollmentForm extends ASPA_Controller
         $this->load->model('Gsheet_Interface_Model');
     }
     
-    public function makeStripePayment() {
-        
-        $data['email'] = $this->input->get('email');
+    public function makeStripePayment() 
+    {
+        // Receive data from form, method=POST
+        $data['name'] = $this->input->post('name');
+        $data['email'] = $this->input->post('email');
+
+        // Put the data into spreadsheet
+        $this->load->model('Gsheet_Interface_Model');
+        $this->Gsheet_Interface_Model->record_to_sheet($data['email'],$data['name'],'Stripe',FALSE);
+
+        // Initiate the stripe payment
         $this->load->view('stripe.php', $data);
 
     }
 
-    public function LoadPaymentSucessful() {
-        
+    public function StripePaymentSucessful() 
+    {
         $data['session_id'] = $this->input->get('session_id');
-        $this->load->view('redir.php',$data);
+
+        // Implement the check if the payment was made (moving everything from redir.php to here)
+        $data['email'] = '';
+
+        // If the session ID is not associated with a valid payment
+        if (!isset($cell)) 
+        { 
+        	show_error("Something went wrong, your payment wasn't processed correctly. Please contact uoa.wdcc@gmail.com",'001');
+        }
+
+        // HighLight the row (get the user's email)
+        $this->load->model('Gsheet_Interface_Model');
+        // Get the row of the specific email from google sheets
+        $cell = $this->Gsheet_Interface_Model->get_cellrange($data['email'], 'B');
+        if (!isset($cell)) 
+        { 
+        	show_error("Something went wrong, your email was not found in the ASPA member list",'002');
+        }
+
+        // Split up the cell column and row 
+        list(, $row) = $this->Gsheet_Interface_Model->split_column_row($cell);
+        // Highlight this row sicne it is paid
+        $this->Gsheet_Interface_Model->highlight_row($row ,[0.69803923, 0.8980392, 0.69803923]);
+
+        //Redirect to the page with green tick
+        $this->load->view('PaymentSuccessful.php',$data);
         
+    }
+
+    public function IEPayPaymentSucessful() 
+    {
+
+        //Redirect to the page with green tick
+        $this->load->view('PaymentSuccessful.php',$data);
+        
+    }
+
+    public function LoadOfflinePayment()
+    {
+		//Redirect to the page with grey tick
+        $this->load->view('OfflinePayment.php',$data);
     }
 }
 

@@ -21,7 +21,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 </head>
 <body>
   <div class="w-form">
-    <form id="email-form" name="email-form" data-name="Email Form">
+    <form action="/" method="post" id="enrollment-form" name="enrollment-form" data-name="Enrollment Form" >
       <div class="section">
         <div id="div-poweredby" class="div-poweredby">
           <p class="paragraph-3">Powered By </p><img src="assets/images/WDCC_logo_Original---Copy-2.png" width="90" id="img-logo" alt="" class="img-logo"></div>
@@ -51,7 +51,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
           <div id="div-page3" class="div-block page3">
             <div class="div-name-email">
               <div class="div div-name">
-                <p class="p p-firstname">Your first and last name: <span class="asterisk">*</span></p><input type="text" class="entry w-input" maxlength="256" name="field" data-name="Field" placeholder="Enter your first name" id="field" required="">
+                <p class="p p-firstname">Your first and last name: <span class="asterisk">*</span></p><input type="text" class="entry w-input" maxlength="256" name="name" data-name="Field" placeholder="Enter your first name" id="field" required="">
               </div>
               <div class="div div-email">
                 <p class="p p-lastname">Email address: <span class="asterisk">*</span></p><input type="email" class="entry entry-lastname w-input" maxlength="256" name="field-2" data-name="Field 2" placeholder="Enter your email" id="field-2" required="">
