@@ -49,40 +49,12 @@ class EnrollmentForm extends ASPA_Controller
 	}
 
 	//this exists purely for testing purposes
-	public function test_email_verify(){
+	// public function test_email_verify(){
 
-		$this->load->model('Verification');
+	// 	$this->load->model('Verification');
 
-		// $testEmail = "b2@aucklanduni.ac.nz"; //-> member, not paid 
-		// $testEmail = "b3@gmail.com";	//-> member, not paid
-		// $testEmail = "b4paid@gmail.com"; //-> member, paid
-		$testEmail = "b5paid@gmail.com"; //-> member, paid
-		// $testEmail = "doesNotExist@gmail.com"; //-> not member, not paid
-		// $testEmail = "wrongFormatEmail.com"; //-> wrong email
-		// $testEmail = "%^&%*&illegalCharButRightFormat@gmail.com"; //-> right email, not member
+	// }
 
-		echo "<strong>Test email is: </strong>" . $testEmail . "<br><br>";
-
-		if ($this->Verification->correct_email_format($testEmail)){
-			echo "This is a <strong>correctly formatted</strong> email address. <br><br>";
-		} else {
-			echo "This is <strong>NOT a correctly formatted</strong> email address. <br><br>";
-		}
-
-		$placeholder = $this->Verification->is_email_on_sheet($testEmail);
-
-		if ($placeholder){
-			echo "EMAIL OWNER IS A <strong>MEMBER</strong> <br>";
-		} else {
-			echo "EMAIL OWNER IS <strong>NOT A MEMBER</strong> <br>";
-		}
-
-		if($this->Verification->has_user_paid($testEmail)){
-			echo "EMAIL OWNER HAS <strong>PAID</strong> <br>";
-		} else {
-			echo "EMAIL OWNER HAS <strong>NOT PAID</strong> <br>";
-		}
-	}
 
 
 }

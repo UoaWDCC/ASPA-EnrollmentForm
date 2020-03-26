@@ -41,46 +41,14 @@ class Verification extends CI_Model {
         //this is an array of array of all existing emails, i.e. [[email1], [email2], [email3]]
         $this->addresses = $this->Gsheet_Interface_Model->get_from_sheet('B2', 'B' . ($sheetSize+1));
 
-        // echo gettype($addresses);
-
-        // echo '<pre>';
-        // print_r($addresses);
-        // echo '</pre>';
-
-        // echo gettype($addresses[1][0]);
-
         //collapse down to a simple array
         $this->addresses = array_column($this->addresses, 0);
-
-        // echo '<pre>';
-        // print_r($addresses);
-        // echo '</pre>';
 
         //returns false to function if email does not exist in google sheet
         if (!(in_array($emailAddress, $this->addresses))){
             //echo "email does NOT exist in sheet <br><br>"
             return false;
         }
-
-        // //get index of emailAddress given that it exists 
-        // $emailKey = array_search($emailAddress, $this->addresses);
-
-        // // echo "emailKey is: " . $emailKey . "<br>";
-        // // $isTouch = empty($emailKey);
-        // // echo "ISTOUCH: " . $isTouch . "<br>";
-        
-        // //convert to sheets readable form
-        // $emailIndex = 'B' . ($emailKey+2);
-        // // echo "email index is: " . $emailIndex . "<br>";
-
-        // //checks if email is in the sheet
-        // //return false for the function if not
-        // if (!(in_array($emailAddress, $addresses))){
-        //     // echo "this email does NOT exist in the sheet <br><br>";
-        //     return false;
-        // } 
-
-        // echo "this email exists in the sheet <br><br>";
 
         return true;
     }
@@ -104,15 +72,6 @@ class Verification extends CI_Model {
         //this takes emailIndex as a parameter
         //gets hex of the colour of the cell containing the email in question
         $colourIs = $this->Gsheet_Interface_Model->get_cell_colour($emailIndex);
-
-        // echo gettype($colourIs) . "<br>";
-        // echo "colour is: " . $colourIs . "<br>";
-
-        // if ($colourIs){
-        //     echo "colour exists <br>";
-        // } else {
-        //     echo "colour doesn't exist <br>";
-        // }
         
         //uncoloured cells return as 000000 (or sometimes ffffff because google sheets is extra like that)
         if ($colourIs == '000000' || $colourIs == 'ffffff'){
