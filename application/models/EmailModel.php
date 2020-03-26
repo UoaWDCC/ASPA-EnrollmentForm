@@ -23,17 +23,20 @@ class EmailModel extends CI_Model {
         $EVENT_DAY = "27";
         $EVENT_LOCATION = "Orange Pool club: 9 City Road, Auckland CBD";
         $EVENT_FEE = "3$ For ASPA Members (5$ Membership Fee)";
+        $EVENT_IMAGE = "https://secure.meetupstatic.com/photos/event/a/6/d/6/600_484542710.jpeg";
 
         // transfer details
         $TRANSFER_AMOUNT = "$3";
         $TRANSFER_ACCOUNT = "00000";
+
+        $MSG_COLOUR = "#ff0000"; 
         
         if ($paymentMethod == "online") 
         {
             $EMAIL_SUBJECT = "Event Payment Confirmation - ASPA 2020";
             $TICK_IMAGE = "assets/images/Green_Tick.png";
             $PAYMENT_DETAIL = "PAID ONLINE";
-            $TRANSFER_DETAIL = "";
+            $MSG_COLOUR = "#00ff00";
             
         }
         elseif ($paymentMethod == "cash") {
@@ -149,7 +152,7 @@ class EmailModel extends CI_Model {
                                                             <td valign="top" style="padding-right:0px;padding-left:0px;padding-top:0;padding-bottom:0;text-align:center">
 
 
-                                                                <img align="center" alt="" src="https://secure.meetupstatic.com/photos/event/a/6/d/6/600_484542710.jpeg" width="590" style="max-width:920px;padding-bottom:0;display:inline!important;vertical-align:bottom;border:0;height:auto;outline:none;text-decoration:none" class="m_-6544744198641712840mcnImage CToWUd a6T" tabindex="0"><div class="a6S" dir="ltr" style="opacity: 0.01; left: 557px; top: 378px;"><div id=":6z" class="T-I J-J5-Ji aQv T-I-ax7 L3 a5q" role="button" tabindex="0" aria-label="Download attachment " data-tooltip-class="a1V" data-tooltip="Download"><div class="aSK J-J5-Ji aYr"></div></div></div>
+                                                                <img align="center" alt="" src="' . $EVENT_IMAGE . '" width="590" style="max-width:920px;padding-bottom:0;display:inline!important;vertical-align:bottom;border:0;height:auto;outline:none;text-decoration:none" class="m_-6544744198641712840mcnImage CToWUd a6T" tabindex="0"><div class="a6S" dir="ltr" style="opacity: 0.01; left: 557px; top: 378px;"><div id=":6z" class="T-I J-J5-Ji aQv T-I-ax7 L3 a5q" role="button" tabindex="0" aria-label="Download attachment " data-tooltip-class="a1V" data-tooltip="Download"><div class="aSK J-J5-Ji aYr"></div></div></div>
 
 
                                                             </td>
@@ -210,7 +213,7 @@ class EmailModel extends CI_Model {
                                                                                             ' . $EVENT_LOCATION . '
                                                                                         </p>
 
-                                                                                        <p style="text-align:center;margin:10px 0;padding:0;color:#ff0000;font-family:Helvetica;font-size:40px;line-height:150%">
+                                                                                        <p style="text-align:center;margin:10px 0;padding:0;color:' . $MSG_COLOUR . ';font-family:Helvetica;font-size:40px;line-height:150%">
                                                                                             <strong>
                                                                                             ' . $PAYMENT_DETAIL . '<br>
                                                                                             ' . $TRANSFER_DETAIL . '
