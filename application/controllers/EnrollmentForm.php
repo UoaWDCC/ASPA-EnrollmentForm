@@ -22,6 +22,12 @@ class EnrollmentForm extends ASPA_Controller
         // Test out functions here
 
 	}
+
+	public function success()
+	{
+		$this->load->view('PaymentSuccessful');
+	}
+
 }
 
 /* End of file EnrollmentForm.php */
