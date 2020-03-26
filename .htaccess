@@ -1,13 +1,29 @@
 <IfModule mod_rewrite.c>
 RewriteEngine on
-RewriteBase /
 
+# ========================================================
+# ====  Uncomment to check if .htaccess is working  ======
+# RewriteRule ^.*$ htaccess_tester.php
+# ========================================================
+
+# ========================================================
+# ====  for assets files =================================
 # Rewrite if the file does not exists
 RewriteCond %{REQUEST_FILENAME} !-f
-
 # Rewrite only if the URI does not starts with assets
 RewriteCond %{REQUEST_URI} !^/assets
-
 # Rewrite any assets file
 RewriteRule ([^/]*).(css|js|png|jpe?g)$ assets/$1.$2 [L]
+# ========================================================
+
+# ========================================================
+# ====  for index.php rewrite  ===========================
+# Rewrite if the file does not exists
+RewriteCond %{REQUEST_FILENAME} !-f
+# Rewrite if the directory does not exists
+RewriteCond %{REQUEST_FILENAME} !-d
+# Rewrite to add index.php
+RewriteRule ^(.*)$ index.php?/$1 [L]
+# ========================================================
+
 </IfModule>
