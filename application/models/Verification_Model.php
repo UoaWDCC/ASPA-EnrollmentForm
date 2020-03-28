@@ -2,7 +2,7 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 include 'Gsheet_Interface_model.php';
 
-class Verification extends CI_Model {
+class Verification_Model extends CI_Model {
     // include_once 'class.verifyEmail.php';
 
     private $addresses = array();
@@ -32,8 +32,8 @@ class Verification extends CI_Model {
             return false;
         }
 
-        // require_once('Gsheet_Interface_Model.php');
         $this->load->model('Gsheet_Interface_Model');
+        $this->Gsheet_Interface_Model->set_spreadsheetId(SPREADSHEETID);
 
         //this gets the sheet size
         $sheetSize = $this->Gsheet_Interface_Model->get_sheet_size();
