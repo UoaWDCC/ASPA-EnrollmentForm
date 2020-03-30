@@ -116,7 +116,7 @@ function previousPage() {
 }
 
 // Enter key (keycode 13) triggers the click event of the appropriate buttons to go to next page.
-window.addEventListener("keypress", function(e) {
+window.addEventListener("keypress", function (e) {
 	if (e.keyCode === 13) {
 		switch (findActivePage()) {
 			case 1:
@@ -136,15 +136,15 @@ window.addEventListener("keypress", function(e) {
 	}
 });
 
-ok2.onclick = function() {
+ok2.onclick = function () {
 	nextPage();
 };
 
 // back buttons onclick function goes to the previous page
-back3.onclick = function() {
+back3.onclick = function () {
 	previousPage();
 };
-back4.onclick = function() {
+back4.onclick = function () {
 	previousPage();
 };
 
@@ -153,35 +153,47 @@ back4.onclick = function() {
 // ==========================================
 
 // name/email page (page 3) OK button onclick name and email validation
-ok3.onclick = function() {
+ok3.onclick = function () {
+	let emailAddress = inputEmail.value;
 	if (inputName.value.trim().length === 0) {
 		inputName.style.border = "1px solid red";
 		return;
 	} else {
 		inputName.style.border = "1px solid #00A22C";
 	}
-	if (!validateEmail(inputEmail.value)) {
-		exclamationEmail.style.visibility = "visible";
-		errorMsgs[0].style.visibility = "visible";
-		exclamationEmail.style.opacity = "1";
-		errorMsgs[0].style.opacity = "1";
-		inputEmail.style.border = "1px solid red";
-		return;
-	}
-	else{
-		emailAddress = inputEmail.value;
-	}
-	// JAIRU'S CODE
-	// if (!isEmailInSpreadsheet) {
-	// exclamationEmail.style.visibility = "visible";
-	// errorMsgs[0].style.visibility = "visible";
-	// exclamationEmail.style.opacity = "1";
-	// errorMsgs[0].style.opacity = "1";
-	// inputEmail.style.border = "1px solid red";
-	// 	return;
-	// }
-	
-	nextPage();
+	$.ajax({
+		cache: false,
+		url: "index.php/EnrollmentForm/validate",
+		contentType: "application/json; charset=utf-8",
+		method: "POST",
+		data: { emailAddress: emailAddress },
+		// if the validate() url functions correctly (even if it returns True/False), then success function executes.
+		success: function (data) {
+			console.log("data", data);
+			// data is a JSON object with the following properties:
+			// is_success: True/False (if the email validation succeeeded)
+			// message: any message
+			// extra: any further information
+			if (data.is_success === "True") {
+				tickEmail.style.visibility = "visible";
+				setTimeout(() => nextPage(), 1000);
+			} else {
+				// show the warning message to users
+				exclamationEmail.style.visibility = "visible";
+				errorMsgs[0].style.visibility = "visible";
+				exclamationEmail.style.opacity = "1";
+				errorMsgs[0].style.opacity = "1";
+				inputEmail.style.border = "1px solid red";
+				return;
+			}
+		},
+		// if there is something wrong in the code, the error function executes.
+		error: function (xhr) {
+			alert("Unknown error occurred. Please contact the team.");
+			console.log(xhr);
+			return;
+		},
+	});
 };
 
 // ==========================================
@@ -191,7 +203,7 @@ ok3.onclick = function() {
 // sets up event listener for button click
 [payCash, payTransfer, payWeChat, payAli, payCard, payPoli].forEach(
 	(item, index) => {
-		item.addEventListener("click", function(e) {
+		item.addEventListener("click", function (e) {
 			toggleButton(item);
 			showButton(index);
 		});
@@ -201,7 +213,7 @@ ok3.onclick = function() {
 // make the buttons look like they are toggled
 function toggleButton(buttonInUse) {
 	[payCash, payTransfer, payWeChat, payAli, payCard, payPoli].forEach(
-		button => {
+		(button) => {
 			if (buttonInUse === button) button.classList.add("toggled");
 			else button.classList.remove("toggled");
 		}
@@ -216,8 +228,7 @@ function showButton(index) {
 		proceedPayment.style.display = "none";
 		if (index === 0) {
 			paymentMethod = "cash";
-		}
-		else {
+		} else {
 			paymentMethod = "transfer";
 		}
 	} else {
@@ -228,24 +239,24 @@ function showButton(index) {
 }
 
 // TODO: these two buttons must connect to the next step of the enrollment form
-submit.onclick = function() {
+submit.onclick = function () {
 	alert("You have submitted the payment!");
 
 	// send email to the email address the user have inputed using ajax post
 	$.ajax({
 		cashe: false,
-     	url:'index.php/EnrollmentForm/send_email',
-     	method: 'POST',
-     	data: {'emailAddress': emailAddress, 'paymentMethod':paymentMethod},
-     	success: function(data){
-     		console.log(data);
+		url: "index.php/EnrollmentForm/send_email",
+		method: "POST",
+		data: { emailAddress: emailAddress, paymentMethod: paymentMethod },
+		success: function (data) {
+			console.log(data);
 
-     		// notify user that the email has been sent
-     		alert("Please check for comfirmation email!");
-      	}
-   	});
+			// notify user that the email has been sent
+			alert("Please check for comfirmation email!");
+		},
+	});
 };
-proceedPayment.onclick = function() {
+proceedPayment.onclick = function () {
 	alert("Taking you to proceed payment!");
 };
 
@@ -264,10 +275,4 @@ function findActivePage() {
 // Checks if an element is active (i.e. on the page)
 function isActive(el) {
 	return !(el.offsetParent === null);
-}
-
-// validates the email by checking if the input is in the right format (e.g. johnsmith@example.com)
-function validateEmail(email) {
-	var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-	return re.test(String(email).toLowerCase());
 }
