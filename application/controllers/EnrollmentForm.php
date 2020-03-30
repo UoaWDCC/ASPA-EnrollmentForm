@@ -34,8 +34,9 @@ class EnrollmentForm extends ASPA_Controller
 	 */
 	public function validate() {
 		$emailAddress = $this->input->post('emailAddress');
-		$this->load->model('Verification_Model', 'verificationModel');
-		if ($this->verificationModel->is_email_on_sheet($emailAddress)) {
+		$this->load->model('Verification_Model');
+		$result = $this->Verification_Model->is_email_on_sheet($emailAddress);
+		if ($result) {
 			$this->create_json('True', '', 'On sheet');
 		} else {
 			$this->create_json('False', '', 'Not on sheet');

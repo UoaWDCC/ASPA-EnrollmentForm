@@ -48,7 +48,9 @@ page3.style.display = "none";
 page4.style.display = "none";
 
 // validation icons/error message on page 3
-loading.style.display = "none";
+loading.style.visibility = "hidden";
+loading.style.opacity = "0";
+loading.style.transition = "visibility 0s, opacity 0.2s linear";
 exclamationEmail.style.visibility = "hidden";
 exclamationEmail.style.opacity = "0";
 exclamationEmail.style.transition = "visibility 0s, opacity 0.2s linear";
@@ -154,6 +156,8 @@ back4.onclick = function () {
 
 // name/email page (page 3) OK button onclick name and email validation
 ok3.onclick = function () {
+	loading.style.visibility = "visible";
+	loading.style.opacity = "1";
 	let emailAddress = inputEmail.value;
 	if (inputName.value.trim().length === 0) {
 		inputName.style.border = "1px solid red";
@@ -164,20 +168,31 @@ ok3.onclick = function () {
 	$.ajax({
 		cache: false,
 		url: "index.php/EnrollmentForm/validate",
-		contentType: "application/json; charset=utf-8",
+		// contentType: "application/json; charset=utf-8",
 		method: "POST",
+		// dataType: "json",
 		data: { emailAddress: emailAddress },
 		// if the validate() url functions correctly (even if it returns True/False), then success function executes.
 		success: function (data) {
-			console.log("data", data);
+			console.log(data);
 			// data is a JSON object with the following properties:
 			// is_success: True/False (if the email validation succeeeded)
 			// message: any message
 			// extra: any further information
 			if (data.is_success === "True") {
+				loading.style.visibility = "hidden";
+				loading.style.opacity = "0";
 				tickEmail.style.visibility = "visible";
+				tickEmail.style.opacity = "1";
+				exclamationEmail.style.visibility = "hidden";
+				errorMsgs[0].style.visibility = "hidden";
+				exclamationEmail.style.opacity = "0";
+				errorMsgs[0].style.opacity = "0";
+				inputEmail.style.border = "1px solid #00A22C";
 				setTimeout(() => nextPage(), 1000);
 			} else {
+				loading.style.visibility = "hidden";
+				loading.style.opacity = "0";
 				// show the warning message to users
 				exclamationEmail.style.visibility = "visible";
 				errorMsgs[0].style.visibility = "visible";
@@ -188,11 +203,11 @@ ok3.onclick = function () {
 			}
 		},
 		// if there is something wrong in the code, the error function executes.
-		error: function (xhr) {
-			alert("Unknown error occurred. Please contact the team.");
-			console.log(xhr);
-			return;
-		},
+		// error: function(xhr) {
+		// 	alert("Unknown error occurred. Please contact the team.");
+		// 	console.log(xhr);
+		// 	return;
+		// }
 	});
 };
 
