@@ -8,9 +8,8 @@
 require_once('vendor/autoload.php');
 //session_start();
 
-echo $session_id."AAAAAAAAAAAAAAA";
+echo $session_id;
 echo "<hr>";
-
 $hasPaid = False;
 
 \Stripe\Stripe::setApiKey(SECRETKEY);

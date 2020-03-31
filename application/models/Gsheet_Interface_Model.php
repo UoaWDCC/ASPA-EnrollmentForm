@@ -49,11 +49,12 @@ class Gsheet_Interface_Model extends CI_Model {
     // Finds the current root directory
     function getCurrentWorkingDir()
     {
-        // For Windows
-        // $dir = shell_exec('echo %cd%');
+        //For Windows
+        $dir = shell_exec('echo %cd%');
 
         // For MacOS / Linux / CentOS server
-        $dir = shell_exec('pwd');
+        // $dir = shell_exec('pwd');
+        
         $stripped = trim($dir);
         return $stripped;
     }

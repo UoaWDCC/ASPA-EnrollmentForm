@@ -342,7 +342,7 @@ proceedPayment.onclick = function() {
 	}
 	else if (toggled_index == 4) {
 		//Stripe Payment
-		$('#enrollment-form').attr('action', 'http://localhost/ASPA-GitLinked/EnrollmentForm/MakeStripePayment');
+		$('#enrollment-form').attr('action', 'http://localhost/ASPA-EnrollmentForm/EnrollmentForm/MakeStripePayment');
 		document.getElementById("enrollment-form").submit();
 		//window.open('http://localhost/ASPA-EnrollmentForm/EnrollmentForm/MakeStripePayment?email=');
 	}
