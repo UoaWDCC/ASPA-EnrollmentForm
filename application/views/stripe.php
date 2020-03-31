@@ -4,9 +4,8 @@
 <div id="session-id" style="display: none;">
 <?php
 
-//Get Email
-
 require_once('vendor/autoload.php');
+
 session_start();
 \Stripe\Stripe::setApiKey(SECRETKEY);
 $session = \Stripe\Checkout\Session::create([
