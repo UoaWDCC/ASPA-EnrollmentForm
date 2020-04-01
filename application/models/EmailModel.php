@@ -19,32 +19,39 @@ class EmailModel extends CI_Model {
         // event details
         $EVENT_NAME = "Pool Tournament";
         $EVENT_TIME = "27th March, 5:30 pm";
+        $EVENT_MONTH = "March 2020";
+        $EVENT_DAY = "27";
         $EVENT_LOCATION = "Orange Pool club: 9 City Road, Auckland CBD";
+        $EVENT_FEE = "3$ For ASPA Members (5$ Membership Fee)";
+        $EVENT_IMAGE = "https://secure.meetupstatic.com/photos/event/a/6/d/6/600_484542710.jpeg";
 
         // transfer details
         $TRANSFER_AMOUNT = "$3";
         $TRANSFER_ACCOUNT = "00000";
+
+        $MSG_COLOUR = "#ff0000"; 
         
-        if ($paymentMethod = "online") 
+        if ($paymentMethod == "online") 
         {
             $EMAIL_SUBJECT = "Event Payment Confirmation - ASPA 2020";
             $TICK_IMAGE = "assets/images/Green_Tick.png";
-            $TRANSFER_DETAIL = "";
+            $PAYMENT_DETAIL = "PAID ONLINE";
+            $MSG_COLOUR = "#00ff00";
             
         }
-        elseif ($paymentMethod = "cash") {
+        elseif ($paymentMethod == "cash") {
             $EMAIL_SUBJECT = "Event Registration - ASPA 2020";
             $TICK_IMAGE = "assets/images/Grey_Tick.jpg";
+            $PAYMENT_DETAIL = "CASH";
             $TRANSFER_DETAIL = "";
         }
         else {
             $EMAIL_SUBJECT = "Event Registration - ASPA 2020";
             $TICK_IMAGE = "assets/images/Grey_tick.png";
+            $PAYMENT_DETAIL = "TRANSFER";
             $TRANSFER_DETAIL = "Please transfer " . $TRANSFER_AMOUNT . " to our bank account - " . $TRANSFER_ACCOUNT . "\r\n";
         }
         
-        
-
 
         $to = $EMAIL_RECIEVER;
 
@@ -108,9 +115,9 @@ class EmailModel extends CI_Model {
 
                                                             <td valign="top" class="m_-6544744198641712840mcnTextContent" style="padding-top:0;padding-right:18px;padding-bottom:9px;padding-left:18px;word-break:break-word;color:#202020;font-family:Helvetica;font-size:16px;line-height:150%;text-align:left">
 
-                                                                <h1 style="display:block;margin:0;padding:0;color:#888888;font-family:Helvetica;font-size:30px;font-style:normal;font-weight:bold;line-height:100%;letter-spacing:normal;text-align:left"><span style="font-size:38px"><span style="color:#303030">ASPA\'s 2020 Welcoming Event</span></span></h1>
+                                                                <h1 style="display:block;margin:0;padding:0;color:#888888;font-family:Helvetica;font-size:30px;font-style:normal;font-weight:bold;line-height:100%;letter-spacing:normal;text-align:left"><span style="font-size:38px"><span style="color:#303030">Thank you for siging up to ' . $EVENT_NAME . '</span></span></h1>
 
-                                                                <h3 style="display:block;margin:0;padding:0;color:#303030;font-family:Helvetica;font-size:16px;font-style:normal;font-weight:bold;line-height:125%;letter-spacing:normal;text-align:left">Proudly presented by Auckland Student Pool Association &amp; Consulting Club</h3>
+                                                                <h3 style="display:block;margin:0;padding:0;color:#303030;font-family:Helvetica;font-size:16px;font-style:normal;font-weight:bold;line-height:125%;letter-spacing:normal;text-align:left">Proudly presented by Auckland Student Pool Association</h3>
 
                                                             </td>
                                                         </tr>
@@ -145,7 +152,7 @@ class EmailModel extends CI_Model {
                                                             <td valign="top" style="padding-right:0px;padding-left:0px;padding-top:0;padding-bottom:0;text-align:center">
 
 
-                                                                <img align="center" alt="" src="https://ci6.googleusercontent.com/proxy/a-Y11PhU3wrOroceUvdi72htBcLGu4AMrj_uQLxEOBIb625yGxPz--IvpzkXXchctvtb-6PidAISL-jD42bJG3bz6gYPRT43qLPjPbEvdaJfBl4hxU3sIvPZHd7mVyGPvQihYeCFxdJS-0pVVpXZN_TiJvJgGQ=s0-d-e1-ft#https://mcusercontent.com/7144f488626ff8b60ce740739/images/c27ed99d-749a-46a7-8fb8-173e52c2fe2c.png" width="590" style="max-width:920px;padding-bottom:0;display:inline!important;vertical-align:bottom;border:0;height:auto;outline:none;text-decoration:none" class="m_-6544744198641712840mcnImage CToWUd a6T" tabindex="0"><div class="a6S" dir="ltr" style="opacity: 0.01; left: 557px; top: 378px;"><div id=":6z" class="T-I J-J5-Ji aQv T-I-ax7 L3 a5q" role="button" tabindex="0" aria-label="Download attachment " data-tooltip-class="a1V" data-tooltip="Download"><div class="aSK J-J5-Ji aYr"></div></div></div>
+                                                                <img align="center" alt="" src="' . $EVENT_IMAGE . '" width="590" style="max-width:920px;padding-bottom:0;display:inline!important;vertical-align:bottom;border:0;height:auto;outline:none;text-decoration:none" class="m_-6544744198641712840mcnImage CToWUd a6T" tabindex="0"><div class="a6S" dir="ltr" style="opacity: 0.01; left: 557px; top: 378px;"><div id=":6z" class="T-I J-J5-Ji aQv T-I-ax7 L3 a5q" role="button" tabindex="0" aria-label="Download attachment " data-tooltip-class="a1V" data-tooltip="Download"><div class="aSK J-J5-Ji aYr"></div></div></div>
 
 
                                                             </td>
@@ -188,27 +195,29 @@ class EmailModel extends CI_Model {
 
                                                                                 <p style="margin:10px 0;padding:0;color:#505050;font-family:Helvetica;font-size:16px;line-height:150%;text-align:left">Hi there!</p>
 
-                                                                                <p style="text-align:left;margin:10px 0;padding:0;color:#505050;font-family:Helvetica;font-size:16px;line-height:150%">ASPA is back bigger and better than ever before!&nbsp;</p><div>
+                                                                                <p style="text-align:left;margin:10px 0;padding:0;color:#505050;font-family:Helvetica;font-size:16px;line-height:150%">ASPA is back bigger and better than ever before! As for the start of 2020 we will be kicking off our first event with a casual night where new and old members can gather together to socialize over a few rounds of pool!&nbsp;</p><div>
                                                                                     <div class="adm"><div id="q_54" class="ajR h4"><div class="ajT"></div></div></div><div class="h5">
 
-                                                                                        <p style="margin:10px 0;padding:0;color:#505050;font-family:Helvetica;font-size:16px;line-height:150%;text-align:left">
-                                                                                            As for the start of 2020 we will be kicking off our first event with a casual night where new and old members can gather together to socialize over a few rounds of pool! <br>
+                                                                                        <p style="margin:10px 0;padding:0;color:#ff0000;font-family:Helvetica;font-size:16px;line-height:150%;text-align:left">
+                                                                                        Please present this email to ASPA executive team member at the event. <br>
                                                                                             &nbsp;
                                                                                         </p>
 
                                                                                         <p style="text-align:center;margin:10px 0;padding:0;color:#505050;font-family:Helvetica;font-size:16px;line-height:150%">
                                                                                             <strong>When: </strong><br>
-                                                                                            Thursday 12th March 6:30pm - 8:00pm
+                                                                                            ' . $EVENT_TIME . '
                                                                                         </p>
 
                                                                                         <p style="text-align:center;margin:10px 0;padding:0;color:#505050;font-family:Helvetica;font-size:16px;line-height:150%">
                                                                                             <strong>Where:</strong><br>
-                                                                                            Orange Pool Club (Corner of Liverpool St and City Rd)
+                                                                                            ' . $EVENT_LOCATION . '
                                                                                         </p>
 
-                                                                                        <p style="text-align:center;margin:10px 0;padding:0;color:#505050;font-family:Helvetica;font-size:16px;line-height:150%">
-                                                                                            <strong>Entry Fee:</strong><br>
-                                                                                            3$ For ASPA Members (5$ Membership Fee)<br>
+                                                                                        <p style="text-align:center;margin:10px 0;padding:0;color:' . $MSG_COLOUR . ';font-family:Helvetica;font-size:40px;line-height:150%">
+                                                                                            <strong>
+                                                                                            ' . $PAYMENT_DETAIL . '<br>
+                                                                                            ' . $TRANSFER_DETAIL . '
+                                                                                            <br>
                                                                                             &nbsp;
                                                                                         </p>
                                                                                     </div>
@@ -243,7 +252,7 @@ class EmailModel extends CI_Model {
                                                                 </tr>
                                                                 <tr>
                                                                     <td align="center" valign="top" id="m_-6544744198641712840dayContainer" style="background-color:#ffffff;color:#303030;font-family:Helvetica;font-size:72px;font-weight:bold;line-height:100%">
-                                                                        <div>12</div>
+                                                                        <div>' . $EVENT_DAY . '</div>
                                                                     </td>
                                                                 </tr>
                                                             </tbody>
@@ -270,8 +279,8 @@ class EmailModel extends CI_Model {
                                                                                                 <tr>
                                                                                                     <td valign="top" class="m_-6544744198641712840mcnTextContent" style="padding:18px;color:#f2f2f2;font-family:Helvetica;font-size:14px;font-weight:normal;text-align:center;word-break:break-word;line-height:150%">
                                                                                                         <span style="color:#303030">
-                                                                                                            10:00 to 18:00<br>
-                                                                                                            Room 405-460
+                                                                                                            ' . $EVENT_TIME . '<br>
+                                                                                                            ' . $EVENT_LOCATION . '
                                                                                                         </span>
                                                                                                     </td>
                                                                                                 </tr>
@@ -290,46 +299,6 @@ class EmailModel extends CI_Model {
                                                         </table><table border="0" cellpadding="0" cellspacing="0" width="100%" style="min-width:100%;border-collapse:collapse">
                                                             <tbody>
                                                                 <tr>
-                                                                    <td valign="top" style="padding-top:9px">
-
-
-
-                                                                        <table align="left" border="0" cellpadding="0" cellspacing="0" style="max-width:100%;min-width:100%;border-collapse:collapse" width="100%" class="m_-6544744198641712840mcnTextContentContainer">
-                                                                            <tbody>
-                                                                                <tr>
-
-                                                                                    <td valign="top" class="m_-6544744198641712840mcnTextContent" style="padding-top:0;padding-right:18px;padding-bottom:9px;padding-left:18px;word-break:break-word;color:#505050;font-family:Helvetica;font-size:12px;line-height:150%;text-align:left">
-
-                                                                                        Sign up today!
-                                                                                    </td>
-                                                                                </tr>
-                                                                            </tbody>
-                                                                        </table>
-
-
-
-                                                                    </td>
-                                                                </tr>
-                                                            </tbody>
-                                                        </table><table border="0" cellpadding="0" cellspacing="0" width="100%" style="min-width:100%;border-collapse:collapse">
-                                                            <tbody>
-                                                                <tr>
-                                                                    <td style="padding-top:0;padding-right:18px;padding-bottom:18px;padding-left:18px" valign="top" align="center">
-                                                                        <table border="0" cellpadding="0" cellspacing="0" width="100%" style="border-collapse:separate!important;border:5px solid #ffffff;border-radius:0px;background-color:#1c5a9a">
-                                                                            <tbody>
-                                                                                <tr>
-                                                                                    <td align="center" valign="middle" style="font-family:Helvetica;font-size:14px;padding:15px">
-                                                                                        <a class="m_-6544744198641712840mcnButton" title="REGISTER" href="https://wdcc.us4.list-manage.com/track/click?u=7144f488626ff8b60ce740739&amp;id=8ebc1f0e31&amp;e=719a5ef366" style="font-weight:bold;letter-spacing:normal;line-height:100%;text-align:center;text-decoration:none;color:#ffffff;display:block" target="_blank" data-saferedirecturl="https://www.google.com/url?q=https://wdcc.us4.list-manage.com/track/click?u%3D7144f488626ff8b60ce740739%26id%3D8ebc1f0e31%26e%3D719a5ef366&amp;source=gmail&amp;ust=1583892241057000&amp;usg=AFQjCNFYyQWnUEMqGWRhrr0GKEsprILcOw">REGISTER</a>
-                                                                                    </td>
-                                                                                </tr>
-                                                                            </tbody>
-                                                                        </table>
-                                                                    </td>
-                                                                </tr>
-                                                            </tbody>
-                                                        </table><table border="0" cellpadding="0" cellspacing="0" width="100%" style="min-width:100%;border-collapse:collapse">
-                                                            <tbody>
-                                                                <tr>
                                                                     <td valign="top" style="padding:9px">
                                                                         <table align="left" width="100%" border="0" cellpadding="0" cellspacing="0" style="min-width:100%;border-collapse:collapse">
                                                                             <tbody>
@@ -337,7 +306,7 @@ class EmailModel extends CI_Model {
                                                                                     <td valign="top" style="padding-right:9px;padding-left:9px;padding-top:0;padding-bottom:0;text-align:center">
 
 
-                                                                                        <img align="center" alt="" src="https://ci6.googleusercontent.com/proxy/GOFpLDJtori8DtVZ29zvNwvyIQ5hvGIVAsDbMsgx0ZgydfjQi-IHro8QVuKOxa3VZYS56a2cMSpVFSR4tEgMxoGl2-YF-HbeuQyxzSAqnmPtuPZHh2XBHECbFdef8ZD5VNp_BdutUrkGofWYVPCqfISKkvtGJw=s0-d-e1-ft#https://mcusercontent.com/7144f488626ff8b60ce740739/images/86f579ab-d6b3-4b1e-ae4b-77671157aea0.png" width="150" style="max-width:256px;padding-bottom:0;display:inline!important;vertical-align:bottom;border:0;height:auto;outline:none;text-decoration:none" class="m_-6544744198641712840mcnImage CToWUd a6T" tabindex="0"><div class="a6S" dir="ltr" style="opacity: 0.01; left: -8px; top: -8px;"><div id=":70" class="T-I J-J5-Ji aQv T-I-ax7 L3 a5q" title="Download" role="button" tabindex="0" aria-label="Download attachment " data-tooltip-class="a1V"><div class="aSK J-J5-Ji aYr"></div></div></div>
+                                                                                        <img align="center" alt="" src="https://scontent.fhlz1-1.fna.fbcdn.net/v/t1.0-9/37003567_653981724937409_7887348173679624192_n.png?_nc_cat=103&_nc_sid=85a577&_nc_oc=AQlCpgJ-i9yxbnHkDPi4_GoH7Hf9tgHw1J4-3KsiZ0To0-dQUBozDgzlQXRrXP1wyay4hQEM5K8FvSNhdiVbjJlB&_nc_ht=scontent.fhlz1-1.fna&oh=40672df287143b36758e79ac1c0fb1b3&oe=5E9C5099" width="150" style="max-width:256px;padding-bottom:0;display:inline!important;vertical-align:bottom;border:0;height:auto;outline:none;text-decoration:none" class="m_-6544744198641712840mcnImage CToWUd a6T" tabindex="0"><div class="a6S" dir="ltr" style="opacity: 0.01; left: -8px; top: -8px;"><div id=":70" class="T-I J-J5-Ji aQv T-I-ax7 L3 a5q" title="Download" role="button" tabindex="0" aria-label="Download attachment " data-tooltip-class="a1V"><div class="aSK J-J5-Ji aYr"></div></div></div>
 
 
                                                                                     </td>
@@ -355,9 +324,6 @@ class EmailModel extends CI_Model {
 
                                     </div>
                                 </div>
-                            </td>
-                            <td align="right" valign="top" style="padding-top:18px">
-                                <img src="https://ci6.googleusercontent.com/proxy/GOEk0t9O_cxYfhnbeXSqh1aNOaru0XtX8pFCSTqCKmJDzJ0QI0PfRneq_8i-PsQcrhx6jqXtie0JVF6mYy6IngjYTLT4n_pfNjE0mMwvlwATXnSh6Zu8gIq5IOgXF1Hp7-plNoEbyCXuVZydbioEsozoGBs=s0-d-e1-ft#https://cdn-images.mailchimp.com/template_images/gallery/03c9e5d8-4a2f-471e-b646-37327134c2b0.png" height="30" width="15" style="display:block;border:0;height:auto;outline:none;text-decoration:none" class="CToWUd">
                             </td>
                         </tr>
                     </tbody>

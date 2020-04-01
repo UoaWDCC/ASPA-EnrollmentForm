@@ -35,6 +35,10 @@ let payAli = document.getElementById("btn-alipay");
 let payCard = document.getElementById("btn-creditcard");
 let payPoli = document.getElementById("btn-poliay");
 
+// Email Address
+let emailAddress = "";
+let paymentMethod = "";
+
 // ==========================================
 //        Setup of Initial state
 // ==========================================
@@ -178,6 +182,9 @@ ok3.onclick = function() {
 		inputEmail.style.border = "1px solid red";
 		return;
 	}
+	else{
+		emailAddress = inputEmail.value;
+	}
 	// JAIRU'S CODE
 	// if (!isEmailInSpreadsheet) {
 	// exclamationEmail.style.visibility = "visible";
@@ -187,6 +194,7 @@ ok3.onclick = function() {
 	// inputEmail.style.border = "1px solid red";
 	// 	return;
 	// }
+	
 	nextPage();
 };
 
@@ -220,15 +228,32 @@ function showButton(index) {
 	if (index === 0 || index === 1) {
 		submit.style.display = "flex";
 		proceedPayment.style.display = "none";
+		if (index === 0) {
+			paymentMethod = "cash";
+		}
+		else {
+			paymentMethod = "transfer";
+		}
 	} else {
 		submit.style.display = "none";
 		proceedPayment.style.display = "flex";
+		paymentMethod = "online";
 	}
 }
 
 // TODO: these two buttons must connect to the next step of the enrollment form
 submit.onclick = function() {
 	alert("You have submitted the payment!");
+	// window.location.href = "index.php/EnrollmentForm/send_email";
+	$.ajax({
+		cashe: false,
+     	url:'index.php/EnrollmentForm/send_email',
+     	method: 'POST',
+     	data: {'emailAddress': emailAddress, 'paymentMethod':paymentMethod},
+     	success: function(data){
+     		alert("success");
+      	}
+   	});
 };
 proceedPayment.onclick = function() {
 	alert("Taking you to proceed payment!");

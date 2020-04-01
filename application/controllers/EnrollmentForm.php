@@ -25,9 +25,9 @@ class EnrollmentForm extends ASPA_Controller
 
     public function send_email()
     {
-        $emailAddress = "willyzhysh@gmail.com";
-        $paymentMethod = "cash";
-
+        // $emailAddress = "willyzhysh@gmail.com";
+        $emailAddress = $this->input->post('emailAddress');
+        $paymentMethod = $this->input->post('paymentMethod');;
         $this->load->model('EmailModel');
         $this->EmailModel->sendEmail($emailAddress, $paymentMethod);
     }
