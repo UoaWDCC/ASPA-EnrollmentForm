@@ -13,14 +13,6 @@ class EnrollmentForm extends ASPA_Controller
 		$this->load->view('EnrollmentForm');
 	}
 
-	public function sheetsapi_test()
-	{
-        $this->load->model('Gsheet_Interface_Model');
-
-        // Test out functions here
-
-	}
-
     public function send_email()
     {
         // pass in emailAddress & paymentMethod using ajax post
