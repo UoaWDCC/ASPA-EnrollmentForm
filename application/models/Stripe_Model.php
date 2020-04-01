@@ -11,17 +11,46 @@ class Stripe_Model extends CI_Model {
     }
 
     /**
+     *  Generates a new stripe session with a customer email
+     * 
+     * @param string $customer_email             The email address of the session
+     * 
+     * @return $sessID                          The id of the newly created session
+     */
+    function GenSessionId ($customer_email) {
+
+        require_once('vendor/autoload.php');
+
+        \Stripe\Stripe::setApiKey(SECRETKEY);
+        $session = \Stripe\Checkout\Session::create([
+        'payment_method_types' => ['card'],
+        'line_items' => [[
+            'name' => 'ASPA Event entry',
+            'description' => 'Your entry into the next ASPA event!',
+            'images' => ['https://example.com/t-shirt.png'],
+            'amount' => 300,
+            'currency' => 'NZD',
+            'quantity' => 1,
+        ]],
+        'success_url' => base_url().'EnrollmentForm/StripePaymentSucessful?session_id={CHECKOUT_SESSION_ID}',
+        'cancel_url' => base_url().'EnrollmentForm',
+        'customer_email' => $customer_email,
+
+        ]);
+        $stripeSession = array($session);
+        $sessID = ($stripeSession[0]['id']);
+        return $sessID;
+    }
+    
+    /**
 	* This function checks if the stripe session has made it's payment successfully
 	*
-	* @param string    	$session_id  		The session id of this current payment sessio
+	* @param string    	$session_id  		The session id of this current payment session
 	*/
     function CheckPayment($session_id)
     {
         require_once('vendor/autoload.php');
         //session_start();
-
-        echo $session_id;
-        echo "<hr>";
 
         $hasPaid = False;
 
@@ -41,7 +70,6 @@ class Stripe_Model extends CI_Model {
         
             //Checking if a paid session id matches with current session id
             if ($session->id == $session_id) {
-                
                 $hasPaid = True;
                 break;
             }
@@ -49,6 +77,13 @@ class Stripe_Model extends CI_Model {
         return  $hasPaid;
     }
 
+    /**
+     * This Function returns the customers email given a session id
+     * 
+     * @param string $session_id             The session id of the desired email address
+     * 
+     * @return $email the email address of a given session
+     */
     function GetEmail($session_id) {
     
         \Stripe\Stripe::setApiKey(SECRETKEY);
@@ -57,32 +92,7 @@ class Stripe_Model extends CI_Model {
         $session_id
         );
 
-        return $session_object->customer_email;
-
-    }
-
-    function GenSessionId ($customer_email) {
-
-        require_once('vendor/autoload.php');
-
-        \Stripe\Stripe::setApiKey(SECRETKEY);
-        $session = \Stripe\Checkout\Session::create([
-        'payment_method_types' => ['card'],
-        'line_items' => [[
-            'name' => 'ASPA Event entry',
-            'description' => 'Your entry into the next ASPA event!',
-            'images' => ['https://example.com/t-shirt.png'],
-            'amount' => 300,
-            'currency' => 'NZD',
-            'quantity' => 1,
-        ]],
-        'success_url' => base_url().'EnrollmentForm/StripePaymentSucessful?session_id={CHECKOUT_SESSION_ID}',
-        // 'success_url' => 'http://localhost/ASPA-EnrollmentForm/EnrollmentForm/loadPaymentSucessful?session_id={CHECKOUT_SESSION_ID}',
-        'cancel_url' => 'http://localhost',
-        'customer_email' => $customer_email,
-
-        ]);
-        $stripeSession = array($session);
-        return ($stripeSession[0]['id']);
+        $email = $session_object->customer_email;
+        return $email;
     }
 }
