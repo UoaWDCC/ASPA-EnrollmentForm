@@ -29,10 +29,10 @@ class EnrollmentForm extends ASPA_Controller
 
         // Put the data into spreadsheet
         $this->load->model('Gsheet_Interface_Model');
-        $this->load->model('Stripe_Model');
         $this->Gsheet_Interface_Model->record_to_sheet($data['email'],$data['name'],'Stripe',FALSE);
 
         //Generating the session id
+        $this->load->model('Stripe_Model');
         $data['session_id'] = $this->Stripe_Model->GenSessionId($data['email']);
 
         // Initiate the stripe payment
@@ -42,23 +42,21 @@ class EnrollmentForm extends ASPA_Controller
 
     public function StripePaymentSucessful() 
     {
-
         $this->load->model('Stripe_Model');
         $this->load->model('Gsheet_Interface_Model');
 
         $data['session_id'] = $this->input->get('session_id');
-        
 
+        //Checking if payment was made to their session and obtain their email
         $hasPaid = $this->Stripe_Model->CheckPayment($data['session_id']);
         $data['email'] = $this->Stripe_Model->GetEmail($data['session_id']);
 
+        //if the user has paid
         if ($hasPaid) 
         { 
-
             // HighLight the row (get the user's email)
             // Get the row of the specific email from google sheets
             $cell = $this->Gsheet_Interface_Model->get_cellrange($data['email'], 'B');
-
             if (!isset($cell)) 
             { 
                 show_error("Something went wrong, your email was not found in the ASPA member list",'002');
