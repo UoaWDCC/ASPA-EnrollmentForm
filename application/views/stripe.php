@@ -1,40 +1,11 @@
 <HEAD><script src="https://js.stripe.com/v3/"></script></HEAD>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 
-<div id="session-id" style="display: none;">
-<?php
-
-require_once('vendor/autoload.php');
-
-session_start();
-\Stripe\Stripe::setApiKey(SECRETKEY);
-$session = \Stripe\Checkout\Session::create([
-  'payment_method_types' => ['card'],
-  'line_items' => [[
-    'name' => 'ASPA Event entry',
-    'description' => 'Your entry into the next ASPA event!',
-    'images' => ['https://example.com/t-shirt.png'],
-    'amount' => 300,
-    'currency' => 'NZD',
-    'quantity' => 1,
-  ]],
-  'success_url' => base_url().'EnrollmentForm/StripePaymentSucessful?session_id={CHECKOUT_SESSION_ID}',
-  // 'success_url' => 'http://localhost/ASPA-EnrollmentForm/EnrollmentForm/loadPaymentSucessful?session_id={CHECKOUT_SESSION_ID}',
-  'cancel_url' => 'http://localhost',
-  'customer_email' => $email,
-
-]);
-$stripeSession = array($session);
-$sessId = ($stripeSession[0]['id']);
-?>
-</div>
-
-
 <script type="text/javascript">
   $(document).ready(function() {
     var stripe = Stripe('<?php echo PUBLICKEY ?>');
     var div = document.getElementById("session-id");
-    var myData = "<?php echo $sessId ?>";
+    var myData = "<?php echo $session_id ?>";
 
   stripe.redirectToCheckout({
   // Make the id field from the Checkout Session creation API response
@@ -48,5 +19,4 @@ $sessId = ($stripeSession[0]['id']);
   });
     
 	});
-
 </script>
