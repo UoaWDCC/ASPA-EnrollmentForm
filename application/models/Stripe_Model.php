@@ -45,9 +45,6 @@ class Stripe_Model extends CI_Model {
                 $hasPaid = True;
                 break;
             }
-            else {
-                echo "error";
-            }
         }
         return  $hasPaid;
     }
