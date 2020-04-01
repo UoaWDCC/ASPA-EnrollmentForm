@@ -25,10 +25,15 @@ class EnrollmentForm extends ASPA_Controller
         // Receive data from form, method=POST
         $data['name'] = $this->input->post('name');
         $data['email'] = $this->input->post('email');
+        $data['session_id'] = "id"; 
 
         // Put the data into spreadsheet
         $this->load->model('Gsheet_Interface_Model');
+        $this->load->model('Stripe_Model');
         $this->Gsheet_Interface_Model->record_to_sheet($data['email'],$data['name'],'Stripe',FALSE);
+
+        //Generating the session id
+        $data['session_id'] = $this->Stripe_Model->GenSessionId($data['email']);
 
         // Initiate the stripe payment
         $this->load->view('stripe.php', $data);
