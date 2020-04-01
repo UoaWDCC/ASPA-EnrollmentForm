@@ -6,31 +6,12 @@ class EnrollmentForm extends ASPA_Controller
 
 	function __construct() {
 		parent::__construct();
-		// $this->load->helper();
-		// $this->load->model();
 	}
 
 	public function index()
 	{
 		$this->load->view('EnrollmentForm');
 	}
-
-	public function sheetsapi_test()
-	{
-        $this->load->model('Gsheet_Interface_Model');
-
-        // Test out functions here
-
-	}
-
-    public function send_email()
-    {
-        // $emailAddress = "willyzhysh@gmail.com";
-        $emailAddress = $this->input->post('emailAddress');
-        $paymentMethod = $this->input->post('paymentMethod');;
-        $this->load->model('EmailModel');
-        $this->EmailModel->sendEmail($emailAddress, $paymentMethod);
-    }
 }
 
 /* End of file EnrollmentForm.php */
