@@ -14,6 +14,10 @@ class Gsheet_Interface_Model extends CI_Model {
         $this->spreadsheetId = $spreadsheetId;
     }
 
+    public function set_spreadsheetId($spreadsheetId) {
+        $this->spreadsheetId = $spreadsheetId;
+    }
+
     // Setting up service function
     function service_setup()
     {

@@ -6,8 +6,6 @@ class EnrollmentForm extends ASPA_Controller
 
 	function __construct() {
 		parent::__construct();
-		// $this->load->helper();
-		// $this->load->model();
 	}
 
 	public function index()
