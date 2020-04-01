@@ -244,14 +244,18 @@ function showButton(index) {
 // TODO: these two buttons must connect to the next step of the enrollment form
 submit.onclick = function() {
 	alert("You have submitted the payment!");
-	// window.location.href = "index.php/EnrollmentForm/send_email";
+
+	// send email to the email address the user have inputed using ajax post
 	$.ajax({
 		cashe: false,
      	url:'index.php/EnrollmentForm/send_email',
      	method: 'POST',
      	data: {'emailAddress': emailAddress, 'paymentMethod':paymentMethod},
      	success: function(data){
-     		alert("success");
+     		console.log(data);
+
+     		// notify user that the email has been sent
+     		alert("Please check for comfirmation email!");
       	}
    	});
 };
