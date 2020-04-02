@@ -78,7 +78,9 @@ proceedPayment.style.display = "none";
 //             Page Navigation
 // ==========================================
 
-// go to the next page of the membership system
+/**
+ * go to the next page of the membership system
+ */
 function nextPage() {
 	switch (findActivePage()) {
 		case 1:
@@ -107,7 +109,9 @@ function nextPage() {
 	}
 }
 
-// go to the previous page of the membership system
+/**
+ * go to the previous page of the membership system
+ */
 function previousPage() {
 	switch (findActivePage()) {
 		case 3:
@@ -272,7 +276,10 @@ function showWarning() {
 	}
 );
 
-// make the buttons look like they are toggled
+/**
+ * make the buttons look like they are toggled
+ * @param {int} buttonInUse
+ */
 function toggleButton(buttonInUse) {
 	[payCash, payTransfer, payWeChat, payAli, payCard, payPoli].forEach(
 		(button) => {
@@ -282,8 +289,11 @@ function toggleButton(buttonInUse) {
 	);
 }
 
-// show Submit button if user pays using Cash/Bank transfer
-// show proceed payment if user pays using Wechat/AliPay/Credit/Debit/PoLi Pay
+/**
+ * show Submit button if user pays using Cash/Bank transfer
+ * show proceed payment if user pays using Wechat/AliPay/Credit/Debit/PoLi Pay
+ * @param {int} index
+ */
 function showButton(index) {
 	if (index === 0 || index === 1) {
 		submit.style.display = "flex";
@@ -326,7 +336,9 @@ proceedPayment.onclick = function () {
 //             Helper Functions
 // ==========================================
 
-// finds the page that is currently active
+/**
+ * finds the page that is currently active
+ */
 function findActivePage() {
 	if (isActive(page1)) return 1;
 	else if (isActive(page2)) return 2;
@@ -334,7 +346,9 @@ function findActivePage() {
 	else if (isActive(page4)) return 4;
 }
 
-// Checks if an element is active (i.e. on the page)
+/**
+ * Checks if an element is active (i.e. on the page)
+ */
 function isActive(el) {
 	return !(el.offsetParent === null);
 }
