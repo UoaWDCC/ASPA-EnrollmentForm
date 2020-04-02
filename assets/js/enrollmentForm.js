@@ -26,6 +26,15 @@ let tickEmail = document.getElementById("tick-email");
 let exclamationEmail = document.getElementById("exclamation-email");
 let loading = document.getElementById("loading");
 let errorMsgs = document.getElementsByClassName("div-errormsg");
+let errorMsgArray = document.getElementsByClassName("p-errormessage");
+const notSignedUpUnpaidErr = [
+	"Unrecognized email, please use the email you signed up to ASPA with.",
+	"If you are not a member yet, please register first."
+];
+const signedUpUnpaidErr = [
+	"You have signed up, but have not paid for membership fees.",
+	"Please contact the ASPA Team to pay for membership."
+];
 
 // get the payment button types on page 4
 let payCash = document.getElementById("btn-cash");
@@ -184,9 +193,15 @@ ok3.onclick = function () {
 				setTimeout(() => nextPage(), 1000);
 			} else if (data.is_success === "False" && data.extra === signedUpUnpaid) {
 				showWarning();
+				// change the error message to be "signed up but unpaid" warning
+				errorMsgArray[0].innerHTML = signedUpUnpaidErr[0];
+				errorMsgArray[1].innerHTML = signedUpUnpaidErr[1];
 				return;
 			} else {
 				showWarning();
+				// change the error message to be "unrecognized email, please sign up" warning
+				errorMsgArray[0].innerHTML = notSignedUpUnpaidErr[0];
+				errorMsgArray[1].innerHTML = notSignedUpUnpaidErr[1];
 				return;
 			}
 		},
