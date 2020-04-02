@@ -85,6 +85,7 @@ function nextPage() {
 			page2.style.display = "none";
 			page3.style.display = "flex";
 			page4.style.display = "none";
+			setTimeout(() => inputName.focus(), 1000); // autofocus to name field
 			break;
 		case 3:
 			page3.classList.remove("page3-appear");
@@ -156,9 +157,9 @@ back4.onclick = function () {
 
 // name/email page (page 3) OK button onclick name and email validation
 ok3.onclick = function () {
-	loading.style.visibility = "visible";
-	loading.style.opacity = "1";
-	let emailAddress = inputEmail.value;
+	hideAllWarnings();
+	showLoading();
+	let emailAddress = inputEmail.value.trim(); // collect email
 	if (inputName.value.trim().length === 0) {
 		inputName.style.border = "1px solid red";
 		return;
@@ -168,9 +169,7 @@ ok3.onclick = function () {
 	$.ajax({
 		cache: false,
 		url: "index.php/EnrollmentForm/validate",
-		// contentType: "application/json; charset=utf-8",
 		method: "POST",
-		// dataType: "json",
 		data: { emailAddress: emailAddress },
 		// if the validate() url functions correctly (even if it returns True/False), then success function executes.
 		success: function (data) {
@@ -179,37 +178,71 @@ ok3.onclick = function () {
 			// is_success: True/False (if the email validation succeeeded)
 			// message: any message
 			// extra: any further information
+			const signedUpUnpaid = "Error: signed up but not paid"; // edit these if the 'extra' message is modified
 			if (data.is_success === "True") {
-				loading.style.visibility = "hidden";
-				loading.style.opacity = "0";
-				tickEmail.style.visibility = "visible";
-				tickEmail.style.opacity = "1";
-				exclamationEmail.style.visibility = "hidden";
-				errorMsgs[0].style.visibility = "hidden";
-				exclamationEmail.style.opacity = "0";
-				errorMsgs[0].style.opacity = "0";
-				inputEmail.style.border = "1px solid #00A22C";
+				showSuccess();
 				setTimeout(() => nextPage(), 1000);
+			} else if (data.is_success === "False" && data.extra === signedUpUnpaid) {
+				showWarning();
+				return;
 			} else {
-				loading.style.visibility = "hidden";
-				loading.style.opacity = "0";
-				// show the warning message to users
-				exclamationEmail.style.visibility = "visible";
-				errorMsgs[0].style.visibility = "visible";
-				exclamationEmail.style.opacity = "1";
-				errorMsgs[0].style.opacity = "1";
-				inputEmail.style.border = "1px solid red";
+				showWarning();
 				return;
 			}
 		},
-		// if there is something wrong in the code, the error function executes.
-		// error: function(xhr) {
-		// 	alert("Unknown error occurred. Please contact the team.");
-		// 	console.log(xhr);
-		// 	return;
-		// }
 	});
 };
+
+/**
+ * Hides all feedback elements (tick, errors, loading, resets the input fields)
+ */
+function hideAllWarnings() {
+	tickEmail.style.visibility = "hidden";
+	tickEmail.style.opacity = "1";
+	exclamationEmail.style.visibility = "hidden";
+	exclamationEmail.style.opacity = "0";
+	errorMsgs[0].style.visibility = "hidden";
+	errorMsgs[0].style.opacity = "0";
+	loading.style.visibility = "hidden";
+	loading.style.opacity = "0";
+	inputEmail.style.border = "1px solid #00A22C";
+}
+
+/**
+ * shows the loading icon
+ */
+function showLoading() {
+	loading.style.visibility = "visible";
+	loading.style.opacity = "1";
+}
+
+/**
+ * show the successful feedback
+ */
+function showSuccess() {
+	loading.style.visibility = "hidden";
+	loading.style.opacity = "0";
+	tickEmail.style.visibility = "visible";
+	tickEmail.style.opacity = "1";
+	exclamationEmail.style.visibility = "hidden";
+	exclamationEmail.style.opacity = "0";
+	errorMsgs[0].style.visibility = "hidden";
+	errorMsgs[0].style.opacity = "0";
+	inputEmail.style.border = "1px solid #00A22C";
+}
+
+/**
+ * show the error feedback
+ */
+function showWarning() {
+	loading.style.visibility = "hidden";
+	loading.style.opacity = "0";
+	exclamationEmail.style.visibility = "visible";
+	exclamationEmail.style.opacity = "1";
+	errorMsgs[0].style.visibility = "visible";
+	errorMsgs[0].style.opacity = "1";
+	inputEmail.style.border = "1px solid red";
+}
 
 // ==========================================
 //    Payment Page (page 4) Functionality
