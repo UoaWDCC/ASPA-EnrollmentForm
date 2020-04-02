@@ -37,6 +37,10 @@ class EnrollmentForm extends ASPA_Controller
 		$this->load->model('Verification_Model', 'verificationModel');
 		if ($this->verificationModel->has_user_paid($emailAddress)) {
 			$this->create_json('True', '', 'Success');
+			return;
+		}
+		if ($this->Verification_Model->is_email_on_sheet($emailAddress)){
+			$this->create_json('False', '', 'Error: signed up but not paid');
 		} else {
 			if ($this->verificationModel->is_email_on_sheet($emailAddress)){
 				$this->create_json('False', '', 'Error: signed up but not paid');
