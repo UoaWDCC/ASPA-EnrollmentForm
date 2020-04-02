@@ -167,7 +167,6 @@ back4.onclick = function () {
 // name/email page (page 3) OK button onclick name and email validation
 ok3.onclick = function () {
 	hideAllWarnings();
-	showLoading();
 	let emailAddress = inputEmail.value.trim(); // collect email
 	if (inputName.value.trim().length === 0) {
 		inputName.style.border = "1px solid red";
@@ -175,6 +174,7 @@ ok3.onclick = function () {
 	} else {
 		inputName.style.border = "1px solid #00A22C";
 	}
+	showLoading();
 	$.ajax({
 		cache: false,
 		url: "index.php/EnrollmentForm/validate",
@@ -220,7 +220,6 @@ function hideAllWarnings() {
 	errorMsgs[0].style.opacity = "0";
 	loading.style.visibility = "hidden";
 	loading.style.opacity = "0";
-	inputEmail.style.border = "1px solid #00A22C";
 }
 
 /**
