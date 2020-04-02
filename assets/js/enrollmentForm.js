@@ -230,6 +230,7 @@ function showButton(index) {
 submit.onclick = function() {
 	alert("You have submitted the payment!");
 };
+
 proceedPayment.onclick = function() {
 	// get the active button
 	var toggled_index;
@@ -239,12 +240,14 @@ proceedPayment.onclick = function() {
 		}
 	);
 
+	var base_url = window.location.href;
+
 	if (toggled_index < 2){
 		alert('asdf');
 	}
 	else if (toggled_index == 4) {
 		//Stripe Payment
-		$('#enrollment-form').attr('action', 'http://localhost/ASPA-EnrollmentForm/EnrollmentForm/MakeStripePayment');
+		$('#enrollment-form').attr('action', base_url + 'EnrollmentForm/MakeStripePayment');
 		document.getElementById("enrollment-form").submit();
 		//window.open('http://localhost/ASPA-EnrollmentForm/EnrollmentForm/MakeStripePayment?email=');
 	}
