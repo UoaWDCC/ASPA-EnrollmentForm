@@ -13,6 +13,18 @@ class EnrollmentForm extends ASPA_Controller
 		$this->load->view('EnrollmentForm');
 	}
 
+    public function send_email()
+    {
+        // pass in emailAddress & paymentMethod using ajax post
+        $emailAddress = $this->input->post('emailAddress');
+        $paymentMethod = $this->input->post('paymentMethod');
+
+        // load EmailModel
+        $this->load->model('EmailModel');
+
+        // send email to specified email address using sendEmail function in EmailModel
+        $this->EmailModel->sendEmail($emailAddress, $paymentMethod);
+    }
 }
 
 /* End of file EnrollmentForm.php */
