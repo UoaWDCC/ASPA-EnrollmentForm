@@ -1,5 +1,30 @@
-p {
-    color:red
 
+
+h1 {font-family: 'Droid Sans';
+    font-size: 3em;
+}
+
+p {
+    font-family: 'Droid Sans', sans-serif;
+    text-align: left;
+    font-size:0.9em
+
+
+}
+
+.centre-page {
+    text-align: center;
+    width: 400px;
+    margin: 25px auto;
+    background-color: rgb(246,246,246);
+    padding: 25px;
+    border-radius: 25px;
+}
+
+#green-tick {
+
+    width: 100px;
+    filter: grayscale(1);
+    -webkit-filter: grayscale(1);
     
 }
