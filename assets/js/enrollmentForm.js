@@ -29,11 +29,11 @@ let errorMsgs = document.getElementsByClassName("div-errormsg");
 let errorMsgArray = document.getElementsByClassName("p-errormessage");
 const notSignedUpUnpaidErr = [
 	"Unrecognized email, please use the email you signed up to ASPA with.",
-	"If you are not a member yet, please register first."
+	"If you are not a member yet, please register first.",
 ];
 const signedUpUnpaidErr = [
 	"You have signed up, but have not paid for membership fees.",
-	"Please contact the ASPA Team to pay for membership."
+	"Please contact the ASPA Team to pay for membership.",
 ];
 
 // get the payment button types on page 4
