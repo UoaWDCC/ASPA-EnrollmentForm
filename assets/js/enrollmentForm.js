@@ -302,7 +302,7 @@ function showWarning() {
 const disabledButtons = [payWeChat, payAli, payPoli];
 
 /*
-	sets up event listener for button click except for the buttons which are disabled 
+	sets up event listener for button click except for the buttons which are disabled
 	(the buttons to be disabled will not do anything when clicked on)
 */
 [payCash, payTransfer, payWeChat, payAli, payCard, payPoli].forEach(
@@ -317,9 +317,9 @@ const disabledButtons = [payWeChat, payAli, payPoli];
 );
 
  /*
-	make the to-be-disabled-buttons look like they are disabled 
+	make the to-be-disabled-buttons look like they are disabled
 	(stopping them from increasing in size when hovered over, reducing their opacity and making them unclickable)
- */ 
+ */
 	disabledButtons.forEach(
 		(buttonToDisable) => {
 			buttonToDisable.classList.add("btn-disabled"); // stopping the disabled buttons from increasing in size when hovered over
@@ -337,7 +337,7 @@ const disabledButtons = [payWeChat, payAli, payPoli];
 					$(".div-polipay").css("opacity", "0.2");
 					$(".btn-online.btn-polipay").css("pointer-events", "none");
 					break;
-			} 
+			}
 		}
 	);
 
@@ -394,7 +394,7 @@ submit.onclick = function () {
 		base_url + "EnrollmentForm/LoadOfflinePayment"
 	);
 	$("#payment-method-field").attr("value", paymentMethod);
-	
+
 	document.getElementById("enrollment-form").submit();
 };
 
@@ -411,14 +411,14 @@ proceedPayment.onclick = function () {
 		alert("asdf");
 	} else if (toggled_index == 4) {
 		//Stripe Payment
-		$("#enrollment-form").attr(
-			"action",
-			base_url + "EnrollmentForm/MakeStripePayment"
-		);
+		alert('asdf');
+		$('#enrollment-form').attr('action', base_url+ 'EnrollmentForm/MakeStripePayment');
 		document.getElementById("enrollment-form").submit();
 		//window.open('http://localhost/ASPA-EnrollmentForm/EnrollmentForm/MakeStripePayment?email=');
 	} else {
 		//IEpay
+		$('#enrollment-form').attr('action', base_url + 'EnrollmentForm/MakeMYPayment');
+		document.getElementById("enrollment-form").submit();
 	}
 	// alert("Taking you to proceed payment!");
 };
