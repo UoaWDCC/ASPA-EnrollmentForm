@@ -14,6 +14,7 @@ class EmailModel extends CI_Model {
     public function sendEmail($emailAddress, $paymentMethod)
     {
         // email details
+        
         $EMAIL_RECIEVER = $emailAddress;
         $EMAIL_SENDER = "uoawdcc@gmail.com";
         
