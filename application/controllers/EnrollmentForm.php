@@ -13,11 +13,14 @@ class EnrollmentForm extends ASPA_Controller
 		$this->load->view('EnrollmentForm');
 	}
 
-	public function send_email() 
+	public function send_email($emailAddress = null, $paymentMethod = null) 
 	{
-        // pass in emailAddress & paymentMethod using ajax post
-        $emailAddress = $this->input->post('emailAddress');
-        $paymentMethod = $this->input->post('paymentMethod');
+        // pass in emailAddress & paymentMethod using ajax post if it has not already been passed in.
+        // This is a way of overloading the method.
+        if ($emailAddress == null){
+            $emailAddress = $this->input->post('emailAddress');
+            $paymentMethod = $this->input->post('paymentMethod');
+        }
 
         // load EmailModel
         $this->load->model('EmailModel');
@@ -33,7 +36,8 @@ class EnrollmentForm extends ASPA_Controller
 	 *  - is an email on the email spreadsheet
 	 */
 	public function validate() {	
-		$emailAddress = $this->input->post('emailAddress');	
+        $emailAddress = $this->input->post('emailAddress');	
+
 		$this->load->model('Verification_Model');	
 			
 		if ($this->Verification_Model->has_user_paid($emailAddress)) {	
@@ -44,18 +48,18 @@ class EnrollmentForm extends ASPA_Controller
 			$this->create_json('False', '', 'Error: signed up but not paid');	
 		} else {	
 			$this->create_json('False', '', 'Error: not signed up');	
-		}	
+        }	
 	}
-
-        $this->load->model('Gsheet_Interface_Model');
-    }
     
     public function makeStripePayment() 
     {
         // Receive data from form, method=POST
         $data['name'] = $this->input->post('name');
         $data['email'] = $this->input->post('email');
+
         $data['session_id'] = "id"; 
+
+        echo var_dump($this->input->post());
 
         // Put the data into spreadsheet
         $this->load->model('Gsheet_Interface_Model');
@@ -81,6 +85,7 @@ class EnrollmentForm extends ASPA_Controller
         $hasPaid = $this->Stripe_Model->CheckPayment($data['session_id']);
         $data['email'] = $this->Stripe_Model->GetEmail($data['session_id']);
 
+
         //if the user has paid
         if ($hasPaid) 
         { 
@@ -96,6 +101,9 @@ class EnrollmentForm extends ASPA_Controller
             list(, $row) = $this->Gsheet_Interface_Model->split_column_row($cell);
             // Highlight this row sicne it is paid
             $this->Gsheet_Interface_Model->highlight_row($row ,[0.69803923, 0.8980392, 0.69803923]);
+
+            //echo $data['email'];
+            //$this->send_email($data['email'], "Stripe");
 
             //Redirect to the page with green tick
             $this->load->view('PaymentSuccessful.php',$data);

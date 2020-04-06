@@ -60,7 +60,7 @@ class Stripe_Model extends CI_Model {
         'type' => 'checkout.session.completed',
         'created' => [
             // Check for events created in the last 3 minutes
-            'gte' => time() - 1 * 3 * 60,
+            'gte' => time() - 1 * 10 * 60,
         ],
         ]);
 

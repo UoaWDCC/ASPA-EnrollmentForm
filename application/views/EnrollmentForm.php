@@ -54,7 +54,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 <p class="p p-firstname">Your first and last name: <span class="asterisk">*</span></p><input type="text" class="entry w-input" maxlength="256" name="name" data-name="Field" placeholder="Enter your first name" id="field" required="">
               </div>
               <div class="div div-email">
-                <p class="p p-lastname">Email address: <span class="asterisk">*</span></p><input type="email" class="entry entry-lastname w-input" maxlength="256" name="field-2" data-name="Field 2" placeholder="Enter your email" id="field-2" required="">
+                <p class="p p-lastname">Email address: <span class="asterisk">*</span></p><input type="email" class="entry entry-lastname w-input" maxlength="256" name="email" data-name="Field 2" placeholder="Enter your email" id="field-2" required="">
                 <div class="div-block-4">
                   <div id="image-container"></div>
                   <img src="assets/images/green-tick.png" width="40" id="tick-email" alt="" class="image-3">
