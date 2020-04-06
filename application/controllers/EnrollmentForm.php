@@ -189,7 +189,7 @@ class EnrollmentForm extends ASPA_Controller
         $this->load->model('MYPay_Model');
         $data['url'] = $this->MYPay_Model->MakeMYPay($data['email']);
 
-        // Initiate the stripe payment
+        // Initiate the MYPay payment
         $this->load->view('MYPay.php', $data);
 
     }
