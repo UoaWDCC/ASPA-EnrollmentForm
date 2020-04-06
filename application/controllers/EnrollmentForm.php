@@ -29,11 +29,6 @@ class EnrollmentForm extends ASPA_Controller
         $this->EmailModel->sendEmail($emailAddress, $paymentMethod);
 	}
 
-	public function success()
-	{
-		$this->load->view('PaymentSuccessful');
-  }
-  
 	/**
 	 * validate() is called in assets/js/enrollmentForm.js via ajax POST method.
 	 * The functionality is to determine if the inputted email is of the correct:
@@ -62,7 +57,7 @@ class EnrollmentForm extends ASPA_Controller
         $data['name'] = $this->input->post('name');
         $data['email'] = $this->input->post('email');
 
-        $data['session_id'] = "id"; 
+        $data['session_id'] = "id";
 
         // Put the data into spreadsheet
         $this->load->model('Gsheet_Interface_Model');
@@ -84,13 +79,14 @@ class EnrollmentForm extends ASPA_Controller
 
         $data['session_id'] = $this->input->get('session_id');
 
-        //Checking if payment was made to their session and obtain their email
-        $hasPaid = $this->Stripe_Model->CheckPayment($data['session_id']);
+        // Sets boolean to whether payment was made
+        $data['has_paid'] = $this->Stripe_Model->CheckPayment($data['session_id']);
+
+        // Checking if payment was made to their session and obtain their email
         $data['email'] = $this->Stripe_Model->GetEmail($data['session_id']);
 
-        //if the user has paid
-        if ($hasPaid) 
-        { 
+        if ($data['has_paid'])
+        {
             // HighLight the row (get the user's email)
             // Get the row of the specific email from google sheets
             $cell = $this->Gsheet_Interface_Model->get_cellrange($data['email'], 'B');
@@ -108,7 +104,7 @@ class EnrollmentForm extends ASPA_Controller
             //$this->send_email($data['email'], "Stripe");
 
             //Redirect to the page with green tick
-            $this->load->view('PaymentSuccessful.php',$data);
+            $this->load->view('PaymentSuccessful.php', $data);
         }
         else {
             show_error("Something went wrong, your payment wasn't processed correctly. Please contact uoa.wdcc@gmail.com",'001');
@@ -132,7 +128,7 @@ class EnrollmentForm extends ASPA_Controller
     public function LoadOfflinePayment()
     {
 		//Redirect to the page with grey tick
-        $this->load->view('OfflinePayment.php',$data);
+        $this->load->view('PaymentSuccessful.php', $data);
     }
 }
 

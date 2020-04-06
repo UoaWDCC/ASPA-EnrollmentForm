@@ -22,9 +22,5 @@ p {
 }
 
 #green-tick {
-
     width: 100px;
-    filter: grayscale(1);
-    -webkit-filter: grayscale(1);
-    
 }
