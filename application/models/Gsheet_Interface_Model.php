@@ -50,10 +50,11 @@ class Gsheet_Interface_Model extends CI_Model {
     function getCurrentWorkingDir()
     {
         // For Windows
-        // $dir = shell_exec('echo %cd%');
+        //$dir = shell_exec('echo %cd%');
 
         // For MacOS / Linux / CentOS server
         $dir = shell_exec('pwd');
+        
         $stripped = trim($dir);
         return $stripped;
     }

@@ -328,8 +328,31 @@ submit.onclick = function () {
 		},
 	});
 };
-proceedPayment.onclick = function () {
-	alert("Taking you to proceed payment!");
+
+proceedPayment.onclick = function() {
+	// get the active button
+	var toggled_index;
+	[payCash, payTransfer, payWeChat, payAli, payCard, payPoli].forEach(
+		(item, index) => {
+			if (item.classList.contains('toggled')) toggled_index=index;
+		}
+	);
+
+	var base_url = window.location.href;
+
+	if (toggled_index < 2){
+		alert('asdf');
+	}
+	else if (toggled_index == 4) {
+		//Stripe Payment
+		$('#enrollment-form').attr('action', base_url + 'EnrollmentForm/MakeStripePayment');
+		document.getElementById("enrollment-form").submit();
+		//window.open('http://localhost/ASPA-EnrollmentForm/EnrollmentForm/MakeStripePayment?email=');
+	}
+	else {
+		//IEpay
+	}
+	// alert("Taking you to proceed payment!");
 };
 
 // ==========================================
