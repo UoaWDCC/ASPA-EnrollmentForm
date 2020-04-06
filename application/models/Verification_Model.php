@@ -1,11 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-include 'Gsheet_Interface_model.php';
-
-
 
 class Verification_Model extends CI_Model {
-    // include_once 'class.verifyEmail.php';
     
     private $addresses = array();
     
