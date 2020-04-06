@@ -14,7 +14,7 @@ class MYPay_Model extends CI_Model {
     {
         $url = "https://a.mypaynz.com/api/online";
 
-        $pay_type = "IE0021";
+        $pay_type = "IE0022";
 
         $api_key = MYPAYKEY;
         $mid = MYPAYMID;
@@ -37,9 +37,9 @@ class MYPay_Model extends CI_Model {
         foreach ($params as $key => $value) {
             $md5_string .=  $key . "=" . $value . "&";
         }
-        
+
         $md5_string = rtrim($md5_string, "& ");
-        
+
         $md5_string .= $api_key;
 
         $params['sign'] = md5($md5_string);
