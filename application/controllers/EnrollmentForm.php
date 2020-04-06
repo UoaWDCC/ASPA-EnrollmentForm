@@ -6,8 +6,6 @@ class EnrollmentForm extends ASPA_Controller
 
 	function __construct() {
 		parent::__construct();
-		// $this->load->helper();
-		// $this->load->model();
 	}
 
 	public function index()
@@ -15,17 +13,43 @@ class EnrollmentForm extends ASPA_Controller
 		$this->load->view('EnrollmentForm');
 	}
 
-	public function sheetsapi_test()
+	public function send_email() 
 	{
-        $this->load->model('Gsheet_Interface_Model');
+        // pass in emailAddress & paymentMethod using ajax post
+        $emailAddress = $this->input->post('emailAddress');
+        $paymentMethod = $this->input->post('paymentMethod');
 
-        // Test out functions here
+        // load EmailModel
+        $this->load->model('EmailModel');
 
+        // send email to specified email address using sendEmail function in EmailModel
+        $this->EmailModel->sendEmail($emailAddress, $paymentMethod);
 	}
 
 	public function success()
 	{
 		$this->load->view('PaymentSuccessful');
+  }
+  
+	/**
+	 * validate() is called in assets/js/enrollmentForm.js via ajax POST method.
+	 * The functionality is to determine if the inputted email is of the correct:
+	 *  - email format
+	 *  - is an email on the email spreadsheet
+	 */
+	public function validate() {	
+		$emailAddress = $this->input->post('emailAddress');	
+		$this->load->model('Verification_Model');	
+			
+		if ($this->Verification_Model->has_user_paid($emailAddress)) {	
+			$this->create_json('True', '', 'Success');	
+			return;	
+		}	
+		if ($this->Verification_Model->is_email_on_sheet($emailAddress)){	
+			$this->create_json('False', '', 'Error: signed up but not paid');	
+		} else {	
+			$this->create_json('False', '', 'Error: not signed up');	
+		}	
 	}
 
 }

@@ -26,6 +26,15 @@ let tickEmail = document.getElementById("tick-email");
 let exclamationEmail = document.getElementById("exclamation-email");
 let loading = document.getElementById("loading");
 let errorMsgs = document.getElementsByClassName("div-errormsg");
+let errorMsgArray = document.getElementsByClassName("p-errormessage");
+const notSignedUpUnpaidErr = [
+	"Unrecognized email, please use the email you signed up to ASPA with.",
+	"If you are not a member yet, please register first.",
+];
+const signedUpUnpaidErr = [
+	"You have signed up, but have not paid for membership fees.",
+	"Please contact the ASPA Team to pay for membership.",
+];
 
 // get the payment button types on page 4
 let payCash = document.getElementById("btn-cash");
@@ -34,6 +43,10 @@ let payWeChat = document.getElementById("btn-wechat");
 let payAli = document.getElementById("btn-alipay");
 let payCard = document.getElementById("btn-creditcard");
 let payPoli = document.getElementById("btn-poliay");
+
+// Email Address
+let emailAddress = "";
+let paymentMethod = "";
 
 // ==========================================
 //        Setup of Initial state
@@ -44,7 +57,9 @@ page3.style.display = "none";
 page4.style.display = "none";
 
 // validation icons/error message on page 3
-loading.style.display = "none";
+loading.style.visibility = "hidden";
+loading.style.opacity = "0";
+loading.style.transition = "visibility 0s, opacity 0.2s linear";
 exclamationEmail.style.visibility = "hidden";
 exclamationEmail.style.opacity = "0";
 exclamationEmail.style.transition = "visibility 0s, opacity 0.2s linear";
@@ -63,7 +78,9 @@ proceedPayment.style.display = "none";
 //             Page Navigation
 // ==========================================
 
-// go to the next page of the membership system
+/**
+ * go to the next page of the membership system
+ */
 function nextPage() {
 	switch (findActivePage()) {
 		case 1:
@@ -79,6 +96,7 @@ function nextPage() {
 			page2.style.display = "none";
 			page3.style.display = "flex";
 			page4.style.display = "none";
+			setTimeout(() => inputName.focus(), 1000); // autofocus to name field
 			break;
 		case 3:
 			page3.classList.remove("page3-appear");
@@ -91,7 +109,9 @@ function nextPage() {
 	}
 }
 
-// go to the previous page of the membership system
+/**
+ * go to the previous page of the membership system
+ */
 function previousPage() {
 	switch (findActivePage()) {
 		case 3:
@@ -112,7 +132,7 @@ function previousPage() {
 }
 
 // Enter key (keycode 13) triggers the click event of the appropriate buttons to go to next page.
-window.addEventListener("keypress", function(e) {
+window.addEventListener("keypress", function (e) {
 	if (e.keyCode === 13) {
 		switch (findActivePage()) {
 			case 1:
@@ -132,15 +152,15 @@ window.addEventListener("keypress", function(e) {
 	}
 });
 
-ok2.onclick = function() {
+ok2.onclick = function () {
 	nextPage();
 };
 
 // back buttons onclick function goes to the previous page
-back3.onclick = function() {
+back3.onclick = function () {
 	previousPage();
 };
-back4.onclick = function() {
+back4.onclick = function () {
 	previousPage();
 };
 
@@ -148,47 +168,99 @@ back4.onclick = function() {
 //    Name/Email Page (page 3) Functionality
 // ==========================================
 
-// event listener that continuously validates the email input
-inputEmail.addEventListener("keypress", function(e) {
-	if (validateEmail(e.target.value)) {
-		exclamationEmail.style.visibility = "hidden";
-		exclamationEmail.style.opacity = "0";
-		errorMsgs[0].style.visibility = "hidden";
-		errorMsgs[0].style.opacity = "0";
-		inputEmail.style.border = "1px solid #00A22C";
-		tickEmail.style.visibility = "visible";
-		tickEmail.style.opacity = "1";
-	}
-	// JAIRU may need to edit this too
-});
-
 // name/email page (page 3) OK button onclick name and email validation
-ok3.onclick = function() {
+ok3.onclick = function () {
+	hideAllWarnings();
+	let emailAddress = inputEmail.value.trim(); // collect email
 	if (inputName.value.trim().length === 0) {
 		inputName.style.border = "1px solid red";
 		return;
 	} else {
 		inputName.style.border = "1px solid #00A22C";
 	}
-	if (!validateEmail(inputEmail.value)) {
-		exclamationEmail.style.visibility = "visible";
-		errorMsgs[0].style.visibility = "visible";
-		exclamationEmail.style.opacity = "1";
-		errorMsgs[0].style.opacity = "1";
-		inputEmail.style.border = "1px solid red";
-		return;
-	}
-	// JAIRU'S CODE
-	// if (!isEmailInSpreadsheet) {
-	// exclamationEmail.style.visibility = "visible";
-	// errorMsgs[0].style.visibility = "visible";
-	// exclamationEmail.style.opacity = "1";
-	// errorMsgs[0].style.opacity = "1";
-	// inputEmail.style.border = "1px solid red";
-	// 	return;
-	// }
-	nextPage();
+	showLoading();
+	$.ajax({
+		cache: false,
+		url: "index.php/EnrollmentForm/validate",
+		method: "POST",
+		data: { emailAddress: emailAddress },
+		// if the validate() url functions correctly (even if it returns True/False), then success function executes.
+		success: function (data) {
+			console.log(data);
+			// data is a JSON object with the following properties:
+			// is_success: True/False (if the email validation succeeeded)
+			// message: any message
+			// extra: any further information
+			const signedUpUnpaid = "Error: signed up but not paid"; // edit these if the 'extra' message is modified
+			if (data.is_success === "True") {
+				showSuccess();
+				setTimeout(() => nextPage(), 1000);
+			} else if (data.is_success === "False" && data.extra === signedUpUnpaid) {
+				showWarning();
+				// change the error message to be "signed up but unpaid" warning
+				errorMsgArray[0].innerHTML = signedUpUnpaidErr[0];
+				errorMsgArray[1].innerHTML = signedUpUnpaidErr[1];
+				return;
+			} else {
+				showWarning();
+				// change the error message to be "unrecognized email, please sign up" warning
+				errorMsgArray[0].innerHTML = notSignedUpUnpaidErr[0];
+				errorMsgArray[1].innerHTML = notSignedUpUnpaidErr[1];
+				return;
+			}
+		},
+	});
 };
+
+/**
+ * Hides all feedback elements (tick, errors, loading, resets the input fields)
+ */
+function hideAllWarnings() {
+	tickEmail.style.visibility = "hidden";
+	tickEmail.style.opacity = "1";
+	exclamationEmail.style.visibility = "hidden";
+	exclamationEmail.style.opacity = "0";
+	errorMsgs[0].style.visibility = "hidden";
+	errorMsgs[0].style.opacity = "0";
+	loading.style.visibility = "hidden";
+	loading.style.opacity = "0";
+}
+
+/**
+ * shows the loading icon
+ */
+function showLoading() {
+	loading.style.visibility = "visible";
+	loading.style.opacity = "1";
+}
+
+/**
+ * show the successful feedback
+ */
+function showSuccess() {
+	loading.style.visibility = "hidden";
+	loading.style.opacity = "0";
+	tickEmail.style.visibility = "visible";
+	tickEmail.style.opacity = "1";
+	exclamationEmail.style.visibility = "hidden";
+	exclamationEmail.style.opacity = "0";
+	errorMsgs[0].style.visibility = "hidden";
+	errorMsgs[0].style.opacity = "0";
+	inputEmail.style.border = "1px solid #00A22C";
+}
+
+/**
+ * show the error feedback
+ */
+function showWarning() {
+	loading.style.visibility = "hidden";
+	loading.style.opacity = "0";
+	exclamationEmail.style.visibility = "visible";
+	exclamationEmail.style.opacity = "1";
+	errorMsgs[0].style.visibility = "visible";
+	errorMsgs[0].style.opacity = "1";
+	inputEmail.style.border = "1px solid red";
+}
 
 // ==========================================
 //    Payment Page (page 4) Functionality
@@ -197,40 +269,66 @@ ok3.onclick = function() {
 // sets up event listener for button click
 [payCash, payTransfer, payWeChat, payAli, payCard, payPoli].forEach(
 	(item, index) => {
-		item.addEventListener("click", function(e) {
+		item.addEventListener("click", function (e) {
 			toggleButton(item);
 			showButton(index);
 		});
 	}
 );
 
-// make the buttons look like they are toggled
+/**
+ * make the buttons look like they are toggled
+ * @param {int} buttonInUse
+ */
 function toggleButton(buttonInUse) {
 	[payCash, payTransfer, payWeChat, payAli, payCard, payPoli].forEach(
-		button => {
+		(button) => {
 			if (buttonInUse === button) button.classList.add("toggled");
 			else button.classList.remove("toggled");
 		}
 	);
 }
 
-// show Submit button if user pays using Cash/Bank transfer
-// show proceed payment if user pays using Wechat/AliPay/Credit/Debit/PoLi Pay
+/**
+ * show Submit button if user pays using Cash/Bank transfer
+ * show proceed payment if user pays using Wechat/AliPay/Credit/Debit/PoLi Pay
+ * @param {int} index
+ */
 function showButton(index) {
 	if (index === 0 || index === 1) {
 		submit.style.display = "flex";
 		proceedPayment.style.display = "none";
+		if (index === 0) {
+			paymentMethod = "cash";
+		} else {
+			paymentMethod = "transfer";
+		}
 	} else {
 		submit.style.display = "none";
 		proceedPayment.style.display = "flex";
+		paymentMethod = "online";
 	}
 }
 
 // TODO: these two buttons must connect to the next step of the enrollment form
-submit.onclick = function() {
+submit.onclick = function () {
 	alert("You have submitted the payment!");
+
+	// send email to the email address the user have inputed using ajax post
+	$.ajax({
+		cashe: false,
+		url: "index.php/EnrollmentForm/send_email",
+		method: "POST",
+		data: { emailAddress: emailAddress, paymentMethod: paymentMethod },
+		success: function (data) {
+			console.log(data);
+
+			// notify user that the email has been sent
+			alert("Please check for comfirmation email!");
+		},
+	});
 };
-proceedPayment.onclick = function() {
+proceedPayment.onclick = function () {
 	alert("Taking you to proceed payment!");
 };
 
@@ -238,7 +336,9 @@ proceedPayment.onclick = function() {
 //             Helper Functions
 // ==========================================
 
-// finds the page that is currently active
+/**
+ * finds the page that is currently active
+ */
 function findActivePage() {
 	if (isActive(page1)) return 1;
 	else if (isActive(page2)) return 2;
@@ -246,13 +346,9 @@ function findActivePage() {
 	else if (isActive(page4)) return 4;
 }
 
-// Checks if an element is active (i.e. on the page)
+/**
+ * Checks if an element is active (i.e. on the page)
+ */
 function isActive(el) {
 	return !(el.offsetParent === null);
-}
-
-// validates the email by checking if the input is in the right format (e.g. johnsmith@example.com)
-function validateEmail(email) {
-	var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-	return re.test(String(email).toLowerCase());
 }
