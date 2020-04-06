@@ -55,12 +55,16 @@ defined('BASEPATH') OR exit('No direct script access allowed');
               </div>
               <div class="div div-email">
                 <p class="p p-lastname">Email address: <span class="asterisk">*</span></p><input type="email" class="entry entry-lastname w-input" maxlength="256" name="email" data-name="Field 2" placeholder="Enter your email" id="field-2" required="">
+<<<<<<< HEAD
                 <div class="div-block-4">
                   <div id="image-container"></div>
                   <img src="assets/images/green-tick.png" width="40" id="tick-email" alt="" class="image-3">
                   <img src="assets/images/exclamation.png" width="30" id="exclamation-email" srcset="assets/images/exclamation-p-500.png 500w, assets/images/exclamation.png 777w" sizes="30px" alt="" class="image">
                   <img src="assets/images/Spinner-1s-200px-2.svg" width="50" id="loading" alt="" class="image-2">
                 </div>
+=======
+                <div class="div-block-4"><img src="assets/images/green-tick.png" width="40" id="tick-email" alt="" class="image-3"><img src="assets/images/exclamation.png" width="30" id="exclamation-email" srcset="assets/images/exclamation-p-500.png 500w, assets/images/exclamation.png 777w" sizes="30px" alt="" class="image"><img src="assets/images/Spinner-1s-200px-2.svg" width="50" id="loading" alt="" class="image-2"></div>
+>>>>>>> 44d2e3848514f673a859ee381413fc2dd101bcb0
               </div>
               <div class="div div-errormsg">
                 <p class="p p-errormessage">Unrecognized email, please use the email you signed up to ASPA with.<br></p>

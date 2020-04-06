@@ -59,8 +59,6 @@ class EnrollmentForm extends ASPA_Controller
 
         $data['session_id'] = "id"; 
 
-        echo var_dump($this->input->post());
-
         // Put the data into spreadsheet
         $this->load->model('Gsheet_Interface_Model');
         $this->Gsheet_Interface_Model->record_to_sheet($data['email'],$data['name'],'Stripe',FALSE);
@@ -84,7 +82,6 @@ class EnrollmentForm extends ASPA_Controller
         //Checking if payment was made to their session and obtain their email
         $hasPaid = $this->Stripe_Model->CheckPayment($data['session_id']);
         $data['email'] = $this->Stripe_Model->GetEmail($data['session_id']);
-
 
         //if the user has paid
         if ($hasPaid) 
