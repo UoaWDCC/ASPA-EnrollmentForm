@@ -422,7 +422,16 @@ proceedPayment.onclick = function () {
 	}
 	else {
 		//IEpay
+		//find toggled index, alipay wechat etc
+		//find enviro browser/mobile
+		// if (true) {
+		// 	//append to form
+		// $('#form').append('<input type="text" value="'+yourValue+'" name="environment"/>');
+		// }
+
 		$('#enrollment-form').attr('action', base_url + 'EnrollmentForm/MakeMYPayment');
+
+
 		document.getElementById("enrollment-form").submit();
 	}
 
