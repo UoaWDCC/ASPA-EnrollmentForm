@@ -52,7 +52,7 @@ class MYPay_Model extends CI_Model {
         curl_setopt($ch,CURLOPT_POSTFIELDS, $params);
 
         //So that curl_exec returns the contents of the cURL; rather than echoing it
-        curl_setopt($ch,CURLOPT_RETURNTRANSFER, true); 
+        curl_setopt($ch,CURLOPT_RETURNTRANSFER, true);
 
         //execute post
         $result = curl_exec($ch);
