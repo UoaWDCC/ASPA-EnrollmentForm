@@ -60,7 +60,7 @@ class MYPay_Model extends CI_Model {
 
         echo var_dump($result);
 
-        return $result["pay_url"];
+        return $result['extra']['pay_url'];
     }
 
 }
