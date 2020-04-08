@@ -181,7 +181,7 @@ class EnrollmentForm extends ASPA_Controller
 
         $data['name'] = $this->input->post('name');
         $data['email'] = $this->input->post('email');
-        $data['method'] = $this->input->post('method');
+        $data['pay_type'] = $this->input->post('method');
         $data['MYd'] = "";
 
        // echo var_dump($data)
@@ -192,10 +192,10 @@ class EnrollmentForm extends ASPA_Controller
 
         //Generating the session id, POST DATA TO API SITE
         $this->load->model('MYPay_Model');
-        //$data['MYd'] = $this->MYPay_Model->MakeMYPay($data['email']);
+        $data['MYd'] = $this->MYPay_Model->MakeMYPay($data['email']);
 
         // Initiate the MYPay payment
-        //$this->load->view('MYPay.php', $data);
+        $this->load->view('MYPay.php', $data);
 
     }
 
