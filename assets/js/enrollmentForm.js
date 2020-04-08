@@ -421,23 +421,38 @@ proceedPayment.onclick = function () {
 		//window.open('http://localhost/ASPA-EnrollmentForm/EnrollmentForm/MakeStripePayment?email=');
 	}
 	else {
-		if (toggled_index == 2) {
-			//If wechat pay is selected
-			MYpay_method = "Wechat";
+		if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+			if (toggled_index == 2) {
+				//If wechat pay is selected
+				MYpay_method = "Wechat";
+			}
+			else if (toggled_index == 3) {
+				// If Alipay is selected
+				MYpay_method = "Alipay";
+			}
+			else {
+				// If Poli pay is selected
+				MYpay_method = "Poli";
+			}
 		}
-		else if (toggled_index == 3) {
-			// If Alipay is selected
-			MYpay_method = "Alipay";
+		else
+		{
+			if (toggled_index == 2) {
+				//If wechat pay is selected
+				MYpay_method = "Wechat";
+			}
+			else if (toggled_index == 3) {
+				// If Alipay is selected
+				MYpay_method = "Alipay";
+			}
+			else {
+				// If Poli pay is selected
+				MYpay_method = "Poli";
+			}
 		}
-		else {
-			// If Poli pay is selected
-			MYpay_method = "Poli";
-		}
-		//find enviro browser/mobile
 
-		$('#enrollment-form').append('<input type="text" maxlength="256" name="method" value=">' + MYpay_method + '">');
+		$('#enrollment-form').append('<input type="text" maxlength="256" name="pay_type" value=">' + MYpay_method + '">');
 		$('#enrollment-form').attr('action', base_url + 'EnrollmentForm/MakeMYPayment');
-
 
 		document.getElementById("enrollment-form").submit();
 	}

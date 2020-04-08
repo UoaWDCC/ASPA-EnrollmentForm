@@ -14,7 +14,7 @@ class MYPay_Model extends CI_Model {
     {
         $url = "https://a.mypaynz.com/api/online";
 
-        $pay_type = "IE0022";
+        $pay_type = "IE0021";
 
         $api_key = MYPAYKEY;
         $mid = MYPAYMID;
