@@ -177,20 +177,25 @@ class EnrollmentForm extends ASPA_Controller
     public function MakeMYPayment()
     {
         // Receive data from form, method=POST
+        echo var_dump($this->input->post());
+
         $data['name'] = $this->input->post('name');
         $data['email'] = $this->input->post('email');
+        $data['method'] = $this->input->post('method');
         $data['MYd'] = "";
 
+       // echo var_dump($data)
+;
         // Put the data into spreadsheet
         $this->load->model('Gsheet_Interface_Model');
         $this->Gsheet_Interface_Model->record_to_sheet($data['email'],$data['name'],'MY',FALSE);
 
         //Generating the session id, POST DATA TO API SITE
         $this->load->model('MYPay_Model');
-        $data['MYd'] = $this->MYPay_Model->MakeMYPay($data['email']);
+        //$data['MYd'] = $this->MYPay_Model->MakeMYPay($data['email']);
 
         // Initiate the MYPay payment
-        $this->load->view('MYPay.php', $data);
+        //$this->load->view('MYPay.php', $data);
 
     }
 

@@ -407,23 +407,35 @@ proceedPayment.onclick = function () {
 		}
 	);
 
-	if (toggled_index < 2) {
-		alert("asdf");
-	} else if (toggled_index == 4) {
+	var base_url = window.location.href;
+	var MYpay_method;
+
+	if (toggled_index < 2){
+		alert('asdf');
+	}
+	else if (toggled_index == 4) {
 		//Stripe Payment
 		alert('asdf');
 		$('#enrollment-form').attr('action', base_url+ 'EnrollmentForm/MakeStripePayment');
 		document.getElementById("enrollment-form").submit();
 		//window.open('http://localhost/ASPA-EnrollmentForm/EnrollmentForm/MakeStripePayment?email=');
-	} else {
-		//IEpay
-		//find toggled index, alipay wechat etc
+	}
+	else {
+		if (toggled_index == 2) {
+			//If wechat pay is selected
+			MYpay_method = "Wechat";
+		}
+		else if (toggled_index == 3) {
+			// If Alipay is selected
+			MYpay_method = "Alipay";
+		}
+		else {
+			// If Poli pay is selected
+			MYpay_method = "Poli";
+		}
 		//find enviro browser/mobile
-		// if (true) {
-		// 	//append to form
-		// $('#form').append('<input type="text" value="'+yourValue+'" name="environment"/>');
-		// }
 
+		$('#enrollment-form').append('<input type="text" maxlength="256" name="method" value=">' + MYpay_method + '">');
 		$('#enrollment-form').attr('action', base_url + 'EnrollmentForm/MakeMYPayment');
 
 
