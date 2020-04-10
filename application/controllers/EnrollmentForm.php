@@ -127,6 +127,9 @@ class EnrollmentForm extends ASPA_Controller
 
     public function LoadOfflinePayment()
     {
+        $data['has_paid'] = false;
+        $data["email"] = $this->input->post("email");
+
 		//Redirect to the page with grey tick
         $this->load->view('PaymentSuccessful.php', $data);
     }

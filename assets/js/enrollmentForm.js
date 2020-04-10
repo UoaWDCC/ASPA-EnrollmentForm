@@ -315,18 +315,25 @@ submit.onclick = function () {
 	alert("You have submitted the payment!");
 
 	// send email to the email address the user have inputed using ajax post
-	$.ajax({
-		cashe: false,
-		url: "index.php/EnrollmentForm/send_email",
-		method: "POST",
-		data: { emailAddress: emailAddress, paymentMethod: paymentMethod },
-		success: function (data) {
-			console.log(data);
 
-			// notify user that the email has been sent
-			alert("Please check for comfirmation email!");
-		},
-	});
+    // CURRENTLY BROKEN?
+	// $.ajax({
+	// 	cashe: false,
+	// 	url: "index.php/EnrollmentForm/send_email",
+	// 	method: "POST",
+	// 	data: { emailAddress: emailAddress, paymentMethod: paymentMethod },
+	// 	success: function (data) {
+	// 		console.log(data);
+    //
+	// 		// notify user that the email has been sent
+	// 		alert("Please check for comfirmation email!");
+	// 	},
+	// });
+
+    var base_url = window.location.href;
+
+    $('#enrollment-form').attr('action', base_url + 'EnrollmentForm/LoadOfflinePayment');
+    document.getElementById("enrollment-form").submit();
 };
 
 proceedPayment.onclick = function() {
