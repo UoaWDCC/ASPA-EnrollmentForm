@@ -312,23 +312,18 @@ function showButton(index) {
 
 // TODO: these two buttons must connect to the next step of the enrollment form
 submit.onclick = function () {
-    
+
 	// send email to the email address the user have inputted using ajax post
 
-    // CURRENTLY BROKEN?
-	// $.ajax({
-	// 	cashe: false,
-	// 	url: "index.php/EnrollmentForm/send_email",
-	// 	method: "POST",
-	// 	data: { emailAddress: emailAddress, paymentMethod: paymentMethod },
-	// 	success: function (data) {
-	// 		console.log(data);
-    //
-	// 		// notify user that the email has been sent
-	// 		alert("Please check for comfirmation email!");
-	// 	},
-	// });
-
+    $.ajax({
+		cashe: false,
+		url: "index.php/EnrollmentForm/send_email",
+		method: "POST",
+		data: { emailAddress: emailAddress, paymentMethod: paymentMethod },
+		success: function (data) {
+			console.log(data);
+		},
+	});
 
 
     var base_url = window.location.href;
