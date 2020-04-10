@@ -134,7 +134,12 @@ class EnrollmentForm extends ASPA_Controller
     public function LoadOfflinePayment()
     {
         $data['has_paid'] = false;
+        $data['name'] = $this->input->post("name");
         $data["email"] = $this->input->post("email");
+        $data['paymentMethod'] = $this->input->post("paymentMethod");
+
+        $this->load->model("Gsheet_Interface_Model");
+        $this->Gsheet_Interface_Model->record_to_sheet($data['name'], $data['email'], ucfirst($data['paymentMethod']), $data['has_paid']);
 
 		//Redirect to the page with grey tick
         $this->load->view('PaymentSuccessful.php', $data);
