@@ -1,11 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-include 'Gsheet_Interface_model.php';
-
-
 
 class Verification_Model extends CI_Model {
-    // include_once 'class.verifyEmail.php';
     
     private $addresses = array();
     
@@ -34,7 +30,7 @@ class Verification_Model extends CI_Model {
             return false;
         }
         $this->load->model('Gsheet_Interface_Model');
-        $this->Gsheet_Interface_Model->set_spreadsheetId(SPREADSHEETID);
+        $this->Gsheet_Interface_Model->set_spreadsheetId(MEMBERSHIP_SPREADSHEETID, MEMBERSHIP_SHEETNAME);
         //this gets the sheet size
         $sheetSize = $this->Gsheet_Interface_Model->get_sheet_size();
         //this is an array of array of all existing emails, i.e. [[email1], [email2], [email3]]

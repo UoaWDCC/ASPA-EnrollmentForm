@@ -3,19 +3,21 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Gsheet_Interface_Model extends CI_Model {
 
-    private $service = FALSE;
-    private $spreadsheetId = FALSE;
-    private $sheetName = SHEETNAME;
+    private $service = null;
+    private $spreadsheetId = null;
+    private $sheetName = null;
 
     // Setting up current client
-    function __construct($spreadsheetId=SPREADSHEETID)
+    function __construct()
     {
         $this->service = $this->service_setup();
-        $this->spreadsheetId = $spreadsheetId;
+        $this->spreadsheetId = SPREADSHEETID;
+        $this->sheetName = SHEETNAME;
     }
 
-    public function set_spreadsheetId($spreadsheetId) {
+    public function set_spreadsheetId($spreadsheetId, $sheetName=SHEETNAME) {
         $this->spreadsheetId = $spreadsheetId;
+        $this->sheetName = $sheetName;
     }
 
     // Setting up service function
