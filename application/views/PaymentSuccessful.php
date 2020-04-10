@@ -9,8 +9,9 @@
 
         <meta charset="utf-8">
 
-    	<title>Payment Successful</title>
+    	<title><?php echo $has_paid ? "Payment Successful" : "Offline Payment"; ?></title>
     	<meta name="description" content="Payment Successfully Made">
+        <meta name='viewport' content='initial-scale=1.0' />
     	<meta name="author" content="UoA Web Development & Consulting Club members">
 
         <link type='text/css' rel='stylesheet' href='http://localhost/assets/css/ConfirmationStyle.css' />
@@ -23,7 +24,7 @@
             <image id="green-tick" src="http://localhost/assets/images/Green-Confirmation-Tick.jfif"<?php echo $has_paid ? "" : "style='filter: grayscale(1); -webkit-filter: grayscale(1)'"; ?> />
 
             <h1>
-                Submitted!
+                <?php echo $has_paid ? "Paid!" : "Submitted!"; ?>
             </h1>
 
             <P>Thank you for signing up to our first event this semester!</p>
