@@ -79,6 +79,12 @@ class EnrollmentForm extends ASPA_Controller
 
         $data['session_id'] = $this->input->get('session_id');
 
+        // Check if there is a session ID, or else redirect back to index
+        if (!$data['session_id']) {
+            redirect(base_url());
+            return;
+        }
+
         // Sets boolean to whether payment was made
         $data['has_paid'] = $this->Stripe_Model->CheckPayment($data['session_id']);
 
