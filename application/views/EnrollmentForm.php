@@ -119,6 +119,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
           </div>
         </div>
       </div>
+
+      <input type='hidden' name='paymentMethod' id='payment-method-field' />
     </form>
     <div class="w-form-done">
       <div>Thank you! Your submission has been received!</div>

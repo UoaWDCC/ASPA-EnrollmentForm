@@ -1,0 +1,57 @@
+
+
+h1 {font-family: 'Droid Sans';
+    font-size: 3em;
+}
+
+p {
+    font-family: 'Droid Sans', sans-serif;
+    text-align: left;
+    font-size:0.9em
+
+
+}
+
+.centre-page {
+
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    /* bring your own prefixes */
+    transform: translate(-50%, -50%);
+
+    text-align: center;
+    width: 400px;
+    background-color: rgb(246,246,246);
+    padding: 25px;
+    border-radius: 25px;
+}
+
+#green-tick {
+    width: 100px;
+}
+
+@media screen and (max-width: 450px) {
+    body {
+        background-color: rgb(246, 246, 246);
+    }
+    .centre-page {
+        position: absolute;
+        box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        top: 0;
+        left: 0;
+        right: 0;
+
+        border-radius: 0;
+        width: 100%;
+        height: auto;
+
+        transform: translate(0, 0);
+    }
+
+    iframe {
+        width: 100%;
+    }
+}

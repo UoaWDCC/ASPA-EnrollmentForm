@@ -113,11 +113,6 @@ class Gsheet_Interface_Model extends CI_Model {
 
         // Appends user information to sheet
         $result = $this->service->spreadsheets_values->update($this->spreadsheetId, $newrange, $body, $params);
-
-        // Checks if payment made (TRUE/FALSE)
-        if ($paymentmade) {
-            $this->highlight_row($size, [0.69803923, 0.8980392, 0.69803923]);
-        }
     }
 
     // Returns size of gsheet as a numerical value
