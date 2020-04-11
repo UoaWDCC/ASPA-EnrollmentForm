@@ -14,14 +14,14 @@
         <meta name='viewport' content='initial-scale=1.0' />
     	<meta name="author" content="UoA Web Development & Consulting Club members">
 
-        <link type='text/css' rel='stylesheet' href='http://localhost/assets/css/ConfirmationStyle.css' />
+        <link type='text/css' rel='stylesheet' href='assets/css/ConfirmationStyle.css' />
     </head>
 
     <body>
         <div class="centre-page">
 
             <br />
-            <image id="green-tick" src="http://localhost/assets/images/Green-Confirmation-Tick.jfif"<?php echo $has_paid ? "" : "style='filter: grayscale(1); -webkit-filter: grayscale(1)'"; ?> />
+            <image id="green-tick" src="assets/images/Green-Confirmation-Tick.jfif"<?php echo $has_paid ? "" : "style='filter: grayscale(1); -webkit-filter: grayscale(1)'"; ?> />
 
             <h1>
                 <?php echo $has_paid ? "Paid!" : "Submitted!"; ?>
