@@ -171,7 +171,7 @@ back4.onclick = function () {
 // name/email page (page 3) OK button onclick name and email validation
 ok3.onclick = function () {
 	hideAllWarnings();
-	let emailAddress = inputEmail.value.trim(); // collect email
+	emailAddress = inputEmail.value.trim(); // collect email
 	if (inputName.value.trim().length === 0) {
 		inputName.style.border = "1px solid red";
 		return;
