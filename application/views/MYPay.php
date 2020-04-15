@@ -4,6 +4,10 @@
 
 <?php 
     //echo var_dump($MYd);
+    $this->load->model('MYPay_Model');
+    $result = $this->MYPay_Model->CheckMYPay($MYd);
+
+    //echo var_dump($result);
 ?>
 
 <div id="qrcode"></div>

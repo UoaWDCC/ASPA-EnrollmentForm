@@ -177,7 +177,7 @@ class EnrollmentForm extends ASPA_Controller
     public function MakeMYPayment()
     {
         // Receive data from form, method=POST
-         echo var_dump($this->input->post());
+        // echo var_dump($this->input->post());
 
         $data['name'] = $this->input->post('name');
         $data['email'] = $this->input->post('email');

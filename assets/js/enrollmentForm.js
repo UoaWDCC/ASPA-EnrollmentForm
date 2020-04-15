@@ -422,30 +422,30 @@ proceedPayment.onclick = function () {
 		if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
 			if (toggled_index == 2) {
 				//If wechat pay is selected
-				MYpay_method = "Wechat";
+				MYpay_method = "IE0025";
 			}
 			else if (toggled_index == 3) {
 				// If Alipay is selected
-				MYpay_method = "Alipay";
+				MYpay_method = "IE0015 ";
 			}
 			else {
 				// If Poli pay is selected
-				MYpay_method = "Poli";
+				MYpay_method = "IE0041";
 			}
 		}
 		else
 		{
 			if (toggled_index == 2) {
 				//If wechat pay is selected
-				MYpay_method = "Wechat";
+				MYpay_method = "IE0022";
 			}
 			else if (toggled_index == 3) {
 				// If Alipay is selected
-				MYpay_method = "Alipay";
+				MYpay_method = "IE0012";
 			}
 			else {
 				// If Poli pay is selected
-				MYpay_method = "Poli";
+				MYpay_method = "IE0041";
 			}
 		}
 
