@@ -411,14 +411,12 @@ proceedPayment.onclick = function () {
 	var MYpay_method;
 
 	if (toggled_index < 2){
-		alert('asdf');
+		alert('???');
 	}
 	else if (toggled_index == 4) {
 		//Stripe Payment
-		alert('asdf');
 		$('#enrollment-form').attr('action', base_url+ 'EnrollmentForm/MakeStripePayment');
 		document.getElementById("enrollment-form").submit();
-		//window.open('http://localhost/ASPA-EnrollmentForm/EnrollmentForm/MakeStripePayment?email=');
 	}
 	else {
 		if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
@@ -451,9 +449,10 @@ proceedPayment.onclick = function () {
 			}
 		}
 
-		$('#enrollment-form').append('<input type="text" maxlength="256" name="pay_type" value=">' + MYpay_method + '">');
+		//$('#enrollment-form').append('<input type="text" maxlength="256" name="pay_type" value=">' + MYpay_method + '">');
 		$('#enrollment-form').attr('action', base_url + 'EnrollmentForm/MakeMYPayment');
 
+		$('#payment-method-field').attr('value', MYpay_method);
 		document.getElementById("enrollment-form").submit();
 	}
 

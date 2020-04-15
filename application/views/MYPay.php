@@ -2,6 +2,10 @@
 <script src="<?= base_url();?>assets/js/qrcode.js"></script>
 
 
+<?php 
+    //echo var_dump($MYd);
+?>
+
 <div id="qrcode"></div>
 <script type="text/javascript">
 

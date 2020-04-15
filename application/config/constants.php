@@ -102,3 +102,6 @@ define('MYPAYKEY', 'a3c92b6b12028fb9afa20d248380426c');
 
 define("MEMBERSHIP_SPREADSHEETID", '10mwPhiOR_Vfsfw8WHereu4Y5KOsuSWkJFGhrf6Mfk9I');
 define("MEMBERSHIP_SHEETNAME", 'Sheet1');
+
+//Price in cents
+define('AMOUNT', '100');

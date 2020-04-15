@@ -10,16 +10,15 @@ class MYPay_Model extends CI_Model {
         parent::__construct();
     }
 
-    function MakeMYPay($customerEmail)
+    function MakeMYPay($customerEmail, $pay_type)
     {
-        $url = "https://a.mypaynz.com/api/online";
 
-        $pay_type = "IE0021";
+        $url = "https://a.mypaynz.com/api/online";
 
         $api_key = MYPAYKEY;
         $mid = MYPAYMID;
         $out_trade_no = $pay_type . date("Ymdhis") ;
-        $amount = "0.01";
+        $amount = AMOUNT;
         $goods = "test";
         $goods_detail = "detail@detail";
         $md5_string = "";
@@ -30,7 +29,7 @@ class MYPay_Model extends CI_Model {
             'mid'=>$mid,
             'out_trade_no'=>$out_trade_no,
             'pay_type'=>$pay_type,
-            'total_fee'=>$amount * 100,
+            'total_fee'=>$amount,
             'version'=> 'v1'
         ];
 
@@ -58,7 +57,7 @@ class MYPay_Model extends CI_Model {
         $result = curl_exec($ch);
         $result = json_decode($result,true);
 
-        echo var_dump($result);
+        //echo var_dump($result);
 
         return $result['extra'];
     }
