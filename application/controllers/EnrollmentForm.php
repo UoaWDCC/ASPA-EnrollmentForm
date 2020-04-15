@@ -141,7 +141,7 @@ class EnrollmentForm extends ASPA_Controller
         $data['paymentMethod'] = $this->input->post("paymentMethod");
 
         $this->load->model("Gsheet_Interface_Model");
-        $this->Gsheet_Interface_Model->record_to_sheet($data['name'], $data['email'], ucfirst($data['paymentMethod']), $data['has_paid']);
+        $this->Gsheet_Interface_Model->record_to_sheet($data['email'], $data['name'], ucfirst($data['paymentMethod']), $data['has_paid']);
 
 		//Redirect to the page with grey tick
         $this->load->view('PaymentSuccessful.php', $data);
