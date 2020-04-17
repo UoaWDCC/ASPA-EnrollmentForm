@@ -21,7 +21,7 @@ class MYPay_Model extends CI_Model {
         $out_trade_no = $pay_type . date("Ymdhis") ;
         $amount = AMOUNT;
         $goods = "test";
-        $goods_detail = "detail@detail";
+        $goods_detail = "detaildetail";
         $md5_string = "";
 
         $params = [
