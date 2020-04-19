@@ -312,21 +312,26 @@ function showButton(index) {
 
 // TODO: these two buttons must connect to the next step of the enrollment form
 submit.onclick = function () {
-	alert("You have submitted the payment!");
 
-	// send email to the email address the user have inputed using ajax post
-	$.ajax({
+	// send email to the email address the user have inputted using ajax post
+
+    $.ajax({
 		cashe: false,
 		url: "index.php/EnrollmentForm/send_email",
 		method: "POST",
 		data: { emailAddress: emailAddress, paymentMethod: paymentMethod },
 		success: function (data) {
 			console.log(data);
-
-			// notify user that the email has been sent
-			alert("Please check for comfirmation email!");
 		},
 	});
+
+
+    var base_url = window.location.href;
+
+    $('#enrollment-form').attr('action', base_url + 'EnrollmentForm/LoadOfflinePayment');
+    $('#payment-method-field').attr('value', paymentMethod);
+
+    document.getElementById("enrollment-form").submit();
 };
 
 proceedPayment.onclick = function() {
