@@ -276,7 +276,7 @@ class EmailModel extends CI_Model {
 
         try {
             //Server settings
-            $mail->SMTPDebug = SMTP::DEBUG_SERVER;                      // Enable verbose debug output
+            //$mail->SMTPDebug = SMTP::DEBUG_SERVER;                      // Enable verbose debug output
             $mail->isSMTP();                                            // Send using SMTP
             $mail->Host       = 'smtp.gmail.com';                    // Set the SMTP server to send through
             $mail->SMTPAuth   = true;                                   // Enable SMTP authentication
@@ -306,9 +306,7 @@ class EmailModel extends CI_Model {
             $mail->AltBody = 'Thank you for signing up to ASPA event. These email is shown due to the your device restriction.';
 
             $mail->send();
-            echo 'Message has been sent';
         } catch (Exception $e) {
-            echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
         }
     }
 }
