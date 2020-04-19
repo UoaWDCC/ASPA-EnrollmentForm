@@ -99,8 +99,10 @@ class EnrollmentForm extends ASPA_Controller
             // Highlight this row sicne it is paid
             $this->Gsheet_Interface_Model->highlight_row($row ,[0.69803923, 0.8980392, 0.69803923]);
 
-            //echo $data['email'];
-            //$this->send_email($data['email'], "Stripe");
+            // load EmailModel
+            $this->load->model('EmailModel');
+            // send email to specified email address using sendEmail function in EmailModel
+            $this->EmailModel->sendEmail($data['email'], "online");
 
             //Redirect to the page with green tick
             $this->load->view('PaymentSuccessful.php',$data);
