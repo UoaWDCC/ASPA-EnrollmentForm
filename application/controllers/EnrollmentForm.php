@@ -19,7 +19,7 @@ class EnrollmentForm extends ASPA_Controller
         $data = $this->Gsheet_Interface_Model->get_from_sheet('A2', 'C' . ($this->Gsheet_Interface_Model->get_sheet_size() + 2));
 
         // Important variables we care about
-        $elements = ['time', 'date', 'location', 'title', 'tagline', 'price', 'acc_num', 'desc', 'gsheet_name'];
+        $elements = ['time', 'date', 'location', 'title', 'tagline', 'price', 'acc_num', 'desc', 'gsheet_name', 'form_enabled'];
 
         // If the data from spreadsheet contains event details we are looking for, set them.
         for ($i = 0; $i < sizeof($data); $i++) {
@@ -40,7 +40,12 @@ class EnrollmentForm extends ASPA_Controller
 
 	public function index()
 	{
-		$this->load->view('EnrollmentForm', $this->eventData);
+        if (filter_var($this->eventData["form_enabled"], FILTER_VALIDATE_BOOLEAN)) {
+            $this->load->view('EnrollmentForm', $this->eventData);
+        } else {
+            // TODO: Load a disabled view.
+            echo "This ASPA form is currently disabled.";
+        }
 	}
 
 	public function send_email($emailAddress = null, $paymentMethod = null)
