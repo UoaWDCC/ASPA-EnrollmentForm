@@ -102,7 +102,27 @@ class EnrollmentForm extends ASPA_Controller
         $data['session_id'] = "id";
 
         $this->load->model('Gsheet_Interface_Model');
-        $this->Gsheet_Interface_Model->record_to_sheet($data['email'],$data['name'],'Stripe',FALSE);
+        $this->load->model('Verification_Model');
+
+        // only record if the email is not found
+        if (!($this->Verification_Model->is_email_on_sheet($data['email'], SPREADSHEETID, SHEETNAME))) {
+            $this->Gsheet_Interface_Model->record_to_sheet($data['email'],$data['name'],'Stripe',FALSE);
+        } else {
+            echo "In stripe else";
+            // email is found, so find the cell
+            // then edit the "How would you like your payment" to be of Stripe payment
+            // Get the row of the specific email from google sheets
+            $cell = $this->Gsheet_Interface_Model->get_cellrange($data['email'], 'B');
+            if (!isset($cell)) 
+            { 
+                show_error("Something went wrong, your email was not found in the ASPA member list",'002');
+            }
+
+            // Split up the cell column and row 
+            list(, $row) = $this->Gsheet_Interface_Model->split_column_row($cell);
+            // Edit Payment method column (Column F)
+            $this->Gsheet_Interface_Model->update_payment_method($row, 'Stripe');
+        }
 
         //Generating the session id
         $this->load->model('Stripe_Model');
@@ -179,7 +199,27 @@ class EnrollmentForm extends ASPA_Controller
         $data['paymentMethod'] = $this->input->post("paymentMethod");
 
         $this->load->model("Gsheet_Interface_Model");
-        $this->Gsheet_Interface_Model->record_to_sheet($data['email'], $data['name'], ucfirst($data['paymentMethod']), $data['has_paid']);
+        $this->load->model("Verification_Model");
+
+        // only record if the email is not found
+        if (!($this->Verification_Model->is_email_on_sheet($data['email'], SPREADSHEETID, SHEETNAME))) {
+            $this->Gsheet_Interface_Model->record_to_sheet($data['email'], $data['name'], ucfirst($data['paymentMethod']), $data['has_paid']);
+        } else {
+            echo "In offline else";
+            // email is found, so find the cell
+            // then edit the "How would you like your payment" to be of Stripe payment
+            // Get the row of the specific email from google sheets
+            $cell = $this->Gsheet_Interface_Model->get_cellrange($data['email'], 'B');
+            if (!isset($cell)) 
+            { 
+                show_error("Something went wrong, your email was not found in the ASPA member list",'002');
+            }
+
+            // Split up the cell column and row 
+            list(, $row) = $this->Gsheet_Interface_Model->split_column_row($cell);
+            // Edit Payment method column (Column F)
+            $this->Gsheet_Interface_Model->update_payment_method($row, 'Cash');
+        }
 
 		//Redirect to the page with grey tick
         $this->load->view('PaymentSuccessful.php', array_merge($this->eventData, $data));

@@ -213,4 +213,22 @@ class Gsheet_Interface_Model extends CI_Model {
         // If email does not exist in spreadsaheet
         return NULL;
     }
+
+    // Updates the cell for payment method to be of $paymentType. This is called in EnrollmentForm.php
+    // when the email is found in the google sheets. No duplicate entries are allowed and so the payment
+    // method is edited to the chosen type.
+    // example IN: '10', 'Stripe'
+    // Updates the cell F10, overrides the current value to Stripe.
+    function update_payment_method($row, $paymentType) {
+        $range = $this->sheetName . "!F" . $row;
+        $values = [[$paymentType]];
+        $requestBody = new Google_Service_Sheets_ValueRange(['values' => $values]);
+
+        // Setting input option to RAW text format (i.e no format parsing)
+        // NB: Risk level = MED, may need some parsing for harmful injections into gsheet document
+        $params = ['valueInputOption' => 'USER_ENTERED'];
+
+        // Appends user information to sheet
+        $response = $this->service->spreadsheets_values->update($this->spreadsheetId, $range, $requestBody, $params);
+    }
 }
