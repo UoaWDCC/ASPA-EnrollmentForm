@@ -108,7 +108,6 @@ class EnrollmentForm extends ASPA_Controller
         if (!($this->Verification_Model->is_email_on_sheet($data['email'], SPREADSHEETID, SHEETNAME))) {
             $this->Gsheet_Interface_Model->record_to_sheet($data['email'],$data['name'],'Stripe',FALSE);
         } else {
-            echo "In stripe else";
             // email is found, so find the cell
             // then edit the "How would you like your payment" to be of Stripe payment
             // Get the row of the specific email from google sheets
@@ -205,7 +204,6 @@ class EnrollmentForm extends ASPA_Controller
         if (!($this->Verification_Model->is_email_on_sheet($data['email'], SPREADSHEETID, SHEETNAME))) {
             $this->Gsheet_Interface_Model->record_to_sheet($data['email'], $data['name'], ucfirst($data['paymentMethod']), $data['has_paid']);
         } else {
-            echo "In offline else";
             // email is found, so find the cell
             // then edit the "How would you like your payment" to be of Stripe payment
             // Get the row of the specific email from google sheets
