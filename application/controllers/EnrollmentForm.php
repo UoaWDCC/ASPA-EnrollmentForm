@@ -70,20 +70,27 @@ class EnrollmentForm extends ASPA_Controller
 	 *  - email format
 	 *  - is an email on the email spreadsheet
 	 */
-	public function validate() {
-        $emailAddress = $this->input->post('emailAddress');
+	public function validate() {	
+        $emailAddress = $this->input->post('emailAddress');	
 
-		$this->load->model('Verification_Model');
-
-		if ($this->Verification_Model->has_user_paid($emailAddress)) {
-			$this->create_json('True', '', 'Success');
-			return;
-		}
-		if ($this->Verification_Model->is_email_on_sheet($emailAddress)){
-			$this->create_json('False', '', 'Error: signed up but not paid');
-		} else {
-			$this->create_json('False', '', 'Error: not signed up');
+        $this->load->model('Verification_Model');
+        
+        // has user paid for the event already?
+        if ($this->Verification_Model->has_user_paid_event($emailAddress)) {
+            $this->create_json('False', '', 'Error: already paid for event');
+            return;
         }
+        
+        // has user paid for membership?
+		if ($this->Verification_Model->has_user_paid($emailAddress)) {	
+			$this->create_json('True', '', 'Success');	
+			return;	
+		}	
+		if ($this->Verification_Model->is_email_on_sheet($emailAddress)){	
+			$this->create_json('False', '', 'Error: signed up but not paid');	
+		} else {	
+			$this->create_json('False', '', 'Error: not signed up');	
+        }	
 	}
 
     public function makeStripePayment()
@@ -94,7 +101,6 @@ class EnrollmentForm extends ASPA_Controller
 
         $data['session_id'] = "id";
 
-        // Put the data into spreadsheet
         $this->load->model('Gsheet_Interface_Model');
         $this->Gsheet_Interface_Model->record_to_sheet($data['email'],$data['name'],'Stripe',FALSE);
 
