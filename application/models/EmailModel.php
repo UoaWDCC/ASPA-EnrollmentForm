@@ -11,46 +11,49 @@ require 'application/PHPMailer/src/SMTP.php';
 
 // This model sends different emails to specified email address based on the payment method
 class EmailModel extends CI_Model {
-    public function sendEmail($emailAddress, $paymentMethod)
+    public function sendEmail($emailAddress, $paymentMethod, $eventData)
     {
         // email details
         
         $EMAIL_RECIEVER = $emailAddress;
         $EMAIL_SENDER = "uoawdcc@gmail.com";
-        
-        // event details
-        $EVENT_NAME = "Pool Tournament";
-        $EVENT_TIME = "27th March, 5:30 pm";
-        $EVENT_MONTH = "March 2020";
-        $EVENT_DAY = "27";
-        $EVENT_LOCATION = "Orange Pool club: 9 City Road, Auckland CBD";
-        $EVENT_FEE = "3$ For ASPA Members (5$ Membership Fee)";
+
+        // event details on body
+        $EVENT_NAME = $eventData["title"];
+        $EVENT_TIME = $eventData["date"] . ', ' . $eventData["time"];
+
+        // event details on right hand side
+        $EVENT_MONTH = explode(" ", $eventData["date"])[2];
+        $EVENT_DAY = substr(explode(" ", $eventData["date"])[1], 0, 2);
+
+        $EVENT_DATETIME = explode(" ", $eventData["date"])[1] . ' ' . explode(" ", $eventData["date"])[2] . "<br />" . $eventData["time"];
+        $EVENT_LOCATION = $eventData["location"];
         $EVENT_IMAGE = "https://secure.meetupstatic.com/photos/event/a/6/d/6/600_484542710.jpeg";
 
         // transfer details
-        $TRANSFER_AMOUNT = "$3";
-        $TRANSFER_ACCOUNT = "00000";
+        $TRANSFER_AMOUNT = "$" . (string) number_format((float) $eventData["price"], 2, '.', '');
+        $TRANSFER_ACCOUNT = $eventData["acc_num"];
 
         // default colour of the payment method shown on email (red)
-        $MSG_COLOUR = "#ff0000"; 
-        
+        $MSG_COLOUR = "#ff0000";
+
         // change email details based on different payment method
-        if ($paymentMethod == "online") 
+        if ($paymentMethod == "online")
         {
-            $EMAIL_SUBJECT = "Event Payment Confirmation - ASPA 2020";
+            $EMAIL_SUBJECT = "Payment Confirmation - " . $eventData["title"];
             $TICK_IMAGE = "assets/images/Green_Tick.png";
-            $PAYMENT_DETAIL = "PAID ONLINE";
+            $PAYMENT_DETAIL = "ONLINE PAYMENT";
             $MSG_COLOUR = "#00ff00";
 		$TRANSFER_DETAIL = "";
         }
         elseif ($paymentMethod == "cash") {
-            $EMAIL_SUBJECT = "Event Registration - ASPA 2020";
+            $EMAIL_SUBJECT = "Event Registration - " . $eventData["title"];
             $TICK_IMAGE = "assets/images/Grey_Tick.jpg";
             $PAYMENT_DETAIL = "CASH";
             $TRANSFER_DETAIL = "";
         }
         else {
-            $EMAIL_SUBJECT = "Event Registration - ASPA 2020";
+            $EMAIL_SUBJECT = "Event Registration - " . $eventData["title"];
             $TICK_IMAGE = "assets/images/Grey_tick.png";
             $PAYMENT_DETAIL = "TRANSFER";
             $TRANSFER_DETAIL = "Please transfer " . $TRANSFER_AMOUNT . " to our bank account - " . $TRANSFER_ACCOUNT . "\r\n";
@@ -83,7 +86,7 @@ class EmailModel extends CI_Model {
         <tr>
         <td valign="top" class="m_-6544744198641712840mcnTextContent" style="padding-top:0;padding-right:18px;padding-bottom:9px;padding-left:18px;word-break:break-word;color:#202020;font-family:Helvetica;font-size:16px;line-height:150%;text-align:left">
 
-        <h1 style="display:block;margin:0;padding:0;color:#888888;font-family:Helvetica;font-size:30px;font-style:normal;font-weight:bold;line-height:100%;letter-spacing:normal;text-align:left"><span style="font-size:38px"><span style="color:#303030">Thank you for siging up to ' . $EVENT_NAME . '</span></span></h1>
+        <h1 style="display:block;margin:0;padding:0;color:#888888;font-family:Helvetica;font-size:30px;font-style:normal;font-weight:bold;line-height:100%;letter-spacing:normal;text-align:left"><span style="font-size:38px"><span style="color:#303030">Thank you for signing up to ' . $EVENT_NAME . '</span></span></h1>
         <h3 style="display:block;margin:0;padding:0;color:#303030;font-family:Helvetica;font-size:16px;font-style:normal;font-weight:bold;line-height:125%;letter-spacing:normal;text-align:left">Proudly presented by Auckland Student Pool Association</h3>
         </td>
         </tr>
@@ -161,7 +164,7 @@ class EmailModel extends CI_Model {
         <strong>Where:</strong><br>
         ' . $EVENT_LOCATION . '
         </p>
-        <p style="text-align:center;margin:10px 0;padding:0;color:' . $MSG_COLOUR . ';font-family:Helvetica;font-size:40px;line-height:150%">
+        <p style="text-align:center;margin:10px 0;padding:0;color:' . $MSG_COLOUR . ';font-family:Helvetica;font-size:20px;line-height:150%">
         <strong>
         ' . $PAYMENT_DETAIL . '<br>
         ' . $TRANSFER_DETAIL . '
@@ -191,7 +194,7 @@ class EmailModel extends CI_Model {
         <tbody>
         <tr>
         <td align="center" bgcolor="#EFEFEF" valign="top" id="m_-6544744198641712840monthContainer" style="background-color:#efefef;color:#303030;font-family:Helvetica;font-size:14px;font-weight:bold;line-height:150%">
-        <div>March 2020</div>
+        <div>' . $EVENT_MONTH . ' 2020</div>
         </td>
         </tr>
         <tr>
@@ -218,7 +221,7 @@ class EmailModel extends CI_Model {
         <tr>
         <td valign="top" class="m_-6544744198641712840mcnTextContent" style="padding:18px;color:#f2f2f2;font-family:Helvetica;font-size:14px;font-weight:normal;text-align:center;word-break:break-word;line-height:150%">
         <span style="color:#303030">
-        ' . $EVENT_TIME . '<br>
+        ' . $EVENT_DATETIME . ' <br>
         ' . $EVENT_LOCATION . '
         </span>
         </td>
@@ -304,11 +307,10 @@ class EmailModel extends CI_Model {
             $mail->isHTML(true);                                  // Set email format to HTML
             $mail->Subject = $EMAIL_SUBJECT;
             $mail->Body    = $message;
-            $mail->AltBody = 'Thank you for signing up to ASPA event. These email is shown due to the your device restriction.';
+            $mail->AltBody = 'Thank you for signing up to ' . $eventData["title"] . 'This text is shown due to your device\'s restriction on email content. Please contact ' . $EMAIL_SENDER . ' for clarification.';
 
             $mail->send();
         } catch (Exception $e) {
         }
     }
 }
-
