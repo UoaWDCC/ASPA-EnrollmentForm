@@ -41,6 +41,7 @@ class EmailModel extends CI_Model {
             $TICK_IMAGE = "assets/images/Green_Tick.png";
             $PAYMENT_DETAIL = "PAID ONLINE";
             $MSG_COLOUR = "#00ff00";
+		$TRANSFER_DETAIL = "";
         }
         elseif ($paymentMethod == "cash") {
             $EMAIL_SUBJECT = "Event Registration - ASPA 2020";
