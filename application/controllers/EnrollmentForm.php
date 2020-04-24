@@ -40,7 +40,7 @@ class EnrollmentForm extends ASPA_Controller
 
 	public function index()
 	{
-		$this->load->view('EnrollmentForm');
+		$this->load->view('EnrollmentForm', $this->eventData);
 	}
 
 	public function send_email($emailAddress = null, $paymentMethod = null)
@@ -142,7 +142,7 @@ class EnrollmentForm extends ASPA_Controller
             $this->EmailModel->sendEmail($data['email'], "online");
 
             //Redirect to the page with green tick
-            $this->load->view('PaymentSuccessful.php', $data);
+            $this->load->view('PaymentSuccessful.php', array_merge($this->eventData, $data));
         }
         else {
             show_error("Something went wrong, your payment wasn't processed correctly. Please contact uoa.wdcc@gmail.com",'001');
@@ -174,7 +174,7 @@ class EnrollmentForm extends ASPA_Controller
         $this->Gsheet_Interface_Model->record_to_sheet($data['email'], $data['name'], ucfirst($data['paymentMethod']), $data['has_paid']);
 
 		//Redirect to the page with grey tick
-        $this->load->view('PaymentSuccessful.php', $data);
+        $this->load->view('PaymentSuccessful.php', array_merge($this->eventData, $data));
     }
 }
 

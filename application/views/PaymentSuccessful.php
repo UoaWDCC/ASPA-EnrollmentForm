@@ -28,9 +28,9 @@
                 <?php echo $has_paid ? "Paid!" : "Submitted!"; ?>
             </h1>
 
-            <P>Thank you for signing up to our first event this semester!</p>
-            <p><b>Location:</b> Orange Pool club &ndash; 9 City Road, Auckland CBD</p>
-            <p><b>Time:</b> Thursday 14th March, 6:30 – 8:00 PM</p>
+            <P>Thank you for signing up to <b><?php echo $title; ?></b></p>
+            <p><b>Location:</b> <?php echo $location; ?></p>
+            <p><b>Time:</b> <?php echo $date . ", " . $time; ?></p>
             <p>We have sent an email to <b><?php echo $email; ?></b> for your reference</p>
             <br />
 
