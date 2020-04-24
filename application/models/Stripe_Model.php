@@ -12,12 +12,12 @@ class Stripe_Model extends CI_Model {
 
     /**
      *  Generates a new stripe session with a customer email
-     * 
+     *
      * @param string $customer_email             The email address of the session
-     * 
+     *
      * @return $sessID                          The id of the newly created session
      */
-    function GenSessionId ($customer_email) {
+    function GenSessionId ($customer_email, $eventData) {
 
         require_once('vendor/autoload.php');
 
@@ -25,10 +25,10 @@ class Stripe_Model extends CI_Model {
         $session = \Stripe\Checkout\Session::create([
         'payment_method_types' => ['card'],
         'line_items' => [[
-            'name' => 'ASPA Event entry',
-            'description' => 'Your entry into the next ASPA event!',
-            'images' => ['https://example.com/t-shirt.png'],
-            'amount' => 300,
+            'name' => $eventData["title"],
+            'description' => $eventData["tagline"],
+            'images' => [(base_url() . 'assets/images/ASPA_logo.png')],
+            'amount' => (float) $eventData["price"] * 100,
             'currency' => 'NZD',
             'quantity' => 1,
         ]],
@@ -41,7 +41,7 @@ class Stripe_Model extends CI_Model {
         $sessID = ($stripeSession[0]['id']);
         return $sessID;
     }
-    
+
     /**
 	* This function checks if the stripe session has made it's payment successfully
 	*
@@ -67,7 +67,7 @@ class Stripe_Model extends CI_Model {
         foreach ($events->autoPagingIterator() as $event) {
             //getting each session object
             $session = $event->data->object;
-        
+
             //Checking if a paid session id matches with current session id
             if ($session->id == $session_id) {
                 $hasPaid = True;
@@ -79,13 +79,13 @@ class Stripe_Model extends CI_Model {
 
     /**
      * This Function returns the customers email given a session id
-     * 
+     *
      * @param string $session_id             The session id of the desired email address
-     * 
+     *
      * @return $email the email address of a given session
      */
     function GetEmail($session_id) {
-    
+
         \Stripe\Stripe::setApiKey(SECRETKEY);
 
         $session_object = Stripe\Checkout\Session::retrieve(

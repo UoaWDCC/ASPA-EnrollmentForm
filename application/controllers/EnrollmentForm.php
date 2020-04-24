@@ -95,7 +95,7 @@ class EnrollmentForm extends ASPA_Controller
 
         //Generating the session id
         $this->load->model('Stripe_Model');
-        $data['session_id'] = $this->Stripe_Model->GenSessionId($data['email']);
+        $data['session_id'] = $this->Stripe_Model->GenSessionId($data['email'], $this->eventData);
 
         // Initiate the stripe payment
         $this->load->view('stripe.php', $data);
