@@ -14,7 +14,7 @@
         <meta name='viewport' content='initial-scale=1.0' />
     	<meta name="author" content="UoA Web Development & Consulting Club members">
 
-        <base href="/" />
+        <base href="<?php echo base_url(); ?>" >
         <link type='text/css' rel='stylesheet' href='assets/css/ConfirmationStyle.css' />
     </head>
 

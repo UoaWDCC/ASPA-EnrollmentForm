@@ -7,6 +7,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
   <meta charset="utf-8">
   <title>ASPA</title>
   <meta content="width=device-width, initial-scale=1" name="viewport">
+  <base href="<?php echo base_url(); ?>" >
   <link href="assets/css/normalize.css" rel="stylesheet" type="text/css">
   <link href="assets/css/webflow.css" rel="stylesheet" type="text/css">
   <link href="assets/css/aspa.webflow.css" rel="stylesheet" type="text/css">
