@@ -22,7 +22,7 @@ class Verification_Model extends CI_Model {
 
     }
 
-    function is_email_on_sheet($emailAddress, $sheetId = MEMBERSHIP_SPREADSHEETID, $sheetName = MEMBERSHIP_SHEETNAME){
+    function is_email_on_sheet($emailAddress, $sheetId, $sheetName){
         if (!($this->correct_email_format($emailAddress))){
             return false;
         }
@@ -46,7 +46,7 @@ class Verification_Model extends CI_Model {
 
     function has_user_paid($emailAddress){
 
-        if (!($this->is_email_on_sheet($emailAddress))){
+        if (!($this->is_email_on_sheet($emailAddress, MEMBERSHIP_SPREADSHEETID, MEMBERSHIP_SHEETNAME))){
             return false;
         }
 
@@ -74,8 +74,8 @@ class Verification_Model extends CI_Model {
 
     // Checks if the user has paid for the event in the event registration google sheets.
     // If the row is highlighted green, they have paid.
-    function has_user_paid_event($emailAddress) {
-        if (!($this->is_email_on_sheet($emailAddress, SPREADSHEETID, SHEETNAME))){
+    function has_user_paid_event($emailAddress, $sheetName) {
+        if (!($this->is_email_on_sheet($emailAddress, SPREADSHEETID, $sheetName))){
             return false;
         }
 

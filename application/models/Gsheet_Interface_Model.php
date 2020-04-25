@@ -73,7 +73,9 @@ class Gsheet_Interface_Model extends CI_Model {
             ]
         ];
 
+        echo "<script>console.log(".$this->sheetName.")</script>";
         $formatRange = [
+            "sheetId" => 1497698019,
             "startRowIndex" => $row_num - 1,
             "endRowIndex" => $row_num,
         ];

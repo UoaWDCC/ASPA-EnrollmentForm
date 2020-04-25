@@ -70,13 +70,13 @@ class EnrollmentForm extends ASPA_Controller
 	 *  - email format
 	 *  - is an email on the email spreadsheet
 	 */
-	public function validate() {	
+	public function validate() {
         $emailAddress = $this->input->post('emailAddress');	
 
         $this->load->model('Verification_Model');
         
         // has user paid for the event already?
-        if ($this->Verification_Model->has_user_paid_event($emailAddress)) {
+        if ($this->Verification_Model->has_user_paid_event($emailAddress, $this->eventData['gsheet_name'])) {
             $this->create_json('False', '', 'Error: already paid for event');
             return;
         }
@@ -86,7 +86,7 @@ class EnrollmentForm extends ASPA_Controller
 			$this->create_json('True', '', 'Success');	
 			return;	
 		}	
-		if ($this->Verification_Model->is_email_on_sheet($emailAddress)){	
+		if ($this->Verification_Model->is_email_on_sheet($emailAddress, MEMBERSHIP_SPREADSHEETID, MEMBERSHIP_SHEETNAME)){	
 			$this->create_json('False', '', 'Error: signed up but not paid');	
 		} else {	
 			$this->create_json('False', '', 'Error: not signed up');	
@@ -105,7 +105,7 @@ class EnrollmentForm extends ASPA_Controller
         $this->load->model('Verification_Model');
 
         // only record if the email is not found
-        if (!($this->Verification_Model->is_email_on_sheet($data['email'], SPREADSHEETID, SHEETNAME))) {
+        if (!($this->Verification_Model->is_email_on_sheet($data['email'], SPREADSHEETID, $this->eventData['gsheet_name']))) {
             $this->Gsheet_Interface_Model->record_to_sheet($data['email'],$data['name'],'Stripe',FALSE);
         } else {
             // email is found, so find the cell
@@ -150,7 +150,6 @@ class EnrollmentForm extends ASPA_Controller
 
         // Checking if payment was made to their session and obtain their email
         $data['email'] = $this->Stripe_Model->GetEmail($data['session_id']);
-
         if ($data['has_paid'])
         {
             // HighLight the row (get the user's email)
@@ -165,9 +164,7 @@ class EnrollmentForm extends ASPA_Controller
             list(, $row) = $this->Gsheet_Interface_Model->split_column_row($cell);
             // Highlight this row sicne it is paid
             $this->Gsheet_Interface_Model->highlight_row($row ,[0.69803923, 0.8980392, 0.69803923]);
-
             $this->send_email($data['email'], "online");
-
             //Redirect to the page with green tick
             $this->load->view('PaymentSuccessful.php', array_merge($this->eventData, $data));
         }
@@ -201,7 +198,7 @@ class EnrollmentForm extends ASPA_Controller
         $this->load->model("Verification_Model");
 
         // only record if the email is not found
-        if (!($this->Verification_Model->is_email_on_sheet($data['email'], SPREADSHEETID, SHEETNAME))) {
+        if (!($this->Verification_Model->is_email_on_sheet($data['email'], SPREADSHEETID, $this->eventData['gsheet_name']))) {
             $this->Gsheet_Interface_Model->record_to_sheet($data['email'], $data['name'], ucfirst($data['paymentMethod']), $data['has_paid']);
         } else {
             // email is found, so find the cell
