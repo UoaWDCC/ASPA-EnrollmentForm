@@ -285,6 +285,31 @@ const disabledButtons = [payWeChat, payAli, payPoli];
 	}
 );
 
+ /*
+	make the to-be-disabled-buttons look like they are disabled 
+	(stopping them from increasing in size when hovered over, reducing their opacity and making them unclickable)
+ */ 
+	disabledButtons.forEach(
+		(buttonToDisable) => {
+			buttonToDisable.classList.add("btn-disabled"); // stopping the disabled buttons from increasing in size when hovered over
+			switch (buttonToDisable) {
+				// More cases need to be added if any other buttons are to be disabled
+				case payWeChat:
+					$(".div-wechatpay").css("opacity", "0.2"); // reducing the opacity
+					$(".btn-online.btn-wechatpay").css("pointer-events", "none"); // making the button unclickable
+					break;
+				case payAli:
+					$(".div-alipay").css("opacity", "0.2");
+					$(".btn-online.btn-alipay").css("pointer-events", "none");
+					break;
+				case payPoli:
+					$(".div-polipay").css("opacity", "0.2");
+					$(".btn-online.btn-polipay").css("pointer-events", "none");
+					break;
+			} 
+		}
+	);
+
 /**
  * make the buttons look like they are toggled
  * @param {Object} buttonInUse
