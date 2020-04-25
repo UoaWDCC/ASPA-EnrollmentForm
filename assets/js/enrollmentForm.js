@@ -278,7 +278,7 @@ function showWarning() {
 
 /**
  * make the buttons look like they are toggled
- * @param {int} buttonInUse
+ * @param {Object} buttonInUse
  */
 function toggleButton(buttonInUse) {
 	[payCash, payTransfer, payWeChat, payAli, payCard, payPoli].forEach(
