@@ -21,6 +21,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
   <link href="assets/css/enrollmentForm.css" rel="stylesheet">
 </head>
 <body>
+  <div id="base_url" style="display: none;"><?php echo base_url(); ?></div>
   <div class="w-form">
     <form action="/" method="post" id="enrollment-form" name="enrollment-form" data-name="Enrollment Form" >
       <div class="section">
