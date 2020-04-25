@@ -266,13 +266,22 @@ function showWarning() {
 //    Payment Page (page 4) Functionality
 // ==========================================
 
-// sets up event listener for button click
+// Buttons which are to be temporarily disabled
+const disabledButtons = [payWeChat, payAli, payPoli];
+
+/*
+	sets up event listener for button click except for the buttons which are disabled 
+	(the buttons to be disabled will not do anything when clicked on)
+*/
 [payCash, payTransfer, payWeChat, payAli, payCard, payPoli].forEach(
 	(item, index) => {
-		item.addEventListener("click", function (e) {
-			toggleButton(item);
-			showButton(index);
-		});
+		if (!disabledButtons.includes(item)) {
+			console.log(item);
+			item.addEventListener("click", function (e) {
+				toggleButton(item);
+				showButton(index);
+			});
+		}
 	}
 );
 
