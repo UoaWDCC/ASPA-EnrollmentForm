@@ -228,7 +228,7 @@ ok3.onclick = function () {
 					data.extra === alreadyPaidForEvent
 				) {
 					showWarning();
-					// change the error message to be "signed up but unpaid" warning
+					// change the error message to be "already paid" warning
 					errorMsgArray[0].innerHTML = alreadyPaidEventErr[0];
 					errorMsgArray[1].innerHTML = alreadyPaidEventErr[1];
 					return;
