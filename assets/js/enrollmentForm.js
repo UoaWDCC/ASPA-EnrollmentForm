@@ -58,7 +58,6 @@ let paymentMethod = "";
 // ==========================================
 
 let base_url = document.getElementById("base_url").innerHTML;
-console.log(base_url)
 
 // ==========================================
 //        Setup of Initial state
