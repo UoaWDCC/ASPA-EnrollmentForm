@@ -33,7 +33,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             <div class="div-placeholder"></div>
             <div class="div-main-page-right">
               <h1 class="heading">Welcome</h1>
-              <h1 class="heading-2">ASPA 2020 Welcome Event</h1>
+              <h1 class="heading-2"><?php echo $title ?></h1>
               <div class="div-main-page"><a id="register" data-w-id="dfbe5add-65ea-95a7-6380-331c1db905e2" href="#" class="button w-button">Register</a>
                 <p class="paragraph-pressenter">press <strong class="bold-enter">Enter ↵</strong></p>
               </div>
@@ -41,7 +41,15 @@ defined('BASEPATH') OR exit('No direct script access allowed');
           </div>
           <div id="div-page2" class="div-block page2">
             <div class="div-main-text">
-              <p class="p">Bring your cue skills, friends, and pool rivals to ASPA&#x27;s first event for 2019!<br><br>Limited availability so sign up to confirm your spot!<br>‍<br>(this form will close upon reaching capacity so if you&#x27;re reading this its not too late :D)<br>‍<br>When: Thursday 14th March 6:30pm - 8:00pm<br>‍<br>Where: Orange Pool Club (Corner of Liverpool St and City Rd)<br>‍<br>Make sure you are.<br>‍</p>
+              <p class="p">
+                  <?php echo $tagline; ?>
+                  <br /><br />Limited availability so sign up to confirm your spot! (This form will close upon reaching capacity so if you&#x27;re reading this it's not too late :D)
+                  <br />‍<br /><br /><b>When:</b> <?php echo $date . ", " . $time; ?>
+                  <br />‍<br /><b>Where:</b> <?php echo $location; ?>
+                  <br /><br /><b>Entry cost:</b> <?php echo "$" . (string) number_format((float) $price, 2, '.', '') . ' with ASPA membership'; ?>
+                  <br />‍<br /><br /><?php echo $desc; ?>
+
+              </p>
             </div>
             <div id="div-ok2" class="div-okbtn">
               <div class="div-placeholder ok-btn-spaceholder"></div><a id="ok2" data-w-id="9bf4b69b-3e76-a6f8-a909-2eb2c799c775" href="#" class="button btn-ok w-button">OK ✓</a>

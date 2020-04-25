@@ -120,7 +120,12 @@ class Gsheet_Interface_Model extends CI_Model {
     {
         $range = $this->sheetName . '!A2:A';
         $response = $this->service->spreadsheets_values->get($this->spreadsheetId, $range);
-        return sizeof($response->getValues());
+
+        if ($response->getValues()) {
+            return sizeof($response->getValues());
+        } else {
+            return 0;
+        }
     }
 
     // Get colour of cell from sheet
