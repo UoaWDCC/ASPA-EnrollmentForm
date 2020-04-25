@@ -33,7 +33,8 @@ class EnrollmentForm extends ASPA_Controller
         if ($this->eventData['gsheet_name']) {
             $this->Gsheet_Interface_Model->set_spreadsheetId(SPREADSHEETID, $this->eventData['gsheet_name']);
         } else {
-            $this->Gsheet_Interface_Model->set_spreadsheetId(SPREADSHEETID, SHEETNAME);
+            // disable form if no event sheet is found.
+            $this->eventData["form_enabled"] = False;
         }
 	}
 
