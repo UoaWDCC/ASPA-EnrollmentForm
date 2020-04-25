@@ -35,6 +35,10 @@ const signedUpUnpaidErr = [
 	"You have signed up, but have not paid for membership fees.",
 	"Please contact the ASPA Team to pay for membership.",
 ];
+const alreadyPaidEventErr = [
+	"Oops! This email has already paid for this event.",
+	"Please use a different account or email.",
+];
 
 // get the payment button types on page 4
 let payCash = document.getElementById("btn-cash");
@@ -46,6 +50,7 @@ let payPoli = document.getElementById("btn-poliay");
 
 // Email Address
 let emailAddress = "";
+let name = "";
 let paymentMethod = "";
 
 // ==========================================
@@ -169,9 +174,13 @@ back4.onclick = function () {
 // ==========================================
 
 // name/email page (page 3) OK button onclick name and email validation
+// store the last values to prevent recalling of validate();
+let oldValue = "";
+let oldName = "";
 ok3.onclick = function () {
 	hideAllWarnings();
 	emailAddress = inputEmail.value.trim(); // collect email
+	name = inputName.value.trim(); // collect name
 	if (inputName.value.trim().length === 0) {
 		inputName.style.border = "1px solid red";
 		return;
@@ -179,37 +188,54 @@ ok3.onclick = function () {
 		inputName.style.border = "1px solid #00A22C";
 	}
 	showLoading();
-	$.ajax({
-		cache: false,
-		url: "index.php/EnrollmentForm/validate",
-		method: "POST",
-		data: { emailAddress: emailAddress },
-		// if the validate() url functions correctly (even if it returns True/False), then success function executes.
-		success: function (data) {
-			console.log(data);
-			// data is a JSON object with the following properties:
-			// is_success: True/False (if the email validation succeeeded)
-			// message: any message
-			// extra: any further information
-			const signedUpUnpaid = "Error: signed up but not paid"; // edit these if the 'extra' message is modified
-			if (data.is_success === "True") {
-				showSuccess();
-				setTimeout(() => nextPage(), 1000);
-			} else if (data.is_success === "False" && data.extra === signedUpUnpaid) {
-				showWarning();
-				// change the error message to be "signed up but unpaid" warning
-				errorMsgArray[0].innerHTML = signedUpUnpaidErr[0];
-				errorMsgArray[1].innerHTML = signedUpUnpaidErr[1];
-				return;
-			} else {
-				showWarning();
-				// change the error message to be "unrecognized email, please sign up" warning
-				errorMsgArray[0].innerHTML = notSignedUpUnpaidErr[0];
-				errorMsgArray[1].innerHTML = notSignedUpUnpaidErr[1];
-				return;
-			}
-		},
-	});
+	if (oldValue !== emailAddress || oldName !== name) {
+		oldValue = emailAddress;
+		oldName = name;
+		$.ajax({
+			cache: false,
+			url: "index.php/EnrollmentForm/validate",
+			method: "POST",
+			data: { emailAddress: emailAddress },
+			// if the validate() url functions correctly (even if it returns True/False), then success function executes.
+			success: function (data) {
+				console.log(data);
+				// data is a JSON object with the following properties:
+				// is_success: True/False (if the email validation succeeeded)
+				// message: any message
+				// extra: any further information
+				const signedUpUnpaid = "Error: signed up but not paid"; // edit these if the 'extra' message is modified
+				const alreadyPaidForEvent = "Error: already paid for event";
+				if (data.is_success === "True") {
+					showSuccess();
+					setTimeout(() => nextPage(), 1000);
+				} else if (
+					data.is_success === "False" &&
+					data.extra === signedUpUnpaid
+				) {
+					showWarning();
+					// change the error message to be "signed up but unpaid" warning
+					errorMsgArray[0].innerHTML = signedUpUnpaidErr[0];
+					errorMsgArray[1].innerHTML = signedUpUnpaidErr[1];
+					return;
+				} else if (
+					data.is_success === "False" &&
+					data.extra === alreadyPaidForEvent
+				) {
+					showWarning();
+					// change the error message to be "signed up but unpaid" warning
+					errorMsgArray[0].innerHTML = alreadyPaidEventErr[0];
+					errorMsgArray[1].innerHTML = alreadyPaidEventErr[1];
+					return;
+				} else {
+					showWarning();
+					// change the error message to be "unrecognized email, please sign up" warning
+					errorMsgArray[0].innerHTML = notSignedUpUnpaidErr[0];
+					errorMsgArray[1].innerHTML = notSignedUpUnpaidErr[1];
+					return;
+				}
+			},
+		});
+	}
 };
 
 /**
@@ -312,10 +338,9 @@ function showButton(index) {
 
 // TODO: these two buttons must connect to the next step of the enrollment form
 submit.onclick = function () {
-
 	// send email to the email address the user have inputted using ajax post
 
-    $.ajax({
+	$.ajax({
 		cashe: false,
 		url: "index.php/EnrollmentForm/send_email",
 		method: "POST",
@@ -325,36 +350,39 @@ submit.onclick = function () {
 		},
 	});
 
+	var base_url = window.location.href;
 
-    var base_url = window.location.href;
+	$("#enrollment-form").attr(
+		"action",
+		base_url + "EnrollmentForm/LoadOfflinePayment"
+	);
+	$("#payment-method-field").attr("value", paymentMethod);
 
-    $('#enrollment-form').attr('action', base_url + 'EnrollmentForm/LoadOfflinePayment');
-    $('#payment-method-field').attr('value', paymentMethod);
-
-    document.getElementById("enrollment-form").submit();
+	document.getElementById("enrollment-form").submit();
 };
 
-proceedPayment.onclick = function() {
+proceedPayment.onclick = function () {
 	// get the active button
 	var toggled_index;
 	[payCash, payTransfer, payWeChat, payAli, payCard, payPoli].forEach(
 		(item, index) => {
-			if (item.classList.contains('toggled')) toggled_index=index;
+			if (item.classList.contains("toggled")) toggled_index = index;
 		}
 	);
 
 	var base_url = window.location.href;
 
-	if (toggled_index < 2){
-		alert('asdf');
-	}
-	else if (toggled_index == 4) {
+	if (toggled_index < 2) {
+		alert("asdf");
+	} else if (toggled_index == 4) {
 		//Stripe Payment
-		$('#enrollment-form').attr('action', base_url + 'EnrollmentForm/MakeStripePayment');
+		$("#enrollment-form").attr(
+			"action",
+			base_url + "EnrollmentForm/MakeStripePayment"
+		);
 		document.getElementById("enrollment-form").submit();
 		//window.open('http://localhost/ASPA-EnrollmentForm/EnrollmentForm/MakeStripePayment?email=');
-	}
-	else {
+	} else {
 		//IEpay
 	}
 	// alert("Taking you to proceed payment!");

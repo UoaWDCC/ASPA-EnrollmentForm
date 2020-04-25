@@ -22,15 +22,12 @@ class Verification_Model extends CI_Model {
 
     }
 
-    //pass in emailAddress as a string
-    //returns a boolean value for whether an email address is considered to be on the sheet
-    //if email user hasn't paid for memebership they are considered to be not on the sheet
-    function is_email_on_sheet($emailAddress){
+    function is_email_on_sheet($emailAddress, $sheetId, $sheetName){
         if (!($this->correct_email_format($emailAddress))){
             return false;
         }
         $this->load->model('Gsheet_Interface_Model');
-        $this->Gsheet_Interface_Model->set_spreadsheetId(MEMBERSHIP_SPREADSHEETID, MEMBERSHIP_SHEETNAME);
+        $this->Gsheet_Interface_Model->set_spreadsheetId($sheetId, $sheetName);
         //this gets the sheet size
         $sheetSize = $this->Gsheet_Interface_Model->get_sheet_size();
         //this is an array of array of all existing emails, i.e. [[email1], [email2], [email3]]
@@ -49,7 +46,7 @@ class Verification_Model extends CI_Model {
 
     function has_user_paid($emailAddress){
 
-        if (!($this->is_email_on_sheet($emailAddress))){
+        if (!($this->is_email_on_sheet($emailAddress, MEMBERSHIP_SPREADSHEETID, MEMBERSHIP_SHEETNAME))){
             return false;
         }
 
@@ -73,5 +70,33 @@ class Verification_Model extends CI_Model {
 
         return true;
         
+    }
+
+    // Checks if the user has paid for the event in the event registration google sheets.
+    // If the row is highlighted green, they have paid.
+    function has_user_paid_event($emailAddress, $sheetName) {
+        if (!($this->is_email_on_sheet($emailAddress, SPREADSHEETID, $sheetName))){
+            return false;
+        }
+
+        //given that the email exists in the sheet
+        //find its index
+        $emailKey = array_search($emailAddress, $this->addresses);
+        // echo "emailKey is: " . $emailKey . "<br>";
+        
+        //turn into sheets readable form 
+        $emailIndex = 'B' . ($emailKey+2);
+        // echo "emailIndex is: " . $emailIndex . "<br><br>";
+
+        //this takes emailIndex as a parameter
+        //gets hex of the colour of the cell containing the email in question
+        $colourIs = $this->Gsheet_Interface_Model->get_cell_colour($emailIndex);
+        
+        //uncoloured cells return as 000000 (or sometimes ffffff because google sheets is extra like that)
+        if ($colourIs == '000000' || $colourIs == 'ffffff'){
+            return false;
+        } 
+
+        return true;
     }
 }
