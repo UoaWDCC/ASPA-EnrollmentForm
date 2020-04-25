@@ -50,6 +50,7 @@ let payPoli = document.getElementById("btn-poliay");
 
 // Email Address
 let emailAddress = "";
+let name = "";
 let paymentMethod = "";
 
 // ==========================================
@@ -173,9 +174,13 @@ back4.onclick = function () {
 // ==========================================
 
 // name/email page (page 3) OK button onclick name and email validation
+// store the last values to prevent recalling of validate();
+let oldValue = "";
+let oldName = "";
 ok3.onclick = function () {
 	hideAllWarnings();
 	emailAddress = inputEmail.value.trim(); // collect email
+	name = inputName.value.trim(); // collect name
 	if (inputName.value.trim().length === 0) {
 		inputName.style.border = "1px solid red";
 		return;
@@ -183,47 +188,54 @@ ok3.onclick = function () {
 		inputName.style.border = "1px solid #00A22C";
 	}
 	showLoading();
-	$.ajax({
-		cache: false,
-		url: "index.php/EnrollmentForm/validate",
-		method: "POST",
-		data: { emailAddress: emailAddress },
-		// if the validate() url functions correctly (even if it returns True/False), then success function executes.
-		success: function (data) {
-			console.log(data);
-			// data is a JSON object with the following properties:
-			// is_success: True/False (if the email validation succeeeded)
-			// message: any message
-			// extra: any further information
-			const signedUpUnpaid = "Error: signed up but not paid"; // edit these if the 'extra' message is modified
-			const alreadyPaidForEvent = "Error: already paid for event";
-			if (data.is_success === "True") {
-				showSuccess();
-				setTimeout(() => nextPage(), 1000);
-			} else if (data.is_success === "False" && data.extra === signedUpUnpaid) {
-				showWarning();
-				// change the error message to be "signed up but unpaid" warning
-				errorMsgArray[0].innerHTML = signedUpUnpaidErr[0];
-				errorMsgArray[1].innerHTML = signedUpUnpaidErr[1];
-				return;
-			} else if (
-				data.is_success === "False" &&
-				data.extra === alreadyPaidForEvent
-			) {
-				showWarning();
-				// change the error message to be "signed up but unpaid" warning
-				errorMsgArray[0].innerHTML = alreadyPaidEventErr[0];
-				errorMsgArray[1].innerHTML = alreadyPaidEventErr[1];
-				return;
-			} else {
-				showWarning();
-				// change the error message to be "unrecognized email, please sign up" warning
-				errorMsgArray[0].innerHTML = notSignedUpUnpaidErr[0];
-				errorMsgArray[1].innerHTML = notSignedUpUnpaidErr[1];
-				return;
-			}
-		},
-	});
+	if (oldValue !== emailAddress || oldName !== name) {
+		oldValue = emailAddress;
+		oldName = name;
+		$.ajax({
+			cache: false,
+			url: "index.php/EnrollmentForm/validate",
+			method: "POST",
+			data: { emailAddress: emailAddress },
+			// if the validate() url functions correctly (even if it returns True/False), then success function executes.
+			success: function (data) {
+				console.log(data);
+				// data is a JSON object with the following properties:
+				// is_success: True/False (if the email validation succeeeded)
+				// message: any message
+				// extra: any further information
+				const signedUpUnpaid = "Error: signed up but not paid"; // edit these if the 'extra' message is modified
+				const alreadyPaidForEvent = "Error: already paid for event";
+				if (data.is_success === "True") {
+					showSuccess();
+					setTimeout(() => nextPage(), 1000);
+				} else if (
+					data.is_success === "False" &&
+					data.extra === signedUpUnpaid
+				) {
+					showWarning();
+					// change the error message to be "signed up but unpaid" warning
+					errorMsgArray[0].innerHTML = signedUpUnpaidErr[0];
+					errorMsgArray[1].innerHTML = signedUpUnpaidErr[1];
+					return;
+				} else if (
+					data.is_success === "False" &&
+					data.extra === alreadyPaidForEvent
+				) {
+					showWarning();
+					// change the error message to be "signed up but unpaid" warning
+					errorMsgArray[0].innerHTML = alreadyPaidEventErr[0];
+					errorMsgArray[1].innerHTML = alreadyPaidEventErr[1];
+					return;
+				} else {
+					showWarning();
+					// change the error message to be "unrecognized email, please sign up" warning
+					errorMsgArray[0].innerHTML = notSignedUpUnpaidErr[0];
+					errorMsgArray[1].innerHTML = notSignedUpUnpaidErr[1];
+					return;
+				}
+			},
+		});
+	}
 };
 
 /**
