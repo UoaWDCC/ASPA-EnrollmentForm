@@ -54,6 +54,12 @@ let name = "";
 let paymentMethod = "";
 
 // ==========================================
+//        Getting the base_url
+// ==========================================
+
+let base_url = document.getElementById("base_url").innerHTML;
+
+// ==========================================
 //        Setup of Initial state
 // ==========================================
 
@@ -193,7 +199,7 @@ ok3.onclick = function () {
 		oldName = name;
 		$.ajax({
 			cache: false,
-			url: "index.php/EnrollmentForm/validate",
+			url: base_url + "index.php/EnrollmentForm/validate",
 			method: "POST",
 			data: { emailAddress: emailAddress },
 			// if the validate() url functions correctly (even if it returns True/False), then success function executes.
@@ -375,7 +381,7 @@ submit.onclick = function () {
 
 	$.ajax({
 		cashe: false,
-		url: "index.php/EnrollmentForm/send_email",
+		url: base_url + "index.php/EnrollmentForm/send_email",
 		method: "POST",
 		data: { emailAddress: emailAddress, paymentMethod: paymentMethod },
 		success: function (data) {
@@ -383,14 +389,12 @@ submit.onclick = function () {
 		},
 	});
 
-	var base_url = window.location.href;
-
 	$("#enrollment-form").attr(
 		"action",
 		base_url + "EnrollmentForm/LoadOfflinePayment"
 	);
 	$("#payment-method-field").attr("value", paymentMethod);
-
+	
 	document.getElementById("enrollment-form").submit();
 };
 
@@ -402,8 +406,6 @@ proceedPayment.onclick = function () {
 			if (item.classList.contains("toggled")) toggled_index = index;
 		}
 	);
-
-	var base_url = window.location.href;
 
 	if (toggled_index < 2) {
 		alert("asdf");

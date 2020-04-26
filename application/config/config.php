@@ -25,10 +25,14 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 */
 
 if (substr($_SERVER['HTTP_HOST'], 0, 9) == 'localhost') {
-  $config['base_url'] = "http://" . $_SERVER['HTTP_HOST'] . "/";
+	$config['base_url'] = '';
+	$config['base_url'] = ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == "on") ? "https" : "http");
+	$config['base_url'] .= "://" . $_SERVER['HTTP_HOST'];
+	$config['base_url'] .= str_replace(basename($_SERVER['SCRIPT_NAME']), "", $_SERVER['SCRIPT_NAME']);
 } else {
-  $config['base_url'] = 'https://' . $_SERVER['HTTP_HOST'] . '/';
+	$config['base_url'] = 'https://' . $_SERVER['HTTP_HOST'] . '/';
 }
+
 
 /*
 |--------------------------------------------------------------------------
