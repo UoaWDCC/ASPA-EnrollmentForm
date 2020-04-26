@@ -389,14 +389,12 @@ submit.onclick = function () {
 		},
 	});
 
-	var base_url = window.location.href;
-
 	$("#enrollment-form").attr(
 		"action",
 		base_url + "EnrollmentForm/LoadOfflinePayment"
 	);
 	$("#payment-method-field").attr("value", paymentMethod);
-
+	
 	document.getElementById("enrollment-form").submit();
 };
 
@@ -408,8 +406,6 @@ proceedPayment.onclick = function () {
 			if (item.classList.contains("toggled")) toggled_index = index;
 		}
 	);
-
-	var base_url = window.location.href;
 
 	if (toggled_index < 2) {
 		alert("asdf");
