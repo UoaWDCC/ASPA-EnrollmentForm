@@ -33,7 +33,7 @@ class Stripe_Model extends CI_Model {
             'quantity' => 1,
         ]],
         'success_url' => base_url().'EnrollmentForm/StripePaymentSucessful?session_id={CHECKOUT_SESSION_ID}',
-        'cancel_url' => base_url().'EnrollmentForm',
+        'cancel_url' => base_url(),
         'customer_email' => $customer_email,
 
         ]);
