@@ -186,7 +186,6 @@ ok3.onclick = function () {
 		data: { emailAddress: emailAddress },
 		// if the validate() url functions correctly (even if it returns True/False), then success function executes.
 		success: function (data) {
-			console.log(data);
 			// data is a JSON object with the following properties:
 			// is_success: True/False (if the email validation succeeeded)
 			// message: any message
