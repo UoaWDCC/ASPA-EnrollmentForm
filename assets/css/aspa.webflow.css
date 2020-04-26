@@ -645,6 +645,12 @@
 	transform: scale(1.1);
 }
 
+.btn-disabled:hover {
+	-webkit-transform: scale(1);
+	-ms-transform: scale(1);
+	transform: scale(1);
+}
+
 .btn-online:active {
 	background-color: #dbdbdb;
 	box-shadow: inset 1px 1px 3px 0 #000, 1px 1px 5px 0 rgba(0, 0, 0, 0.4);
