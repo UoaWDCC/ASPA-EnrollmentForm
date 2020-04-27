@@ -12,10 +12,9 @@ class Gsheet_Interface_Model extends CI_Model {
     {
         $this->service = $this->service_setup();
         $this->spreadsheetId = SPREADSHEETID;
-        $this->sheetName = SHEETNAME;
     }
 
-    public function set_spreadsheetId($spreadsheetId, $sheetName=SHEETNAME) {
+    public function set_spreadsheetId($spreadsheetId, $sheetName) {
         $this->spreadsheetId = $spreadsheetId;
         $this->sheetName = $sheetName;
     }
@@ -48,6 +47,19 @@ class Gsheet_Interface_Model extends CI_Model {
         }
     }
 
+    function get_sheet_id($sheetName) {
+
+        // Gets all sheets from spreadsheet
+        $sheets = $this->service->spreadsheets->get($this->spreadsheetId)["sheets"];
+
+        // Iterates over sheets, returning first sheetId with matching name
+        foreach ($sheets as $sheet) {
+            if ($sheet['properties']['title'] == $sheetName) {
+                return $sheet['properties']['sheetId'];
+            }
+        }
+    }
+
     // Finds the current root directory
     function getCurrentWorkingDir()
     {
@@ -73,9 +85,8 @@ class Gsheet_Interface_Model extends CI_Model {
             ]
         ];
 
-        echo "<script>console.log(".$this->sheetName.")</script>";
         $formatRange = [
-            "sheetId" => 1497698019,
+            "sheetId" => $this->get_sheet_id($this->sheetName),
             "startRowIndex" => $row_num - 1,
             "endRowIndex" => $row_num,
         ];
