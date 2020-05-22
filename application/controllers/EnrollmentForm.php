@@ -183,9 +183,8 @@ class EnrollmentForm extends ASPA_Controller
         $data['email'] = $this->input->post('email');
         $data['pay_type'] = $this->input->post('paymentMethod');
         $data['MYd'] = "";
-
-       // echo var_dump($data)
-;
+        $data['price'] = number_format((float) $this->eventData['price'], 2, '.', '');
+        
         // Put the data into spreadsheet
         $this->load->model('Gsheet_Interface_Model');
         $this->Gsheet_Interface_Model->record_to_sheet($data['email'],$data['name'],'MY',FALSE);
