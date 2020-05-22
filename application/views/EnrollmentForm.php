@@ -45,7 +45,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             <div class="div-main-text">
               <p class="p">
                   <?php echo $tagline; ?>
-                  <br /><br />Limited availability so sign up to confirm your spot! (This form will close upon reaching capacity so if you&#x27;re reading this it's not too late :D)
+                  <br /><br />Limited availability so sign up to confirm your spot!<br />This form will close upon reaching capacity so if you&#x27;re reading this it's not too late :D)
                   <br />‍<br /><br /><b>When:</b> <?php echo $date . ", " . $time; ?>
                   <br />‍<br /><b>Where:</b> <?php echo $location; ?>
                   <br /><br /><b>Entry cost:</b> <?php echo "$" . (string) number_format((float) $price, 2, '.', '') . ' with ASPA membership'; ?>
