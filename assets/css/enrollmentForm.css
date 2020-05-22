@@ -1,5 +1,6 @@
 body {
-	overflow: hidden;
+    margin: 0;
+    padding: 0;
 }
 
 .asterisk {
@@ -75,4 +76,47 @@ body {
 	to {
 		opacity: 1;
 	}
+}
+
+.qr-container {
+    font-family: 'Droid Sans', arial;
+    text-align: center;
+    width: 100vw;
+    height: 100vh;
+
+    display: flex;
+    flex-flow: row wrap;
+    box-sizing: border-box;
+    padding: 50px 0;
+
+    align-items: center;
+    justify-content: space-around;
+}
+
+.qr-container h4 {
+    text-align: right;
+}
+
+.qr-container .qrcode {
+    display: block;
+    margin: 0 auto;
+    padding: 0;
+    text-align: center;
+    width: 256px;
+}
+
+.qr-container p {
+    font-size: 1em;
+    margin: 20px 0 0 0;
+    padding-right;
+    height: 30px;
+    flex-basis: 100%;
+    vertical-align: center;
+}
+
+.qr-container p img {
+    padding-left: 5px;
+    vertical-align: center;
+    height: 30px;
+    width: auto;
 }
