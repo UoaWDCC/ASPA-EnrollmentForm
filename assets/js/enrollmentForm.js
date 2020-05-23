@@ -431,7 +431,6 @@ proceedPayment.onclick = function () {
 			else {
 				// If Poli pay is selected
 				MYpay_method = "IE0041";
-				alert('HERE');
 			}
 		}
 		else
@@ -447,7 +446,6 @@ proceedPayment.onclick = function () {
 			else {
 				// If Poli pay is selected
 				MYpay_method = "IE0041";
-				alert('HERE');
 			}
 		}
 
