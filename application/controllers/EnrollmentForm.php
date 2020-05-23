@@ -83,7 +83,7 @@ class EnrollmentForm extends ASPA_Controller
         }
         
         // has user paid for membership?
-		if ($this->Verification_Model->has_user_paid($emailAddress)) {	
+		if ($this->Verification_Model->has_user_paid_membership($emailAddress)) {	
 			$this->create_json('True', '', 'Success');	
 			return;	
 		}	
@@ -96,18 +96,24 @@ class EnrollmentForm extends ASPA_Controller
 
     public function makeStripePayment()
     {
+        $this->load->model('Gsheet_Interface_Model');
+        $this->load->model('Verification_Model');
+
         // Receive data from form, method=POST
         $data['name'] = $this->input->post('name');
         $data['email'] = $this->input->post('email');
 
         // Stopping direct access to this method
-        if (!isset($data['name'])||!isset($data['email']))
+        $paid_member = ($this->Verification_Model->has_user_paid_membership($email));
+        if ( !$paid_member )
+        {
+            show_error("Something went wrong, your email was not found in the ASPA member list","500");
+        }
+        if ( !isset($data['name']) || !isset($data['email']) )
         {
             show_error("Sorry, this page you are requesting is either not found or you don't have permission to access this page. Error Code:001","404");
         }
 
-        $this->load->model('Gsheet_Interface_Model');
-        $this->load->model('Verification_Model');
 
         // only record if the email is not found
         if (!($this->Verification_Model->is_email_on_sheet($data['email'], SPREADSHEETID, $this->eventData['gsheet_name']))) {
