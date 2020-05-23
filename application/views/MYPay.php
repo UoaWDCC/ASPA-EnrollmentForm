@@ -48,28 +48,20 @@
             let priceDOM = document.getElementById("price")
 
             // Display QR Code based on destination
-            if (payType == "IE0011" || payType == "IE0012" || payType == "IE0021" || payType == "IE0022" || payType == "IE0023") {
+            if (payType == "IE0011" || payType == "IE0021" || payType == "IE0022" || payType == "IE0023") {
                 new QRCode(document.getElementById("qrcode"), url);
 
                 priceDOM.innerHTML = 'NZD: $<?php echo $price; ?>';
 
                 // Changing icons of text messages
                 // AliPay
-                if (payType == "IE0011" || payType == "IE0012") {
+                if (payType == "IE0011") {
                     paymentDOM.src = "assets/images/alipay.png";
 
                 } else if (payType == "IE0021" || payType == "IE0022" || payType == "IE0023") {
                     paymentDOM.src = "assets/images/wechatpay.png";
                 }
-
             }
-
-            else {
-                location.href = "<?php echo $MYd['pay_url']?>";
-            }
-
-
-
 
 
             var checkPayment = function(){
