@@ -74,6 +74,10 @@ class EnrollmentForm extends ASPA_Controller
 	public function validate() {
         $emailAddress = $this->input->post('emailAddress');	
 
+        if(!isset($emailAddress)){
+            $this->create_json('False', '', 'Error: Email not specified');
+        }
+
         $this->load->model('Verification_Model');
         
         // has user paid for the event already?

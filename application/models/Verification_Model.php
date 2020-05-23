@@ -43,7 +43,6 @@ class Verification_Model extends CI_Model {
         return true;
     }
 
-    // TODO : Refactor this method name to indicate it is has_user_paid_for_membership
     function has_user_paid_membership($emailAddress){
 
         if (!($this->is_email_on_sheet($emailAddress, MEMBERSHIP_SPREADSHEETID, MEMBERSHIP_SHEETNAME))){
