@@ -104,16 +104,15 @@ class EnrollmentForm extends ASPA_Controller
         $data['email'] = $this->input->post('email');
 
         // Stopping direct access to this method
-        $paid_member = ($this->Verification_Model->has_user_paid_membership($email));
-        if ( !$paid_member )
-        {
-            show_error("Something went wrong, your email was not found in the ASPA member list","500");
-        }
         if ( !isset($data['name']) || !isset($data['email']) )
         {
             show_error("Sorry, this page you are requesting is either not found or you don't have permission to access this page. Error Code:001","404");
         }
-
+        $paid_member = ($this->Verification_Model->has_user_paid_membership($data['email']));
+        if ( !$paid_member )
+        {
+            show_error("Something went wrong, your email was not found in the ASPA member list or havn't paid","500");
+        }
 
         // only record if the email is not found
         if (!($this->Verification_Model->is_email_on_sheet($data['email'], SPREADSHEETID, $this->eventData['gsheet_name']))) {
