@@ -100,7 +100,11 @@ class EnrollmentForm extends ASPA_Controller
         $data['name'] = $this->input->post('name');
         $data['email'] = $this->input->post('email');
 
-        $data['session_id'] = "id";
+        // Stopping direct access to this method
+        if (!isset($data['name'])||!isset($data['email']))
+        {
+            show_error("Sorry, this page you are requesting is either not found or you don't have permission to access this page. Error Code:001","404");
+        }
 
         $this->load->model('Gsheet_Interface_Model');
         $this->load->model('Verification_Model');
@@ -170,7 +174,7 @@ class EnrollmentForm extends ASPA_Controller
             $this->load->view('PaymentSuccessful.php', array_merge($this->eventData, $data));
         }
         else {
-            show_error("Something went wrong, your payment wasn't processed correctly. Please contact uoa.wdcc@gmail.com",'001');
+            show_error("Something went wrong, your payment wasn't processed correctly. Please contact uoa.wdcc@gmail.com",'003');
         }
     }
 
