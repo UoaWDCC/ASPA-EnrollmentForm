@@ -1,6 +1,6 @@
 # ASPA-EnrollmentForm
 
-## Install rerequisite softwares
+## Install prerequisite softwares
 https://docs.google.com/document/d/12gQFGppZIV2cbQnOcgkKMs8szKhBsIAE42iEvRt1NQk/edit
 
 ## Trello 
