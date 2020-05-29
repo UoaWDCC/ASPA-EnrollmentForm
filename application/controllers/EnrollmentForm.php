@@ -208,6 +208,11 @@ class EnrollmentForm extends ASPA_Controller
         $data["email"] = $this->input->post("email");
         $data['paymentMethod'] = $this->input->post("paymentMethod");
 
+        if (!isset($data['name']) || !isset($data["email"]) || !isset($data['paymentMethod'])) 
+        {
+            show_error("Something went wrong. Please contact uoa.wdcc@gmail.com. Error Code: 001","500");
+        }
+
         $this->load->model("Gsheet_Interface_Model");
         $this->load->model("Verification_Model");
 
@@ -219,10 +224,6 @@ class EnrollmentForm extends ASPA_Controller
             // then edit the "How would you like your payment" to be of Offline payment
             // Get the row of the specific email from google sheets
             $cell = $this->Gsheet_Interface_Model->get_cellrange($data['email'], 'B');
-            if (!isset($cell)) 
-            { 
-                show_error("Something went wrong, your email is already registered for the event but seems to have problems. Please contact uoa.wdcc@gmail.com. Error code: 002","500");
-            }
 
             // Split up the cell column and row 
             list(, $row) = $this->Gsheet_Interface_Model->split_column_row($cell);
