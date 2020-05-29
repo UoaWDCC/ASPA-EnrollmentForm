@@ -146,7 +146,7 @@ class EnrollmentForm extends ASPA_Controller
 
     }
 
-    public function StripePaymentSucessful()
+    public function StripePaymentSuccessful()
     {
         $this->load->model('Stripe_Model');
         $this->load->model('Gsheet_Interface_Model');
