@@ -115,7 +115,7 @@ class EnrollmentForm extends ASPA_Controller
         $paid_member = ($this->Verification_Model->has_user_paid_membership($data['email']));
         if ( !$paid_member )
         {
-            show_error("Something went wrong, your email was not found in the ASPA member list or havn't paid","500");
+            show_error("Something went wrong, your email was not found in the ASPA member list or havn't paid. Error Code: 002","500");
         }
 
         // only record if the email is not found
@@ -128,7 +128,7 @@ class EnrollmentForm extends ASPA_Controller
             $cell = $this->Gsheet_Interface_Model->get_cellrange($data['email'], 'B');
             if (!isset($cell)) 
             { 
-                show_error("Something went wrong, your email was not found in the ASPA member list",'002');
+                show_error("Something went wrong, your email was not found in the ASPA member list.Error Code: 002","500");
             }
 
             // Split up the cell column and row 
@@ -171,7 +171,7 @@ class EnrollmentForm extends ASPA_Controller
             $cell = $this->Gsheet_Interface_Model->get_cellrange($data['email'], 'B');
             if (!isset($cell))
             {
-                show_error("Something went wrong, your email was not found in the ASPA member list",'002');
+                show_error("Something went wrong, your email was not found in the ASPA member list. Error Code: 002","500");
             }
 
             // Split up the cell column and row
@@ -183,7 +183,7 @@ class EnrollmentForm extends ASPA_Controller
             $this->load->view('PaymentSuccessful.php', array_merge($this->eventData, $data));
         }
         else {
-            show_error("Something went wrong, your payment wasn't processed correctly. Please contact uoa.wdcc@gmail.com",'003');
+            show_error("Something went wrong, your payment wasn't processed correctly. Please contact uoa.wdcc@gmail.com. Error Code: 003","500");
         }
     }
 
@@ -216,12 +216,12 @@ class EnrollmentForm extends ASPA_Controller
             $this->Gsheet_Interface_Model->record_to_sheet($data['email'], $data['name'], ucfirst($data['paymentMethod']), $data['has_paid']);
         } else {
             // email is found, so find the cell
-            // then edit the "How would you like your payment" to be of Stripe payment
+            // then edit the "How would you like your payment" to be of Offline payment
             // Get the row of the specific email from google sheets
             $cell = $this->Gsheet_Interface_Model->get_cellrange($data['email'], 'B');
             if (!isset($cell)) 
             { 
-                show_error("Something went wrong, your email was not found in the ASPA member list",'002');
+                show_error("Something went wrong, your email is already registered for the event but seems to have problems. Please contact uoa.wdcc@gmail.com. Error code: 002","500");
             }
 
             // Split up the cell column and row 
