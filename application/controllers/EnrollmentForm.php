@@ -155,8 +155,7 @@ class EnrollmentForm extends ASPA_Controller
 
         // Check if there is a session ID, or else redirect back to index
         if (!$data['session_id']) {
-            redirect(base_url());
-            return;
+            show_error("Error occured during redirection. If your payment was processed correctly, please contact uoa.wdcc@gmail.com. Error Code: 001","500");
         }
 
         // Sets boolean to whether payment was made
