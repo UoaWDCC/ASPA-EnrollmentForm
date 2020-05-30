@@ -183,20 +183,6 @@ class EnrollmentForm extends ASPA_Controller
         }
     }
 
-    public function IEPayPaymentSucessful()
-    {
-
-        //Redirect to the page with green tick
-        $this->load->view('PaymentSuccessful.php',$data);
-
-    }
-
-    public function HighlightGSheet()
-    {
-
-
-    }
-
     public function LoadOfflinePayment()
     {
         $data['has_paid'] = false;
