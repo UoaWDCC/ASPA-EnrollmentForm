@@ -134,6 +134,7 @@ class EnrollmentForm extends ASPA_Controller
     {
         $this->load->model('Stripe_Model');
         $this->load->model('Gsheet_Interface_Model');
+        $this->load->model('Verification_Model');
 
         $data['session_id'] = $this->input->get('session_id');
 
@@ -147,6 +148,11 @@ class EnrollmentForm extends ASPA_Controller
 
         // Checking if payment was made to their session and obtain their email
         $data['email'] = $this->Stripe_Model->GetEmail($data['session_id']);
+
+        // Check if this is the first time StripePaymentSuccessful is shown
+        // Boolean variable used to determine whether we should send an email
+        $alreadyHighlighted = $this->Verification_Model->has_user_paid_event($data['email'], $this->eventData['gsheet_name']);
+
         if ($data['has_paid'])
         {
             // HighLight the row (get the user's email)
@@ -162,9 +168,12 @@ class EnrollmentForm extends ASPA_Controller
             // Highlight this row sicne it is paid
             $this->Gsheet_Interface_Model->highlight_row($row ,[0.69803923, 0.8980392, 0.69803923]);
 
-            // Send the confirmation email
+            // Send a confirmation email only if it wasn't previously highlighed
+            if (!$alreadyHighlighted)
+            {
             $this->load->model('EmailModel');
             $this->EmailModel->sendEmail($data['email'], "online", $this->eventData);
+            }
 
             //Redirect to the page with green tick
             $this->load->view('PaymentSuccessful.php', array_merge($this->eventData, $data));
