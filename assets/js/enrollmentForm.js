@@ -299,7 +299,7 @@ function showWarning() {
 // ==========================================
 
 // Buttons which are to be temporarily disabled
-const disabledButtons = [payWeChat, payAli, payPoli];
+const disabledButtons = [];
 
 /*
 	sets up event listener for button click except for the buttons which are disabled
@@ -431,7 +431,6 @@ proceedPayment.onclick = function () {
 			else {
 				// If Poli pay is selected
 				MYpay_method = "IE0041";
-				alert('HERE');
 			}
 		}
 		else
@@ -447,7 +446,6 @@ proceedPayment.onclick = function () {
 			else {
 				// If Poli pay is selected
 				MYpay_method = "IE0041";
-				alert('HERE');
 			}
 		}
 

@@ -183,9 +183,8 @@ class EnrollmentForm extends ASPA_Controller
         $data['email'] = $this->input->post('email');
         $data['pay_type'] = $this->input->post('paymentMethod');
         $data['MYd'] = "";
-
-       // echo var_dump($data)
-;
+        $data['price'] = number_format((float) $this->eventData['price'], 2, '.', '');
+        
         // Put the data into spreadsheet
         $this->load->model('Gsheet_Interface_Model');
         $this->Gsheet_Interface_Model->record_to_sheet($data['email'],$data['name'],'MY',FALSE);
@@ -195,8 +194,17 @@ class EnrollmentForm extends ASPA_Controller
         $data['MYd'] = $this->MYPay_Model->MakeMYPay($data['email'],$data['pay_type']);
 
         // Initiate the MYPay payment
-        $this->load->view('MYPay.php', $data);
 
+        $pay_urls_redirect = ["IE0012", "IE0015", "IE0025", "IE0041"];
+
+        // code is any of the above
+        if (in_array($data['MYd']['pay_type'], $pay_urls_redirect)) {
+            redirect($data['MYd']['pay_url']);
+
+        // Wechat
+        } else {
+            $this->load->view('MYPay.php', $data);
+        }
     }
 
     public function IEPayPaymentSucessful()
