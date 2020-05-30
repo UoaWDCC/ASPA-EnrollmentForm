@@ -379,17 +379,6 @@ function showButton(index) {
 
 // TODO: these two buttons must connect to the next step of the enrollment form
 submit.onclick = function () {
-	// send email to the email address the user have inputted using ajax post
-
-	$.ajax({
-		cashe: false,
-		url: base_url + "index.php/EnrollmentForm/send_email",
-		method: "POST",
-		data: { emailAddress: emailAddress, paymentMethod: paymentMethod },
-		success: function (data) {
-			console.log(data);
-		},
-	});
 
 	$("#enrollment-form").attr(
 		"action",

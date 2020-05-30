@@ -43,8 +43,7 @@ class Verification_Model extends CI_Model {
         return true;
     }
 
-
-    function has_user_paid($emailAddress){
+    function has_user_paid_membership($emailAddress){
 
         if (!($this->is_email_on_sheet($emailAddress, MEMBERSHIP_SPREADSHEETID, MEMBERSHIP_SHEETNAME))){
             return false;

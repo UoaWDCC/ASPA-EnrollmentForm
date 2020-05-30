@@ -49,22 +49,6 @@ class EnrollmentForm extends ASPA_Controller
         }
 	}
 
-	public function send_email($emailAddress = null, $paymentMethod = null)
-	{
-        // pass in emailAddress & paymentMethod using ajax post if it has not already been passed in.
-        // This is a way of overloading the method.
-        if ($emailAddress == null){
-            $emailAddress = $this->input->post('emailAddress');
-            $paymentMethod = $this->input->post('paymentMethod');
-        }
-
-        // load EmailModel
-        $this->load->model('EmailModel');
-
-        // send email to specified email address using sendEmail function in EmailModel
-        $this->EmailModel->sendEmail($emailAddress, $paymentMethod, $this->eventData);
-	}
-
 	/**
 	 * validate() is called in assets/js/enrollmentForm.js via ajax POST method.
 	 * The functionality is to determine if the inputted email is of the correct:
@@ -73,6 +57,10 @@ class EnrollmentForm extends ASPA_Controller
 	 */
 	public function validate() {
         $emailAddress = $this->input->post('emailAddress');	
+
+        if(!isset($emailAddress)){
+            $this->create_json('False', '', 'Error: Email not specified');
+        }
 
         $this->load->model('Verification_Model');
         
@@ -83,7 +71,7 @@ class EnrollmentForm extends ASPA_Controller
         }
         
         // has user paid for membership?
-		if ($this->Verification_Model->has_user_paid($emailAddress)) {	
+		if ($this->Verification_Model->has_user_paid_membership($emailAddress)) {	
 			$this->create_json('True', '', 'Success');	
 			return;	
 		}	
@@ -96,14 +84,23 @@ class EnrollmentForm extends ASPA_Controller
 
     public function makeStripePayment()
     {
+        $this->load->model('Gsheet_Interface_Model');
+        $this->load->model('Verification_Model');
+
         // Receive data from form, method=POST
         $data['name'] = $this->input->post('name');
         $data['email'] = $this->input->post('email');
 
-        $data['session_id'] = "id";
-
-        $this->load->model('Gsheet_Interface_Model');
-        $this->load->model('Verification_Model');
+        // Stopping direct access to this method
+        if ( !isset($data['name']) || !isset($data['email']) )
+        {
+            show_error("Sorry, this page you are requesting is either not found or you don't have permission to access this page. Error Code:001","404");
+        }
+        $paid_member = ($this->Verification_Model->has_user_paid_membership($data['email']));
+        if ( !$paid_member )
+        {
+            show_error("Something went wrong, your email was not found in the ASPA member list or haven't paid. Error Code: 002","500");
+        }
 
         // only record if the email is not found
         if (!($this->Verification_Model->is_email_on_sheet($data['email'], SPREADSHEETID, $this->eventData['gsheet_name']))) {
@@ -115,7 +112,7 @@ class EnrollmentForm extends ASPA_Controller
             $cell = $this->Gsheet_Interface_Model->get_cellrange($data['email'], 'B');
             if (!isset($cell)) 
             { 
-                show_error("Something went wrong, your email was not found in the ASPA member list",'002');
+                show_error("Something went wrong, your email was not found in the ASPA member list.Error Code: 002","500");
             }
 
             // Split up the cell column and row 
@@ -133,17 +130,17 @@ class EnrollmentForm extends ASPA_Controller
 
     }
 
-    public function StripePaymentSucessful()
+    public function StripePaymentSuccessful()
     {
         $this->load->model('Stripe_Model');
         $this->load->model('Gsheet_Interface_Model');
+        $this->load->model('Verification_Model');
 
         $data['session_id'] = $this->input->get('session_id');
 
         // Check if there is a session ID, or else redirect back to index
         if (!$data['session_id']) {
-            redirect(base_url());
-            return;
+            show_error("Error occurred during redirection. If your payment was processed correctly, please contact uoa.wdcc@gmail.com. Error Code: 001","500");
         }
 
         // Sets boolean to whether payment was made
@@ -151,6 +148,11 @@ class EnrollmentForm extends ASPA_Controller
 
         // Checking if payment was made to their session and obtain their email
         $data['email'] = $this->Stripe_Model->GetEmail($data['session_id']);
+
+        // Check if this is the first time StripePaymentSuccessful is shown
+        // Boolean variable used to determine whether we should send an email
+        $alreadyHighlighted = $this->Verification_Model->has_user_paid_event($data['email'], $this->eventData['gsheet_name']);
+
         if ($data['has_paid'])
         {
             // HighLight the row (get the user's email)
@@ -158,34 +160,27 @@ class EnrollmentForm extends ASPA_Controller
             $cell = $this->Gsheet_Interface_Model->get_cellrange($data['email'], 'B');
             if (!isset($cell))
             {
-                show_error("Something went wrong, your email was not found in the ASPA member list",'002');
+                show_error("Something went wrong, your email was not found in the ASPA member list. Error Code: 002","500");
             }
 
             // Split up the cell column and row
             list(, $row) = $this->Gsheet_Interface_Model->split_column_row($cell);
             // Highlight this row sicne it is paid
             $this->Gsheet_Interface_Model->highlight_row($row ,[0.69803923, 0.8980392, 0.69803923]);
-            $this->send_email($data['email'], "online");
+
+            // Send a confirmation email only if it wasn't previously highlighted
+            if (!$alreadyHighlighted)
+            {
+            $this->load->model('EmailModel');
+            $this->EmailModel->sendEmail($data['email'], "online", $this->eventData);
+            }
+
             //Redirect to the page with green tick
             $this->load->view('PaymentSuccessful.php', array_merge($this->eventData, $data));
         }
         else {
-            show_error("Something went wrong, your payment wasn't processed correctly. Please contact uoa.wdcc@gmail.com",'001');
+            show_error("Something went wrong, your payment wasn't processed correctly. Please contact uoa.wdcc@gmail.com. Error Code: 003","500");
         }
-    }
-
-    public function IEPayPaymentSucessful()
-    {
-
-        //Redirect to the page with green tick
-        $this->load->view('PaymentSuccessful.php',$data);
-
-    }
-
-    public function HighlightGSheet()
-    {
-
-
     }
 
     public function LoadOfflinePayment()
@@ -195,27 +190,32 @@ class EnrollmentForm extends ASPA_Controller
         $data["email"] = $this->input->post("email");
         $data['paymentMethod'] = $this->input->post("paymentMethod");
 
+        if (!isset($data['name']) || !isset($data["email"]) || !isset($data['paymentMethod'])) 
+        {
+            show_error("Something went wrong. Please contact uoa.wdcc@gmail.com. Error Code: 001","500");
+        }
+
         $this->load->model("Gsheet_Interface_Model");
         $this->load->model("Verification_Model");
+        $this->load->model('EmailModel');
 
         // only record if the email is not found
         if (!($this->Verification_Model->is_email_on_sheet($data['email'], SPREADSHEETID, $this->eventData['gsheet_name']))) {
             $this->Gsheet_Interface_Model->record_to_sheet($data['email'], $data['name'], ucfirst($data['paymentMethod']), $data['has_paid']);
         } else {
             // email is found, so find the cell
-            // then edit the "How would you like your payment" to be of Stripe payment
+            // then edit the "How would you like your payment" to be of Offline payment
             // Get the row of the specific email from google sheets
             $cell = $this->Gsheet_Interface_Model->get_cellrange($data['email'], 'B');
-            if (!isset($cell)) 
-            { 
-                show_error("Something went wrong, your email was not found in the ASPA member list",'002');
-            }
 
             // Split up the cell column and row 
             list(, $row) = $this->Gsheet_Interface_Model->split_column_row($cell);
             // Edit Payment method column (Column F)
-            $this->Gsheet_Interface_Model->update_payment_method($row, 'Cash');
+            $this->Gsheet_Interface_Model->update_payment_method($row, $data['paymentMethod']);
         }
+
+        // Send offline confirmation email
+        $this->EmailModel->sendEmail($data["email"], $data['paymentMethod'], $this->eventData);
 
 		//Redirect to the page with grey tick
         $this->load->view('PaymentSuccessful.php', array_merge($this->eventData, $data));
