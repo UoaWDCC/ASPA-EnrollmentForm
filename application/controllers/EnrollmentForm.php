@@ -49,22 +49,6 @@ class EnrollmentForm extends ASPA_Controller
         }
 	}
 
-	public function send_email($emailAddress = null, $paymentMethod = null)
-	{
-        // pass in emailAddress & paymentMethod using ajax post if it has not already been passed in.
-        // This is a way of overloading the method.
-        if ($emailAddress == null){
-            $emailAddress = $this->input->post('emailAddress');
-            $paymentMethod = $this->input->post('paymentMethod');
-        }
-
-        // load EmailModel
-        $this->load->model('EmailModel');
-
-        // send email to specified email address using sendEmail function in EmailModel
-        $this->EmailModel->sendEmail($emailAddress, $paymentMethod, $this->eventData);
-	}
-
 	/**
 	 * validate() is called in assets/js/enrollmentForm.js via ajax POST method.
 	 * The functionality is to determine if the inputted email is of the correct:
@@ -177,7 +161,11 @@ class EnrollmentForm extends ASPA_Controller
             list(, $row) = $this->Gsheet_Interface_Model->split_column_row($cell);
             // Highlight this row sicne it is paid
             $this->Gsheet_Interface_Model->highlight_row($row ,[0.69803923, 0.8980392, 0.69803923]);
-            $this->send_email($data['email'], "online");
+
+            // Send the confirmation email
+            $this->load->model('EmailModel');
+            $this->EmailModel->sendEmail($data['email'], "online", $this->eventData);
+
             //Redirect to the page with green tick
             $this->load->view('PaymentSuccessful.php', array_merge($this->eventData, $data));
         }
@@ -214,6 +202,7 @@ class EnrollmentForm extends ASPA_Controller
 
         $this->load->model("Gsheet_Interface_Model");
         $this->load->model("Verification_Model");
+        $this->load->model('EmailModel');
 
         // only record if the email is not found
         if (!($this->Verification_Model->is_email_on_sheet($data['email'], SPREADSHEETID, $this->eventData['gsheet_name']))) {
@@ -227,8 +216,11 @@ class EnrollmentForm extends ASPA_Controller
             // Split up the cell column and row 
             list(, $row) = $this->Gsheet_Interface_Model->split_column_row($cell);
             // Edit Payment method column (Column F)
-            $this->Gsheet_Interface_Model->update_payment_method($row, 'Cash');
+            $this->Gsheet_Interface_Model->update_payment_method($row, $data['paymentMethod']);
         }
+
+        // Send offline confirmation email
+        $this->EmailModel->sendEmail($data["email"], $data['paymentMethod'], $this->eventData);
 
 		//Redirect to the page with grey tick
         $this->load->view('PaymentSuccessful.php', array_merge($this->eventData, $data));
