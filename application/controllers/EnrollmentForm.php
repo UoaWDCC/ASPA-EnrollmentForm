@@ -99,7 +99,7 @@ class EnrollmentForm extends ASPA_Controller
         $paid_member = ($this->Verification_Model->has_user_paid_membership($data['email']));
         if ( !$paid_member )
         {
-            show_error("Something went wrong, your email was not found in the ASPA member list or havn't paid. Error Code: 002","500");
+            show_error("Something went wrong, your email was not found in the ASPA member list or haven't paid. Error Code: 002","500");
         }
 
         // only record if the email is not found
@@ -140,7 +140,7 @@ class EnrollmentForm extends ASPA_Controller
 
         // Check if there is a session ID, or else redirect back to index
         if (!$data['session_id']) {
-            show_error("Error occured during redirection. If your payment was processed correctly, please contact uoa.wdcc@gmail.com. Error Code: 001","500");
+            show_error("Error occurred during redirection. If your payment was processed correctly, please contact uoa.wdcc@gmail.com. Error Code: 001","500");
         }
 
         // Sets boolean to whether payment was made
@@ -168,7 +168,7 @@ class EnrollmentForm extends ASPA_Controller
             // Highlight this row sicne it is paid
             $this->Gsheet_Interface_Model->highlight_row($row ,[0.69803923, 0.8980392, 0.69803923]);
 
-            // Send a confirmation email only if it wasn't previously highlighed
+            // Send a confirmation email only if it wasn't previously highlighted
             if (!$alreadyHighlighted)
             {
             $this->load->model('EmailModel');
