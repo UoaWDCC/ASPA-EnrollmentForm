@@ -334,7 +334,7 @@ const disabledButtons = [payWeChat, payAli, payPoli];
 
 /*
 	make the to-be-disabled-buttons look like they are disabled 
-	(stopping them from increasing in size when hovered over, reducing their opacity and making them unclickable)
+	(stopping them from increasing in size when hovered over, reducing their opacity, and making them unclickable)
  */
 
 disabledButtons.forEach((buttonToDisable) => {
