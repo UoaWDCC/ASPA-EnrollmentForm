@@ -183,10 +183,13 @@ back4.onclick = function () {
 // ==========================================
 
 // name/email page (page 3) OK button onclick name and email validation
-// store the last values to prevent recalling of validate();
-let oldValue = "";
-let oldName = "";
 ok3.onclick = function () {
+
+	// Disabling the ok button to prevent user from clicking on it multiple times
+	document.getElementById("ok3").classList.add("btn-disabled"); // stopping the ok button from increasing in size when hovered over
+	$("#div-ok3").css("opacity", "0.2"); // reducing the opacity
+	$("#div-ok3").css("pointer-events", "none"); // making the ok div unclickable
+
 	hideAllWarnings();
 	emailAddress = inputEmail.value.trim(); // collect email
 	name = inputName.value.trim(); // collect name
@@ -197,9 +200,6 @@ ok3.onclick = function () {
 		inputName.style.border = "1px solid #00A22C";
 	}
 	showLoading();
-	if (oldValue !== emailAddress || oldName !== name) {
-		oldValue = emailAddress;
-		oldName = name;
 		$.ajax({
 			cache: false,
 			url: base_url + "index.php/EnrollmentForm/validate",
@@ -216,7 +216,9 @@ ok3.onclick = function () {
 				const alreadyPaidForEvent = "Error: already paid for event";
 				if (data.is_success === "True") {
 					showSuccess();
-					setTimeout(() => nextPage(), 1000);
+					setTimeout(() =>{nextPage(); enableOkButton();
+				}, 1000);
+
 				} else if (
 					data.is_success === "False" &&
 					data.extra === signedUpUnpaid
@@ -225,6 +227,7 @@ ok3.onclick = function () {
 					// change the error message to be "signed up but unpaid" warning
 					errorMsgArray[0].innerHTML = signedUpUnpaidErr[0];
 					errorMsgArray[1].innerHTML = signedUpUnpaidErr[1];
+					enableOkButton();
 					return;
 				} else if (
 					data.is_success === "False" &&
@@ -234,18 +237,28 @@ ok3.onclick = function () {
 					// change the error message to be "already paid" warning
 					errorMsgArray[0].innerHTML = alreadyPaidEventErr[0];
 					errorMsgArray[1].innerHTML = alreadyPaidEventErr[1];
+					enableOkButton();
 					return;
 				} else {
 					showWarning();
 					// change the error message to be "unrecognized email, please sign up" warning
 					errorMsgArray[0].innerHTML = notSignedUpUnpaidErr[0];
 					errorMsgArray[1].innerHTML = notSignedUpUnpaidErr[1];
+					enableOkButton();
 					return;
 				}
 			},
 		});
-	}
 };
+
+/** 
+ * Enable ok button
+ */
+function enableOkButton() {
+	document.getElementById("ok3").classList.remove("btn-disabled"); // enabling the increasing in size when hovered over
+	$("#div-ok3").css("opacity", "1"); // restoring the opacity
+	$("#div-ok3").css("pointer-events", "auto"); // making the button clickable
+}
 
 /**
  * Hides all feedback elements (tick, errors, loading, resets the input fields)
