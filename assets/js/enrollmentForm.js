@@ -153,7 +153,10 @@ window.addEventListener("keydown", function (e) {
 				ok2.click(); //ok2 does not need an onclick function declaration because it is handled by Webflow
 				break;
 			case 3:
-				ok3.click();
+				// Checking to see if the ok button is disabled. The enter key will only work if it is not disabled
+				if ($("#div-ok3").css('pointer-events') != 'none') {
+					ok3.click();
+				}
 				break;
 			case 4:
 				if (isActive(submit)) {
