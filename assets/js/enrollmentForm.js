@@ -219,8 +219,10 @@ ok3.onclick = function () {
 				const alreadyPaidForEvent = "Error: already paid for event";
 				if (data.is_success === "True") {
 					showSuccess();
-					setTimeout(() =>{nextPage(); enableOkButton();
-				}, 1000);
+					setTimeout(() =>{ 
+						nextPage(); 
+						enableOkButton();
+					}, 1000);
 
 				} else if (
 					data.is_success === "False" &&
