@@ -56,30 +56,30 @@ class EnrollmentForm extends ASPA_Controller
 	 *  - is an email on the email spreadsheet
 	 */
 	public function validate() {
-        $emailAddress = $this->input->post('emailAddress');	
+        $emailAddress = $this->input->post('emailAddress');
 
         if(!isset($emailAddress)){
             $this->create_json('False', '', 'Error: Email not specified');
         }
 
         $this->load->model('Verification_Model');
-        
+
         // has user paid for the event already?
         if ($this->Verification_Model->has_user_paid_event($emailAddress, $this->eventData['gsheet_name'])) {
             $this->create_json('False', '', 'Error: already paid for event');
             return;
         }
-        
+
         // has user paid for membership?
-		if ($this->Verification_Model->has_user_paid_membership($emailAddress)) {	
-			$this->create_json('True', '', 'Success');	
-			return;	
-		}	
-		if ($this->Verification_Model->is_email_on_sheet($emailAddress, MEMBERSHIP_SPREADSHEETID, MEMBERSHIP_SHEETNAME)){	
-			$this->create_json('False', '', 'Error: signed up but not paid');	
-		} else {	
-			$this->create_json('False', '', 'Error: not signed up');	
-        }	
+		if ($this->Verification_Model->has_user_paid_membership($emailAddress)) {
+			$this->create_json('True', '', 'Success');
+			return;
+		}
+		if ($this->Verification_Model->is_email_on_sheet($emailAddress, MEMBERSHIP_SPREADSHEETID, MEMBERSHIP_SHEETNAME)){
+			$this->create_json('False', '', 'Error: signed up but not paid');
+		} else {
+			$this->create_json('False', '', 'Error: not signed up');
+        }
 	}
 
     public function makeStripePayment()
@@ -110,12 +110,12 @@ class EnrollmentForm extends ASPA_Controller
             // then edit the "How would you like your payment" to be of Stripe payment
             // Get the row of the specific email from google sheets
             $cell = $this->Gsheet_Interface_Model->get_cellrange($data['email'], 'B');
-            if (!isset($cell)) 
-            { 
+            if (!isset($cell))
+            {
                 show_error("Something went wrong, your email was not found in the ASPA member list.Error Code: 002","500");
             }
 
-            // Split up the cell column and row 
+            // Split up the cell column and row
             list(, $row) = $this->Gsheet_Interface_Model->split_column_row($cell);
             // Edit Payment method column (Column F)
             $this->Gsheet_Interface_Model->update_payment_method($row, 'Stripe');
@@ -190,7 +190,7 @@ class EnrollmentForm extends ASPA_Controller
         $data["email"] = $this->input->post("email");
         $data['paymentMethod'] = $this->input->post("paymentMethod");
 
-        if (!isset($data['name']) || !isset($data["email"]) || !isset($data['paymentMethod'])) 
+        if (!isset($data['name']) || !isset($data["email"]) || !isset($data['paymentMethod']))
         {
             show_error("Something went wrong. Please contact uoa.wdcc@gmail.com. Error Code: 001","500");
         }
@@ -208,7 +208,7 @@ class EnrollmentForm extends ASPA_Controller
             // Get the row of the specific email from google sheets
             $cell = $this->Gsheet_Interface_Model->get_cellrange($data['email'], 'B');
 
-            // Split up the cell column and row 
+            // Split up the cell column and row
             list(, $row) = $this->Gsheet_Interface_Model->split_column_row($cell);
             // Edit Payment method column (Column F)
             $this->Gsheet_Interface_Model->update_payment_method($row, $data['paymentMethod']);
