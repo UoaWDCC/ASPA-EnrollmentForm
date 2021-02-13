@@ -313,6 +313,7 @@ class EmailModel extends CI_Model {
             log_message('info', shell_exec("pwd"));
             $EMAIL_SUBJECT = "$(echo -e '".$EMAIL_SUBJECT."\nContent-Type: text/html')" ;
             log_message('info', shell_exec("echo ".$message."| mailx -a 'Content-Type: text/html' -v -s ".$EMAIL_SUBJECT." ".$EMAIL_RECIEVER));
+            log_message('info', "echo "."abc"."| mailx -a 'Content-Type: text/html' -v -s ".$EMAIL_SUBJECT." ".$EMAIL_RECIEVER);
             
             // $mail->send();
         } catch (Exception $e) {
