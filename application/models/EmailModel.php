@@ -310,7 +310,7 @@ class EmailModel extends CI_Model {
             // $mail->Body    = $message;
             // $mail->AltBody = 'Thank you for signing up to ' . $eventData["title"] . 'This text is shown due to your device\'s restriction on email content. Please contact ' . $EMAIL_SENDER . ' for clarification.';
 
-            log_message('info', "=========sending email=============");
+            log_message('info', "=========sending email==============");
             log_message('info', shell_exec("echo ".$message."| mail -v -s '".$EMAIL_SUBJECT."' ".$EMAIL_RECIEVER));
 
 
