@@ -30,5 +30,8 @@ user_guide_src/cilexer/pycilexer.egg-info/*
 /tests/tests/
 /tests/results/
 
-credentials.json
+*credentials.json
+*Credentials.json
 application/config/database.php
+
+pull.php

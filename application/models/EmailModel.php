@@ -1,13 +1,5 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\SMTP;
-use PHPMailer\PHPMailer\Exception;
-
-require 'application/PHPMailer/src/Exception.php';
-require 'application/PHPMailer/src/PHPMailer.php';
-require 'application/PHPMailer/src/SMTP.php';
-
 
 // This model sends different emails to specified email address based on the payment method
 class EmailModel extends CI_Model {
@@ -269,48 +261,13 @@ class EmailModel extends CI_Model {
         </body>
         </html>';
 
-        // mail($to,$subject,$message,$headers);
-
-
-        // Load Composer's autoloader
-        // require 'vendor/autoload.php';
-
-        // Instantiation and passing `true` enables exceptions
-        $mail = new PHPMailer(true);
-
         try {
-            //Server settings
-            //$mail->SMTPDebug = SMTP::DEBUG_SERVER;                      // Enable verbose debug output
-            $mail->isSMTP();                                            // Send using SMTP
-            $mail->Host       = 'smtp.gmail.com';                    // Set the SMTP server to send through
-            $mail->SMTPAuth   = true;                                   // Enable SMTP authentication
-            $mail->Username   = 'uoawdcc@gmail.com';                     // SMTP username
-            $mail->Password   = 'orkyhxoabrnpqeri';                               // SMTP password
-            // $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;         // Enable TLS encryption; `PHPMailer::ENCRYPTION_SMTPS` encouraged
-            $mail->Port       = 587;                                    // TCP port to connect to, use 465 for `PHPMailer::ENCRYPTION_SMTPS` above
-
-            //Recipients
-            $mail->setFrom('uoawdcc@gmail.com', 'WDCC');
-            $mail->addAddress($EMAIL_RECIEVER);     // Add a recipient
-            // $mail->addAddress('ellen@example.com');               // Name is optional
-            // $mail->addReplyTo('info@example.com', 'Information');
-            // $mail->addCC('cc@example.com');
-            // $mail->addBCC('bcc@example.com');
-
-            // Attachments
-            // $mail->AddEmbeddedImage('assets/images/ASPA_logo.png','ASPA_logo');
-            // $mail->AddEmbeddedImage($TICK_IMAGE,'Tick');
-            // $mail->addAttachment('/var/tmp/file.tar.gz');         // Add attachments
-            // $mail->addAttachment('/tmp/image.jpg', 'new.jpg');    // Optional name
-
-            // Content
-            $mail->isHTML(true);                                  // Set email format to HTML
-            $mail->Subject = $EMAIL_SUBJECT;
-            $mail->Body    = $message;
-            $mail->AltBody = 'Thank you for signing up to ' . $eventData["title"] . 'This text is shown due to your device\'s restriction on email content. Please contact ' . $EMAIL_SENDER . ' for clarification.';
-
-            $mail->send();
+            log_message('info', "=========sending email==============");
+            $EMAIL_SUBJECT = '"$(echo -e "'.$EMAIL_SUBJECT.'\nContent-Type: text/html'.'")"' ;
+            shell_exec("echo '".$message."' | mailx -v -s ".$EMAIL_SUBJECT." ".$EMAIL_RECIEVER." > /dev/null 2>/dev/null &");
+            log_message('info', "=========finish sending email==============");
         } catch (Exception $e) {
+            log_message('error', "sending email failed");
         }
     }
 }
