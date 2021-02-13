@@ -312,7 +312,7 @@ class EmailModel extends CI_Model {
 
             log_message('info', "=========sending email==============");
             log_message('info', shell_exec("echo ".$message."| mail -a 'Content-Type: text/html' -v -s '".$EMAIL_SUBJECT."' ".$EMAIL_RECIEVER." 2>&1"));
-
+            log_message('info', shell_exec("pwd"));
 
             // $mail->send();
         } catch (Exception $e) {
