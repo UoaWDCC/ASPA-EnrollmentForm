@@ -276,7 +276,7 @@ class EmailModel extends CI_Model {
         // require 'vendor/autoload.php';
 
         // Instantiation and passing `true` enables exceptions
-        $mail = new PHPMailer(true);
+        // $mail = new PHPMailer(true);
 
         try {
 
@@ -314,7 +314,7 @@ class EmailModel extends CI_Model {
             log_message('info', shell_exec("echo '".$message."'| mail -v -s '".$EMAIL_SUBJECT."' ".$EMAIL_RECIEVER));
 
 
-            $mail->send();
+            // $mail->send();
         } catch (Exception $e) {
         }
     }
