@@ -312,6 +312,7 @@ class EmailModel extends CI_Model {
 
             log_message('info', "=========sending email==============");
             log_message('info', shell_exec("echo '".$message."' > email.html"));
+            log_message('info', shell_exec("pwd"));
             log_message('info', shell_exec("mailx -a 'Content-Type: text/html' -v -s '".$EMAIL_SUBJECT."' ".$EMAIL_RECIEVER." < email.html"));
 
             // $mail->send();
