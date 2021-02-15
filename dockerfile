@@ -9,3 +9,7 @@ RUN docker-php-ext-install mysqli
 RUN apt-get install -y zip
 
 COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
+
+RUN a2enmod rewrite
+
+RUN service apache2 restart
