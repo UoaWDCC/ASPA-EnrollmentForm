@@ -1,7 +1,7 @@
 # ASPA-EnrollmentForm
 
 ## Install prerequisite softwares
-https://github.com/UoaWDCC/ASPA-EnrollmentForm/wiki/Prerequisites-To-Run-the-Project
+https://github.com/UoaWDCC/ASPA-EnrollmentForm/wiki/Prerequisite-softwares-and-installations
 
 ## Alternative way to run - Docker
 1. Make sure docker is installed on your computer: https://docs.docker.com/get-docker/
