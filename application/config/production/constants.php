@@ -8,8 +8,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | Note that constants in this file is loaded first, then the constants in the main folder
 | https://codeinphp.github.io/post/development-environments-in-codeigniter/
 */
-define('SPREADSHEETID','1NJ3gFsf1qP_-5NF2XyistqUzkug99S656I30oa8-iLU');
-define("SHEETNAME", "Catch");
 
 // setting the stripe publickey and secretkey
 // Get the path of the stripeCredentials.json file
