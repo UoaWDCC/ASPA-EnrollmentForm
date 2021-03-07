@@ -14,7 +14,7 @@ define("SHEETNAME", "Catch");
 // setting the stripe publickey and secretkey
 // Get the path of the stripeCredentials.json file
 $stripeCredentials = trim(shell_exec('pwd'))."/stripeCredentials.json";
-// Only assign to live keys if this file exists. If rolls back to test keys.
+// Only assign to live keys if this file exists. Else it will automatically roll back to test keys.
 if (file_exists($stripeCredentials)) {
 	$json = file_get_contents($stripeCredentials);
 	// Only assign if the json decoding is carried out correctly
