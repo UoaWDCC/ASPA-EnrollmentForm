@@ -24,7 +24,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 |
 */
 
-if (substr($_SERVER['HTTP_HOST'], 0, 9) == 'localhost') {
+if ((substr($_SERVER['HTTP_HOST'], 0, 9) == 'localhost')||(substr($_SERVER['HTTP_HOST'], 0, 9) == '127.0.0.1')) {
 	$config['base_url'] = '';
 	$config['base_url'] = ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == "on") ? "https" : "http");
 	$config['base_url'] .= "://" . $_SERVER['HTTP_HOST'];
