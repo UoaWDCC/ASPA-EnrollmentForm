@@ -187,21 +187,34 @@ back4.onclick = function () {
 
 // name/email page (page 3) OK button onclick name and email validation
 ok3.onclick = function () {
+	
+	hideAllWarnings();
+	emailAddress = inputEmail.value.trim(); // collect email
+	name = inputName.value.trim(); // collect name
+
+	if (name.length === 0) {
+		inputName.style.border = "1px solid red";
+	}
+	else {
+		inputName.style.border = "1px solid #00A22C";
+	}
+	
+	if (emailAddress.length === 0) {
+		inputEmail.style.border = "1px solid red";
+	}
+	else {
+		inputEmail.style.border = "1px solid #00A22C";
+	}
+
+	if (name.length === 0 || emailAddress.length === 0) {
+		return;
+	}
 
 	// Disabling the ok button to prevent user from clicking on it multiple times
 	document.getElementById("ok3").classList.add("btn-disabled"); // stopping the ok button from increasing in size when hovered over
 	$("#div-ok3").css("opacity", "0.2"); // reducing the opacity
 	$("#div-ok3").css("pointer-events", "none"); // making the ok div unclickable
-
-	hideAllWarnings();
-	emailAddress = inputEmail.value.trim(); // collect email
-	name = inputName.value.trim(); // collect name
-	if (inputName.value.trim().length === 0) {
-		inputName.style.border = "1px solid red";
-		return;
-	} else {
-		inputName.style.border = "1px solid #00A22C";
-	}
+	
 	showLoading();
 		$.ajax({
 			cache: false,
