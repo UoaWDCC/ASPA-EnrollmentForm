@@ -10,6 +10,8 @@ class EnrollmentForm extends ASPA_Controller
 	function __construct() {
 		parent::__construct();
         log_message('debug', "=====New Controller Function Initialized====");
+        log_message('debug', "-- from IP address: ". $this->input->ip_address());
+       
 
         // Loading GSIM model into controller
         $this->load->model("Gsheet_Interface_Model");
