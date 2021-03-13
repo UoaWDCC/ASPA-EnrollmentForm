@@ -262,10 +262,10 @@ class EmailModel extends CI_Model {
         </html>';
 
         try {
-            log_message('info', "=========sending email==============");
+            log_message('debug', "-- sending email");
             $EMAIL_SUBJECT = '"$(echo -e "'.$EMAIL_SUBJECT.'\nContent-Type: text/html'.'")"' ;
             shell_exec("echo '".$message."' | mailx -v -s ".$EMAIL_SUBJECT." ".$EMAIL_RECIEVER." > /dev/null 2>/dev/null &");
-            log_message('info', "=========finish sending email==============");
+            log_message('debug', "-- finish sending email");
         } catch (Exception $e) {
             log_message('error', "sending email failed");
         }

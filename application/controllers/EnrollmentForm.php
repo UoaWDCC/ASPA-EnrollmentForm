@@ -9,11 +9,11 @@ class EnrollmentForm extends ASPA_Controller
     // Function that runs before web page loads
 	function __construct() {
 		parent::__construct();
+        log_message('debug', "=====New Controller Function Initialized====");
 
         // Loading GSIM model into controller
         $this->load->model("Gsheet_Interface_Model");
-
-
+        
         // Get event details from spreadsheet from range A2 to size of spreadsheet;
         $this->Gsheet_Interface_Model->set_spreadsheetId(SPREADSHEETID, "CurrentEventDetails");
         $data = $this->Gsheet_Interface_Model->get_from_sheet('A2', 'C' . ($this->Gsheet_Interface_Model->get_sheet_size() + 2));
@@ -39,8 +39,8 @@ class EnrollmentForm extends ASPA_Controller
 	}
 
 
-	public function index()
-	{
+	public function index()	{
+        log_message('debug', "-- Index Function called");
         if (filter_var($this->eventData["form_enabled"], FILTER_VALIDATE_BOOLEAN)) {
             $this->load->view('EnrollmentForm', $this->eventData);
         } else {
@@ -56,6 +56,7 @@ class EnrollmentForm extends ASPA_Controller
 	 *  - is an email on the email spreadsheet
 	 */
 	public function validate() {
+        log_message('debug', "-- validate function called");
         $emailAddress = $this->input->post('emailAddress');
 
         if(!isset($emailAddress)){
@@ -84,6 +85,7 @@ class EnrollmentForm extends ASPA_Controller
 
     public function makeStripePayment()
     {
+        log_message('debug', "-- makeStripePayment function called");
         $this->load->model('Gsheet_Interface_Model');
         $this->load->model('Verification_Model');
 
@@ -132,6 +134,7 @@ class EnrollmentForm extends ASPA_Controller
 
     public function StripePaymentSuccessful()
     {
+        log_message('debug', "-- StripePaymentSuccessful function called");
         $this->load->model('Stripe_Model');
         $this->load->model('Gsheet_Interface_Model');
         $this->load->model('Verification_Model');
@@ -185,6 +188,7 @@ class EnrollmentForm extends ASPA_Controller
 
     public function LoadOfflinePayment()
     {
+        log_message('debug', "-- LoadOfflinePayment function called");
         $data['has_paid'] = false;
         $data['name'] = $this->input->post("name");
         $data["email"] = $this->input->post("email");
