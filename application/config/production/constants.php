@@ -24,5 +24,5 @@ if (file_exists($stripeCredentials)) {
 	}
 }
 
-define("MEMBERSHIP_SPREADSHEETID", '10mwPhiOR_Vfsfw8WHereu4Y5KOsuSWkJFGhrf6Mfk9I');
-define("MEMBERSHIP_SHEETNAME", 'Sheet1');
+define("MEMBERSHIP_SPREADSHEETID", '1yS4k6GEhGUcOi1xcOQJ6JrupPQ9jMrqdAe_TC8Pwp84');
+define("MEMBERSHIP_SHEETNAME", 'Form Responses 1');
