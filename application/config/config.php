@@ -232,7 +232,7 @@ $config['allow_get_array'] = TRUE;
 | your log files will fill up very fast.
 |
 */
-$config['log_threshold'] = 4;
+$config['log_threshold'] = 2;
 
 /*
 |--------------------------------------------------------------------------
@@ -244,6 +244,8 @@ $config['log_threshold'] = 4;
 |
 */
 $config['log_path'] = '';
+$config["clv_log_folder_path"] = APPPATH . "logs";
+$config["clv_log_file_pattern"] = "log-*.log";
 
 /*
 |--------------------------------------------------------------------------
