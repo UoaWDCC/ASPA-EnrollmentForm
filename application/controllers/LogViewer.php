@@ -14,10 +14,21 @@ class LogViewer extends CI_Controller
     }
 
     public function index() {
-        $whitelist = array('127.0.0.1', '::1');
-        if (!in_array($_SERVER['REMOTE_ADDR'], $whitelist)) {
-            show_404('Log page with IP:'.$_SERVER['REMOTE_ADDR'],TRUE);
+        $whitelist = array('127.0.0.1', '::1', '118.92.25.130', '101.98.193.212');
+
+        // Determine my IP Address
+        if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
+            $ip = $_SERVER['HTTP_CLIENT_IP'];
+        } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+            $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+        } else {
+            $ip = $_SERVER['REMOTE_ADDR'];
+        }
+
+        if (!in_array($ip, $whitelist)) {
+            show_404('Log page with IP:'.$ip,TRUE);
         } 
+
         echo $this->logViewer->showLogs();
         return;
     }
