@@ -73,15 +73,24 @@ class EnrollmentForm extends ASPA_Controller
             return;
         }
 
-        // has user paid for membership?
-		if ($this->Verification_Model->has_user_paid_membership($emailAddress)) {
-			$this->create_json('True', '', 'Success');
-			return;
-		}
-		if ($this->Verification_Model->is_email_on_sheet($emailAddress, MEMBERSHIP_SPREADSHEETID, MEMBERSHIP_SHEETNAME)){
-			$this->create_json('False', '', 'Error: signed up but not paid');
-		} else {
-			$this->create_json('False', '', 'Error: not signed up');
+        // Check if feature toggle for check membership payment is on
+        if (CHECK_MEMBERSHIP_PAYMENT){
+            if ($this->Verification_Model->has_user_paid_membership($emailAddress)) {
+                $this->create_json('True', '', 'Success');
+                return;
+            } else if ($this->Verification_Model->is_email_on_sheet($emailAddress, MEMBERSHIP_SPREADSHEETID, MEMBERSHIP_SHEETNAME)){
+                $this->create_json('False', '', 'Error: signed up but not paid');
+                return;
+            } else {
+                $this->create_json('False', '', 'Error: not signed up');
+                return;
+            }
+        } else { 
+            if ($this->Verification_Model->is_email_on_sheet($emailAddress, MEMBERSHIP_SPREADSHEETID, MEMBERSHIP_SHEETNAME)){
+                $this->create_json('True', '', 'Success');
+            } else {
+                $this->create_json('False', '', 'Error: not signed up');
+            }
         }
 	}
 
