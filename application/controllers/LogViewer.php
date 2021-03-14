@@ -14,7 +14,7 @@ class LogViewer extends CI_Controller
     }
 
     public function index() {
-        $whitelist = array('127.0.0.1', '::1', '118.92.25.130');
+        $whitelist = array('127.0.0.1', '::1', '118.92.25.130', '101.98.193.212');
 
         // Determine my IP Address
         if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
@@ -28,7 +28,7 @@ class LogViewer extends CI_Controller
         if (!in_array($ip, $whitelist)) {
             show_404('Log page with IP:'.$ip,TRUE);
         } 
-        
+
         echo $this->logViewer->showLogs();
         return;
     }
