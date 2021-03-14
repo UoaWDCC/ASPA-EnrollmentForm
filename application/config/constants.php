@@ -100,3 +100,7 @@ define('SECRETKEY', 'sk_test_OMC00A11yJUakUU4kx6KoGTp0028EYnLBa');
 
 define("MEMBERSHIP_SPREADSHEETID", '10mwPhiOR_Vfsfw8WHereu4Y5KOsuSWkJFGhrf6Mfk9I');
 define("MEMBERSHIP_SHEETNAME", 'Sheet1');
+
+
+// Feature Toggles
+define("CHECK_MEMBERSHIP_PAYMENT", FALSE);
