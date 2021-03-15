@@ -142,7 +142,7 @@ class EmailModel extends CI_Model {
         <tr>
         <td valign="top" class="m_-6544744198641712840mcnTextContent" style="padding-top:0;padding-right:18px;padding-bottom:9px;padding-left:18px;word-break:break-word;color:#505050;font-family:Helvetica;font-size:16px;line-height:150%;text-align:left">
         <p style="margin:10px 0;padding:0;color:#505050;font-family:Helvetica;font-size:16px;line-height:150%;text-align:left">Hi there!</p>
-        <p style="text-align:left;margin:10px 0;padding:0;color:#505050;font-family:Helvetica;font-size:16px;line-height:150%">ASPA is back bigger and better than ever before! As for the start of 2020 we will be kicking off our first event with a casual night where new and old members can gather together to socialize over a few rounds of pool!&nbsp;</p><div>
+        <p style="text-align:left;margin:10px 0;padding:0;color:#505050;font-family:Helvetica;font-size:16px;line-height:150%">ASPA is back bigger and better than ever before! As for the start of 2021 we will be kicking off our first event with a casual night where new and old members can gather together to socialize over a few rounds of pool!&nbsp;</p><div>
         <div class="adm"><div id="q_54" class="ajR h4"><div class="ajT"></div></div></div><div class="h5">
         <p style="margin:10px 0;padding:0;color:#ff0000;font-family:Helvetica;font-size:16px;line-height:150%;text-align:left">
         Please present this email to ASPA executive team member at the event. <br>
@@ -186,7 +186,7 @@ class EmailModel extends CI_Model {
         <tbody>
         <tr>
         <td align="center" bgcolor="#EFEFEF" valign="top" id="m_-6544744198641712840monthContainer" style="background-color:#efefef;color:#303030;font-family:Helvetica;font-size:14px;font-weight:bold;line-height:150%">
-        <div>' . $EVENT_MONTH . ' 2020</div>
+        <div>' . $EVENT_MONTH . ' 2021</div>
         </td>
         </tr>
         <tr>
