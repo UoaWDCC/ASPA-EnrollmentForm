@@ -90,17 +90,24 @@ defined('EXIT__AUTO_MAX')      OR define('EXIT__AUTO_MAX', 125); // highest auto
 |--------------------------------------------------------------------------
 |
 */
-define('SPREADSHEETID','1NJ3gFsf1qP_-5NF2XyistqUzkug99S656I30oa8-iLU');
-define("SHEETNAME", "Catch");
 
+/**
+ * The event registration sheet we are storing our information on (i.e. adhoc database).
+ */
+const REGISTRATION_SPREADSHEET_ID = '1NJ3gFsf1qP_-5NF2XyistqUzkug99S656I30oa8-iLU';
 
-define('PUBLICKEY', 'pk_test_A4wjqVPPn530rgAXv6sHKgSl00opCMVX9A');
-define('SECRETKEY', 'sk_test_OMC00A11yJUakUU4kx6KoGTp0028EYnLBa');
+/**
+ * Stripe public and private keys for development.
+ */
+const STRIPE_PUBLIC_KEY = 'pk_test_A4wjqVPPn530rgAXv6sHKgSl00opCMVX9A';
+const STRIPE_PRIVATE_KEY = 'sk_test_OMC00A11yJUakUU4kx6KoGTp0028EYnLBa';
 
-
-define("MEMBERSHIP_SPREADSHEETID", '10mwPhiOR_Vfsfw8WHereu4Y5KOsuSWkJFGhrf6Mfk9I');
-define("MEMBERSHIP_SHEETNAME", 'Sheet1');
+/**
+ * Google sheet ID and sheet name for ASPA's membership spreadsheet.
+ */
+const MEMBERSHIP_SPREADSHEET_ID = '10mwPhiOR_Vfsfw8WHereu4Y5KOsuSWkJFGhrf6Mfk9I';
+const MEMBERSHIP_SHEET_NAME = 'Sheet1';
 
 
 // Feature Toggles
-define("CHECK_MEMBERSHIP_PAYMENT", FALSE);
+const CHECK_MEMBERSHIP_PAYMENT = FALSE;

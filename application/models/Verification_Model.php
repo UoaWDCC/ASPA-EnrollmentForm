@@ -1,101 +1,131 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
+/**
+ * Class Verification_Model
+ *
+ * @property GoogleSheets_Model $GoogleSheets_Model
+ */
 class Verification_Model extends CI_Model {
     
     private $addresses = array();
-    
-    //pass in emailAddress as a string
-    //returns a boolean value for if email is in correct format
-    function correct_email_format($emailAddress){
+
+    /**
+     * Checks if an email/user is on the spreadsheet.
+     *
+     * @param $emailAddress
+     * @param $sheetId
+     * @param $sheetName
+     *
+     * @return bool
+     */
+    function isEmailOnSheet($emailAddress, $sheetId, $sheetName)
+    {
+        // If format of email is incorrect, return false
+        if (!Verification_Model::isValidEmail($emailAddress)) {
+            return false;
+        }
+
+        $this->load->model('GoogleSheets_Model');
+        $this->GoogleSheets_Model->setSpreadsheetId($sheetId);
+        $this->GoogleSheets_Model->setCurrentSheetName($sheetName);
+
+        $sheetSize = $this->GoogleSheets_Model->getNumberOfRecords();
+
+        // An array of array of all existing emails, i.e. [[email1], [email2], [email3]]
+        $this->addresses = array_column($this->GoogleSheets_Model->getCellContents('B2', 'B' . ($sheetSize+1)), 0);
+
+        // Return true if email exists in google sheet
+        return in_array($emailAddress, $this->addresses);
+    }
+
+    /**
+     * Checks if a user has a paid membership on the membership spreadsheet.
+     *
+     * @param string $emailAddress The email of the user.
+     *
+     * @return bool
+     */
+    public function hasUserPaidMembership($emailAddress)
+    {
+        if (!$this->isEmailOnSheet($emailAddress, MEMBERSHIP_SPREADSHEET_ID, MEMBERSHIP_SHEET_NAME)) {
+            return false;
+        }
+
+        // Given that the email exists in the sheet, find its index
+        $emailKey = array_search($emailAddress, $this->addresses);
+
+        // Convert key to google coordinate
+        $emailIndex = 'B' . ($emailKey+2);
+
+        // Check the cell colour of the email cell
+        $colourIs = $this->GoogleSheets_Model->getCellColour($emailIndex);
         
-     
-        // simple message to console
-        //removes all illegal characters from email
-        $emailAddress = filter_var($emailAddress, FILTER_SANITIZE_EMAIL);
-        //returns bool variable for whether the sanitised email is valid
-        if (filter_var($emailAddress, FILTER_VALIDATE_EMAIL)){
-            return true;
+        // Uncoloured cells return as 000000 (or sometimes ffffff because google sheets is extra like that)
+        if ($colourIs == '000000' || $colourIs == 'ffffff') {
+            return false;
         } else {
-            return false;
+            return true;
         }
-
     }
 
-    function is_email_on_sheet($emailAddress, $sheetId, $sheetName){
-        if (!($this->correct_email_format($emailAddress))){
-            return false;
-        }
-        $this->load->model('Gsheet_Interface_Model');
-        $this->Gsheet_Interface_Model->set_spreadsheetId($sheetId, $sheetName);
-        //this gets the sheet size
-        $sheetSize = $this->Gsheet_Interface_Model->get_sheet_size();
-        //this is an array of array of all existing emails, i.e. [[email1], [email2], [email3]]
-        $this->addresses = $this->Gsheet_Interface_Model->get_from_sheet('B2', 'B' . ($sheetSize+1));
-        //collapse down to a simple array
-        $this->addresses = array_column($this->addresses, 0);
-        //returns false to function if email does not exist in google sheet
-        if (!(in_array($emailAddress, $this->addresses))){
-            //echo "email does NOT exist in sheet <br><br>"
-            return false;
-        }
-
-        return true;
-    }
-
-    function has_user_paid_membership($emailAddress){
-
-        if (!($this->is_email_on_sheet($emailAddress, MEMBERSHIP_SPREADSHEETID, MEMBERSHIP_SHEETNAME))){
+    /**
+     * Checks if the user has paid for the event in the event registration
+     * google sheets. This is done through checking if the user is highlighted
+     * a specific shade of green (green = paid).
+     *
+     * @param $emailAddress
+     * @param $sheetName
+     *
+     * @return bool
+     */
+    public function hasUserPaidEvent($emailAddress, $sheetName)
+    {
+        if (!$this->isEmailOnSheet($emailAddress, REGISTRATION_SPREADSHEET_ID, $sheetName)) {
             return false;
         }
 
-        //given that the email exists in the sheet
-        //find its index
+        // Given that the email exists in the sheet, find its index
         $emailKey = array_search($emailAddress, $this->addresses);
-        // echo "emailKey is: " . $emailKey . "<br>";
-        
-        //turn into sheets readable form 
+
+        // Convert key to google coordinate
         $emailIndex = 'B' . ($emailKey+2);
-        // echo "emailIndex is: " . $emailIndex . "<br><br>";
 
-        //this takes emailIndex as a parameter
-        //gets hex of the colour of the cell containing the email in question
-        $colourIs = $this->Gsheet_Interface_Model->get_cell_colour($emailIndex);
-        
-        //uncoloured cells return as 000000 (or sometimes ffffff because google sheets is extra like that)
-        if ($colourIs == '000000' || $colourIs == 'ffffff'){
+        log_message("debug", "INDEX: " . $emailIndex);
+
+
+        // Check the cell colour of the email cell
+        $colourIs = $this->GoogleSheets_Model->getCellColour($emailIndex);
+
+        log_message("debug", "COLOUR: " . $colourIs);
+
+        // Uncoloured cells return as 000000 (or sometimes ffffff because google sheets is extra like that)
+        if ($colourIs == '000000' || $colourIs == 'ffffff') {
             return false;
-        } 
-
-        return true;
-        
-    }
-
-    // Checks if the user has paid for the event in the event registration google sheets.
-    // If the row is highlighted green, they have paid.
-    function has_user_paid_event($emailAddress, $sheetName) {
-        if (!($this->is_email_on_sheet($emailAddress, SPREADSHEETID, $sheetName))){
-            return false;
+        } else {
+            return true;
         }
-
-        //given that the email exists in the sheet
-        //find its index
-        $emailKey = array_search($emailAddress, $this->addresses);
-        // echo "emailKey is: " . $emailKey . "<br>";
-        
-        //turn into sheets readable form 
-        $emailIndex = 'B' . ($emailKey+2);
-        // echo "emailIndex is: " . $emailIndex . "<br><br>";
-
-        //this takes emailIndex as a parameter
-        //gets hex of the colour of the cell containing the email in question
-        $colourIs = $this->Gsheet_Interface_Model->get_cell_colour($emailIndex);
-        
-        //uncoloured cells return as 000000 (or sometimes ffffff because google sheets is extra like that)
-        if ($colourIs == '000000' || $colourIs == 'ffffff'){
-            return false;
-        } 
-
-        return true;
     }
+
+
+    /*
+     * Private functions
+     */
+
+    /**
+     * Checks if a string is an email (by its format).
+     *
+     * @param $emailAddress
+     *
+     * @return bool `true` if string is an email format.
+     */
+    public static function isValidEmail($emailAddress)
+    {
+        // Removes all illegal characters from email
+        $emailAddress = filter_var($emailAddress, FILTER_SANITIZE_EMAIL);
+
+        // Returns bool variable for whether the sanitised email is valid
+        return (bool) filter_var($emailAddress, FILTER_VALIDATE_EMAIL);
+    }
+
 }

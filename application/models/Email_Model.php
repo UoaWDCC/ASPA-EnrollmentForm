@@ -1,13 +1,23 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-// This model sends different emails to specified email address based on the payment method
-class EmailModel extends CI_Model {
-    public function sendEmail($emailAddress, $paymentMethod, $eventData)
+/**
+ * Handles email sending and formatting.
+ */
+class Email_Model extends CI_Model {
+
+    /**
+     * Sends the confirmation email to the `emailAddress` with specified
+     * `eventData` and the `paymentMethod`.
+     *
+     * @param string $recipientEmail The email address to send confirmation to.
+     * @param string $paymentMethod The payment method used.
+     * @param array $eventData Any event information.
+     */
+    public function sendConfirmationEmail($recipientEmail, $paymentMethod, $eventData)
     {
-        // email details
-        
-        $EMAIL_RECIEVER = $emailAddress;
+        // Email details
+        $EMAIL_RECEIVER = $recipientEmail;
         $EMAIL_SENDER = "uoawdcc@gmail.com";
 
         // event details on body
@@ -264,7 +274,7 @@ class EmailModel extends CI_Model {
         try {
             log_message('debug', "-- sending email");
             $EMAIL_SUBJECT = '"$(echo -e "'.$EMAIL_SUBJECT.'\nContent-Type: text/html'.'")"' ;
-            shell_exec("echo '".$message."' | mailx -v -s ".$EMAIL_SUBJECT." ".$EMAIL_RECIEVER." > /dev/null 2>/dev/null &");
+            shell_exec("echo '".$message."' | mailx -v -s ".$EMAIL_SUBJECT." ".$EMAIL_RECEIVER." > /dev/null 2>/dev/null &");
             log_message('debug', "-- finish sending email");
         } catch (Exception $e) {
             log_message('error', "sending email failed");

@@ -8,10 +8,6 @@ application/logs/*
 
 !application/*/.htaccess
 
-user_guide_src/build/*
-user_guide_src/cilexer/build/*
-user_guide_src/cilexer/dist/*
-user_guide_src/cilexer/pycilexer.egg-info/*
 /vendor/
 
 # IDE Files
@@ -32,5 +28,7 @@ application/config/database.php
 
 .editorconfig
 
+# Secrets
+
+/private_keys/*
 stripeCredentials.json
-credentials.json
