@@ -1,28 +1,25 @@
 <?php
+
+use Stripe\Checkout\Session;
+use Stripe\Event;
+use Stripe\Stripe;
+
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Stripe_Model extends CI_Model {
 
-    // Note if the child has no constructor then parent constructor is used
-    function __construct()
-    {
-	    // You have to explicitly call parent Constructor
-    	parent::__construct();
-    }
-
     /**
-     *  Generates a new stripe session with a customer email
+     * Generates a new stripe session with a customer email.
      *
-     * @param string $customer_email             The email address of the session
+     * @param string $customer_email The email address of the session.
      *
-     * @return $sessID                          The id of the newly created session
+     * @return string The ID of the newly created session.
      */
-    function GenSessionId ($customer_email, $eventData) {
+    function generateNewSessionId($customer_email, $eventData)
+    {
+        Stripe::setApiKey(STRIPE_PRIVATE_KEY);
 
-        require_once('vendor/autoload.php');
-
-        \Stripe\Stripe::setApiKey(SECRETKEY);
-        $session = \Stripe\Checkout\Session::create([
+        $session = Session::create([
         'payment_method_types' => ['card'],
         'line_items' => [[
             'name' => $eventData["title"],
@@ -38,61 +35,56 @@ class Stripe_Model extends CI_Model {
 
         ]);
         $stripeSession = array($session);
-        $sessID = ($stripeSession[0]['id']);
-        return $sessID;
+        return ($stripeSession[0]['id']);
     }
 
     /**
-	* This function checks if the stripe session has made it's payment successfully
-	*
-	* @param string    	$session_id  		The session id of this current payment session
-	*/
-    function CheckPayment($session_id)
+     * This function checks if the stripe session has made it's payment successfully.
+     *
+     * @param string $sessionId The session id of this current payment session.
+     *
+     * @return bool If the user has paid.
+     */
+    function checkPayment($sessionId)
     {
-        require_once('vendor/autoload.php');
-        //session_start();
-
         $hasPaid = False;
 
-        \Stripe\Stripe::setApiKey(SECRETKEY);
+        Stripe::setApiKey(STRIPE_PRIVATE_KEY);
 
-        $events = \Stripe\Event::all([
-        'type' => 'checkout.session.completed',
-        'created' => [
-            // Check for events created in the last 3 minutes
-            'gte' => time() - 1 * 10 * 60,
-        ],
+        $events = Event::all([
+            'type' => 'checkout.session.completed',
+            'created' => [
+                // Check for events created in the last 3 minutes
+                'gte' => time() - 1 * 10 * 60,
+            ],
         ]);
 
         foreach ($events->autoPagingIterator() as $event) {
-            //getting each session object
             $session = $event->data->object;
 
-            //Checking if a paid session id matches with current session id
-            if ($session->id == $session_id) {
+            // Check if a paid session ID matches with current session ID
+            if ($session->id == $sessionId) {
                 $hasPaid = True;
                 break;
             }
         }
-        return  $hasPaid;
+
+        return $hasPaid;
     }
 
     /**
-     * This Function returns the customers email given a session id
+     * Returns the customers email given a session ID.
      *
-     * @param string $session_id             The session id of the desired email address
+     * @param string $sessionId The session id of the desired email address.
      *
-     * @return $email the email address of a given session
+     * @return string $email the email address of a given session.
      */
-    function GetEmail($session_id) {
+    function getEmail($sessionId)
+    {
+        Stripe::setApiKey(STRIPE_PRIVATE_KEY);
 
-        \Stripe\Stripe::setApiKey(SECRETKEY);
+        $session_object = Session::retrieve($sessionId);
 
-        $session_object = Stripe\Checkout\Session::retrieve(
-        $session_id
-        );
-
-        $email = $session_object->customer_email;
-        return $email;
+        return $session_object->customer_email;
     }
 }

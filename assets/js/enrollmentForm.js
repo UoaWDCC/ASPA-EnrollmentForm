@@ -413,7 +413,7 @@ submit.onclick = function () {
 
 	$("#enrollment-form").attr(
 		"action",
-		base_url + "EnrollmentForm/LoadOfflinePayment"
+		base_url + "EnrollmentForm/makeOfflinePayment"
 	);
 	$("#payment-method-field").attr("value", paymentMethod);
 

@@ -12,7 +12,7 @@ echo $session_id;
 echo "<hr>";
 $hasPaid = False;
 
-\Stripe\Stripe::setApiKey(SECRETKEY);
+\Stripe\Stripe::setApiKey(STRIPE_PRIVATE_KEY);
 
 $events = \Stripe\Event::all([
   'type' => 'checkout.session.completed',
