@@ -18,11 +18,14 @@ if (file_exists($stripeCredentials)) {
 	// Only assign if the json decoding is carried out correctly
 	if ($stripeCredentials = json_decode($json, true)) {
 		if (isset($stripeCredentials["public_key"]) && isset($stripeCredentials["secret_key"])){
-			define('PUBLICKEY', $stripeCredentials["public_key"]);
-			define('SECRETKEY', $stripeCredentials["secret_key"]);
+			define('STRIPE_PUBLIC_KEY', $stripeCredentials["public_key"]);
+			define('STRIPE_PRIVATE_KEY', $stripeCredentials["secret_key"]);
 		}
 	}
 }
 
-define("MEMBERSHIP_SPREADSHEETID", '1yS4k6GEhGUcOi1xcOQJ6JrupPQ9jMrqdAe_TC8Pwp84');
-define("MEMBERSHIP_SHEETNAME", 'Form Responses 1');
+/**
+ * Google sheet ID and sheet name for ASPA's membership spreadsheet.
+ */
+const MEMBERSHIP_SPREADSHEET_ID = '1yS4k6GEhGUcOi1xcOQJ6JrupPQ9jMrqdAe_TC8Pwp84';
+const MEMBERSHIP_SHEET_NAME = 'Form Responses 1';
