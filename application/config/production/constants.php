@@ -11,7 +11,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 // setting the stripe publickey and secretkey
 // Get the path of the stripeCredentials.json file
-$stripeCredentials = trim(shell_exec('pwd'))."/stripeCredentials.json";
+$stripeCredentials = trim(shell_exec('pwd'))."/private_keys/stripeCredentials.json";
 // Only assign to live keys if this file exists. Else it will automatically roll back to test keys.
 if (file_exists($stripeCredentials)) {
 	$json = file_get_contents($stripeCredentials);

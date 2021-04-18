@@ -58,7 +58,6 @@ class EnrollmentForm extends ASPA_Controller
      * The "home" page.
      */
 	public function index()	{
-        var_dump("abc");
         log_message('debug', "-- Index Function called");
         if (filter_var($this->eventData["form_enabled"], FILTER_VALIDATE_BOOLEAN)) {
             $this->load->view('EnrollmentForm', $this->eventData);
