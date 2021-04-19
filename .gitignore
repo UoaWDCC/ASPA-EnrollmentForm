@@ -31,4 +31,6 @@ application/config/database.php
 # Secrets
 
 /private_keys/*
-stripeCredentials.json
+
+# CI/CD
+pull.php
