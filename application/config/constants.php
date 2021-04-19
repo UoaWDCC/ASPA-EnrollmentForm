@@ -94,7 +94,7 @@ defined('EXIT__AUTO_MAX')      OR define('EXIT__AUTO_MAX', 125); // highest auto
 /**
  * The event registration sheet we are storing our information on (i.e. adhoc database).
  */
-const REGISTRATION_SPREADSHEET_ID = '1NJ3gFsf1qP_-5NF2XyistqUzkug99S656I30oa8-iLU';
+const REGISTRATION_SPREADSHEET_ID = '1YvLmK7DbVuf5O3UDKlYaNOH1Zd8ohg_eEibzwfh2IME';
 
 /**
  * Stripe public and private keys for development.
