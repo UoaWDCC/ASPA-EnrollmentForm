@@ -29,3 +29,8 @@ if (file_exists($stripeCredentials)) {
  */
 const MEMBERSHIP_SPREADSHEET_ID = '1yS4k6GEhGUcOi1xcOQJ6JrupPQ9jMrqdAe_TC8Pwp84';
 const MEMBERSHIP_SHEET_NAME = 'Form Responses 1';
+
+/**
+ * The event registration sheet we are storing our information on (i.e. adhoc database).
+ */
+const REGISTRATION_SPREADSHEET_ID = '1NJ3gFsf1qP_-5NF2XyistqUzkug99S656I30oa8-iLU';
