@@ -25,6 +25,11 @@ if (file_exists($stripeCredentials)) {
 }
 
 /**
+ * Google sheet ID for ASPA's registration spreadsheet.
+ */
+const REGISTRATION_SPREADSHEET_ID = '1NJ3gFsf1qP_-5NF2XyistqUzkug99S656I30oa8-iLU';
+
+/**
  * Google sheet ID and sheet name for ASPA's membership spreadsheet.
  */
 const MEMBERSHIP_SPREADSHEET_ID = '1yS4k6GEhGUcOi1xcOQJ6JrupPQ9jMrqdAe_TC8Pwp84';
