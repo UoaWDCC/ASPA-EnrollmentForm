@@ -8,6 +8,7 @@ use PHPMailer\PHPMailer\PHPMailer;
 
 class MailService
 {
+
     private $mail;
 
 
@@ -55,6 +56,7 @@ class MailService
         $this->mail->Body = $bodyContent;
         $this->mail->send();
     }
+
 }
 
 
