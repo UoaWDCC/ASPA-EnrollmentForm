@@ -230,12 +230,7 @@ class EnrollmentForm extends ASPA_Controller
         // Checking if payment was made to their session and obtain their email
         $data['email'] = $this->Stripe_Model->getEmail($data['session_id']);
 
-        // Check if this is the first time StripePaymentSuccessful is shown
-        // Boolean variable used to determine whether we should send an email
-        $alreadyHighlighted = $this->Verification_Model->hasUserPaidEvent($data['email'], $this->eventData['gsheet_name']);
-
-        if ($data['has_paid'])
-        {
+        if ($data['has_paid']) {
             // HighLight the row (get the user's email)
             // Get the row of the specific email from google sheets
             $cell = $this->GoogleSheets_Model->getCellCoordinate($data['email'], 'B');
@@ -250,16 +245,12 @@ class EnrollmentForm extends ASPA_Controller
             // Highlight this row since it is paid
             $this->GoogleSheets_Model->highlightRow($row ,[0.69803923, 0.8980392, 0.69803923]);
 
-            // Send a confirmation email only if it wasn't previously highlighted
-            if (!$alreadyHighlighted) {
-                $this->load->model('Email_Model');
-                $this->Email_Model->sendConfirmationEmail($data['email'], "online", $this->eventData);
-            }
+            $this->load->model('Email_Model');
+            $this->Email_Model->sendConfirmationEmail($data['email'], "online", $this->eventData);
 
             // Redirect to the page with green tick
             $this->load->view('PaymentSuccessful.php', array_merge($this->eventData, $data));
-        }
-        else {
+        } else {
             show_error("Something went wrong, your payment wasn't processed correctly. Please contact uoa.wdcc@gmail.com. Error Code: 003","500");
         }
     }
