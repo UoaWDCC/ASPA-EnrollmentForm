@@ -14,7 +14,7 @@ class Email_Model extends CI_Model {
      * @param string $paymentMethod The payment method used.
      * @param array $eventData Any event information.
      */
-    public function sendConfirmationEmail($recipientEmail, $paymentMethod, $eventData)
+    public function sendConfirmationEmail(string $recipientEmail, string $paymentMethod, array $eventData)
     {
         // Email details
         $EMAIL_RECEIVER = $recipientEmail;
@@ -63,6 +63,7 @@ class Email_Model extends CI_Model {
 
 
         // Body of email in HTML format (Extracted from mailchimp template)
+        // NOTE: It is important all quote marks used inside this email body are double quotes "
         $message = '
         <html>
         <head>
@@ -271,13 +272,33 @@ class Email_Model extends CI_Model {
         </body>
         </html>';
 
-        try {
-            log_message('debug', "-- sending email");
-            $EMAIL_SUBJECT = '"$(echo -e "'.$EMAIL_SUBJECT.'\nContent-Type: text/html'.'")"' ;
-            shell_exec("echo '".$message."' | mailx -v -s ".$EMAIL_SUBJECT." ".$EMAIL_RECEIVER." > /dev/null 2>/dev/null &");
-            log_message('debug', "-- finish sending email");
-        } catch (Exception $e) {
-            log_message('error', "sending email failed");
-        }
+        $cmdlineArgs = [
+                self::sanitize(MAIL_AUTH_EMAIL),
+                self::sanitize(MAIL_AUTH_PASSWORD),
+                self::sanitize($recipientEmail),
+                self::sanitize("PERSON NAME"),
+                self::sanitize($EMAIL_SUBJECT),
+                self::sanitize($message)
+        ];
+
+        // Build the command that will be executed
+        $command = 'php -f ' . getProjectDir() . '/scripts/SendEmail.php ' . implode(" ", $cmdlineArgs);
+
+        // Run the command, and run in the background by appending dev/null stuff
+        exec($command . '  > /dev/null 2> /dev/null &');
     }
+
+
+    /**
+     * Adds single quotes in front of every string.
+     *
+     * @param string $str
+     *
+     * @return string
+     */
+    private static function sanitize(string $str): string
+    {
+        return "'" . $str . "'";
+    }
+
 }
