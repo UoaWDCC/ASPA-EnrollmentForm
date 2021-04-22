@@ -242,11 +242,19 @@ class EnrollmentForm extends ASPA_Controller
             // Split up the cell column and row
             list(, $row) = $this->GoogleSheets_Model->convertCoordinateToArray($cell);
 
-            // Highlight this row since it is paid
-            $this->GoogleSheets_Model->highlightRow($row ,[0.69803923, 0.8980392, 0.69803923]);
+            /*
+             * Send confirmation email if this is the first time the user has called the stripePaymentSuccessful()
+             * function, as if the user is highlighted, this means that this function has been called already. This is
+             * an important check to prevent sending duplicate emails to users if they refresh the confirmation page.
+             */
+            $alreadyHighlighted = $this->Verification_Model->hasUserPaidEvent($data['email'], $this->eventData['gsheet_name']);
+            if (!$alreadyHighlighted) {
+                $this->load->model('Email_Model');
+                $this->Email_Model->sendConfirmationEmail($data['email'], "online", $this->eventData);
 
-            $this->load->model('Email_Model');
-            $this->Email_Model->sendConfirmationEmail($data['email'], "online", $this->eventData);
+                // Highlight this row since it is paid, placed inside this code block to prevent unnecessary calls
+                $this->GoogleSheets_Model->highlightRow($row ,[0.69803923, 0.8980392, 0.69803923]);
+            }
 
             // Redirect to the page with green tick
             $this->load->view('PaymentSuccessful.php', array_merge($this->eventData, $data));
