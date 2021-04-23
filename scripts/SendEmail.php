@@ -33,7 +33,7 @@ class MailService
         $this->mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
 
         // Set the email to be sent from the default authenticated email address
-        $this->mail->setFrom($authUsername, "UOA WDCC");
+        $this->mail->setFrom($authUsername, "ASPA");
     }
 
     /**
