@@ -35,7 +35,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             <div class="div-placeholder"></div>
             <div class="div-main-page-right">
               <h1 class="heading">Welcome</h1>
-              <h1 class="heading-2"><?php echo $title ?></h1>
+              <h1 class="heading-2">To <?php echo $title ?></h1>
               <div class="div-main-page"><a id="register" data-w-id="dfbe5add-65ea-95a7-6380-331c1db905e2" href="#" class="button w-button">Register</a>
                 <p class="paragraph-pressenter">press <strong class="bold-enter">Enter ↵</strong></p>
               </div>
