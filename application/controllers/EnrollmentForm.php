@@ -197,7 +197,7 @@ class EnrollmentForm extends ASPA_Controller
             // Split up the cell column and row
             list(, $row) = $this->GoogleSheets_Model->convertCoordinateToArray($cell);
             // Edit Payment method column (Column F)
-            $this->GoogleSheets_Model->updatePaymentMethod($row, $data['paymentMethod']);
+            $this->GoogleSheets_Model->updatePaymentMethod($row, ucfirst($data['paymentMethod']));
         }
 
         // Send offline confirmation email
