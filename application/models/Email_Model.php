@@ -277,7 +277,7 @@ class Email_Model extends CI_Model {
                 self::sanitize(MAIL_AUTH_EMAIL),
                 self::sanitize(MAIL_AUTH_PASSWORD),
                 self::sanitize($recipientEmail),
-                self::sanitize("PERSON NAME"),
+                self::sanitize($recipientName),
                 self::sanitize($EMAIL_SUBJECT),
                 self::sanitize($message)
         ];
