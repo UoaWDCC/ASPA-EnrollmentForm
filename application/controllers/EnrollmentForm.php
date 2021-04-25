@@ -229,7 +229,7 @@ class EnrollmentForm extends ASPA_Controller
 
         // Checking if payment was made to their session and obtain their email
         $data['email'] = $this->Stripe_Model->getEmail($data['session_id']);
-
+        // Get the recipient's name
         $data['name'] = $this->input->post("name");
 
         if ($data['has_paid']) {
