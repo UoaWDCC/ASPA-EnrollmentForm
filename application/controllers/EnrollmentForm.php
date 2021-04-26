@@ -201,7 +201,7 @@ class EnrollmentForm extends ASPA_Controller
         }
 
         // Send offline confirmation email
-        $this->Email_Model->sendConfirmationEmail($data["email"], $data['paymentMethod'], $this->eventData);
+        $this->Email_Model->sendConfirmationEmail($data["name"], $data["email"], $data['paymentMethod'], $this->eventData);
 
         // Redirect to the page with grey tick
         $this->load->view('PaymentSuccessful.php', array_merge($this->eventData, $data));
@@ -229,6 +229,8 @@ class EnrollmentForm extends ASPA_Controller
 
         // Checking if payment was made to their session and obtain their email
         $data['email'] = $this->Stripe_Model->getEmail($data['session_id']);
+        // Get the recipient's name
+        $data['name'] = $this->input->post("name");
 
         if ($data['has_paid']) {
             // HighLight the row (get the user's email)
@@ -250,7 +252,7 @@ class EnrollmentForm extends ASPA_Controller
             $alreadyHighlighted = $this->Verification_Model->hasUserPaidEvent($data['email'], $this->eventData['gsheet_name']);
             if (!$alreadyHighlighted) {
                 $this->load->model('Email_Model');
-                $this->Email_Model->sendConfirmationEmail($data['email'], "online", $this->eventData);
+                $this->Email_Model->sendConfirmationEmail($data['name'], $data['email'], "online", $this->eventData);
 
                 // Highlight this row since it is paid, placed inside this code block to prevent unnecessary calls
                 $this->GoogleSheets_Model->highlightRow($row ,[0.69803923, 0.8980392, 0.69803923]);
