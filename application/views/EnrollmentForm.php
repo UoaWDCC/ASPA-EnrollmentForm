@@ -82,6 +82,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
               <p class="p-ok-btn-confirm p">Press<strong> Enter ↵</strong></p>
             </div>
             <div id="div-back-page3" class="div-back div-page-page3"><a id="btn-back-page3" href="#" class="btn-back w-button">← Back</a></div>
+              <div>
+                <p><a href="https://docs.google.com/forms/d/e/1FAIpQLSezUAfbTZKBV-J0yJleBn3RkvJj0xHIinqLsc5aqKCdxgzZSw/viewform">Sign up to ASPA</a> if you're not a member</p>
+              </div>
           </div>
           <div id="div-page4" class="div-block page4">
             <div class="div">
