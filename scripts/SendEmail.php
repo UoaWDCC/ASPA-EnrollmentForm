@@ -34,6 +34,9 @@ class MailService
 
         // Set the email to be sent from the default authenticated email address
         $this->mail->setFrom($authUsername, "ASPA");
+      
+        // Set the reply email to ASPA's email
+        $this->mail->addReplyTo("uoapool@gmail.com", "ASPA");
     }
 
     /**
