@@ -108,6 +108,24 @@ class GoogleSheets_Model extends CI_Model {
         $result = $this->service->spreadsheets_values->update($this->spreadsheetId, $range, $body, $params);
     }
 
+        /**
+     * Mark an attendees attendance in the google sheets
+     *
+     * @param string $eventName The name of the event
+     * @param string $email The email of the user to record.
+     * @param string @upi The upi of the user if it exists
+     */
+    public function markAsPresent($eventName, $email = null, $upi = null)
+    {
+        // This should probably be in a try/catch block
+        if (is_null($email) and if_null($upi))
+            throw new Exception("That email/UPI doesn't exist in the spreadsheet.");
+
+        if (is_null($sheetName))
+            throw new Exception("That event doesn't have a spreadsheet associated with it.");
+        
+    }
+
     /**
      * Returns the number of records in the registration sheet.
      *
