@@ -353,9 +353,8 @@
 }
 
 .div.div-errormsg {
-  position: absolute;
+  position: relative;
   left: 0%;
-  top: 100%;
   right: 0%;
   bottom: 0%;
 }
