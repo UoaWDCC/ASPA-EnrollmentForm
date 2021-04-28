@@ -76,8 +76,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 <p class="p p-errormessage">Unrecognized email, please use the email you signed up to ASPA with.<br></p>
                 <p class="p p-errormessage">If you are not a member yet, please register first.</p>
               </div>
-              <div>
-                <p><a class="signuplink" href="https://docs.google.com/forms/d/e/1FAIpQLSezUAfbTZKBV-J0yJleBn3RkvJj0xHIinqLsc5aqKCdxgzZSw/viewform">Sign up to ASPA</a> if you're not a member</p>
+              <div class="sign-up">
+                <p><a class="sign-up-link" href="https://docs.google.com/forms/d/e/1FAIpQLSezUAfbTZKBV-J0yJleBn3RkvJj0xHIinqLsc5aqKCdxgzZSw/viewform">Sign up to ASPA</a> if you're not a member</p>
               </div>
             </div>
             <div id="div-ok3" class="div-okbtn">
