@@ -229,8 +229,6 @@ class EnrollmentForm extends ASPA_Controller
 
         // Checking if payment was made to their session and obtain their email
         $data['email'] = $this->Stripe_Model->getEmail($data['session_id']);
-        // Get the recipient's name
-        $data['name'] = $this->input->post("name");
 
         if ($data['has_paid']) {
             // HighLight the row (get the user's email)
@@ -243,6 +241,9 @@ class EnrollmentForm extends ASPA_Controller
 
             // Split up the cell column and row
             list(, $row) = $this->GoogleSheets_Model->convertCoordinateToArray($cell);
+
+            // Get the name from the Google Sheet
+            $data['name'] = $this->GoogleSheets_Model->getCellContents(('C' . $row), ('C' . $row))[0][0];
 
             /*
              * Send confirmation email if this is the first time the user has called the stripePaymentSuccessful()
