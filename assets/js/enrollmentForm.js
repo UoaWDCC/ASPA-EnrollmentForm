@@ -29,7 +29,7 @@ let errorMsgs = document.getElementsByClassName("div-errormsg");
 let errorMsgArray = document.getElementsByClassName("p-errormessage");
 const notSignedUpUnpaidErr = [
 	"Unrecognized email, please use the email you signed up to ASPA with.",
-	"To sign up: <a href='https://bit.ly/3eBrBW5' target='_blank'> https://bit.ly/3eBrBW5 </a>", 
+	"To sign up: <a href='https://bit.ly/3xl5bzx' target='_blank'> https://bit.ly/3xl5bzx </a>", 
 ];
 const signedUpUnpaidErr = [
 	"You have signed up, but have not paid for membership fees.",

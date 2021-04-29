@@ -14,12 +14,13 @@ class Email_Model extends CI_Model {
      * @param string $paymentMethod The payment method used.
      * @param array $eventData Any event information.
      */
-    public function sendConfirmationEmail(string $recipientEmail, string $paymentMethod, array $eventData)
+    public function sendConfirmationEmail(string $recipientName, string $recipientEmail, string $paymentMethod, array $eventData)
     {
         // Email details
         $EMAIL_RECEIVER = $recipientEmail;
         $EMAIL_SENDER = "uoawdcc@gmail.com";
-
+        //receiver's full name
+        $RECIPIENT_NAME = $recipientName;
         // event details on body
         $EVENT_NAME = $eventData["title"];
         $EVENT_TIME = $eventData["date"] . ', ' . $eventData["time"];
@@ -30,8 +31,8 @@ class Email_Model extends CI_Model {
 
         $EVENT_DATETIME = explode(" ", $eventData["date"])[1] . ' ' . explode(" ", $eventData["date"])[2] . "<br />" . $eventData["time"];
         $EVENT_LOCATION = $eventData["location"];
-        $EVENT_IMAGE = "https://secure.meetupstatic.com/photos/event/a/6/d/6/600_484542710.jpeg";
-
+        $EVENT_IMAGE = "https://user-images.githubusercontent.com/19633284/115980245-417e0500-a5df-11eb-9741-3b7a10499ef5.png";
+        
         // transfer details
         $TRANSFER_AMOUNT = "$" . (string) number_format((float) $eventData["price"], 2, '.', '');
         $TRANSFER_ACCOUNT = $eventData["acc_num"];
@@ -152,7 +153,7 @@ class Email_Model extends CI_Model {
         <tbody>
         <tr>
         <td valign="top" class="m_-6544744198641712840mcnTextContent" style="padding-top:0;padding-right:18px;padding-bottom:9px;padding-left:18px;word-break:break-word;color:#505050;font-family:Helvetica;font-size:16px;line-height:150%;text-align:left">
-        <p style="margin:10px 0;padding:0;color:#505050;font-family:Helvetica;font-size:16px;line-height:150%;text-align:left">Hi there!</p>
+        <p style="margin:10px 0;padding:0;color:#505050;font-family:Helvetica;font-size:22px;line-height:150%;text-align:left">Hi <span style="font-weight:bold;">' . $RECIPIENT_NAME . '</span>,</p>
         <p style="text-align:left;margin:10px 0;padding:0;color:#505050;font-family:Helvetica;font-size:16px;line-height:150%">ASPA is back bigger and better than ever before! Bring your cue skills, friends, and pool rivals for a casual night of pool! Meet new people, socialize, and have fun for Thursday pooling night!!!&nbsp;</p><div>
         <div class="adm"><div id="q_54" class="ajR h4"><div class="ajT"></div></div></div><div class="h5">
         <p style="margin:10px 0;padding:0;color:#ff0000;font-family:Helvetica;font-size:16px;line-height:150%;text-align:left">
@@ -276,7 +277,7 @@ class Email_Model extends CI_Model {
                 self::sanitize(MAIL_AUTH_EMAIL),
                 self::sanitize(MAIL_AUTH_PASSWORD),
                 self::sanitize($recipientEmail),
-                self::sanitize("PERSON NAME"),
+                self::sanitize($recipientName),
                 self::sanitize($EMAIL_SUBJECT),
                 self::sanitize($message)
         ];

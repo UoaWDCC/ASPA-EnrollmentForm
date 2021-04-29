@@ -197,11 +197,11 @@ class EnrollmentForm extends ASPA_Controller
             // Split up the cell column and row
             list(, $row) = $this->GoogleSheets_Model->convertCoordinateToArray($cell);
             // Edit Payment method column (Column F)
-            $this->GoogleSheets_Model->updatePaymentMethod($row, $data['paymentMethod']);
+            $this->GoogleSheets_Model->updatePaymentMethod($row, ucfirst($data['paymentMethod']));
         }
 
         // Send offline confirmation email
-        $this->Email_Model->sendConfirmationEmail($data["email"], $data['paymentMethod'], $this->eventData);
+        $this->Email_Model->sendConfirmationEmail($data["name"], $data["email"], $data['paymentMethod'], $this->eventData);
 
         // Redirect to the page with grey tick
         $this->load->view('PaymentSuccessful.php', array_merge($this->eventData, $data));
@@ -242,6 +242,9 @@ class EnrollmentForm extends ASPA_Controller
             // Split up the cell column and row
             list(, $row) = $this->GoogleSheets_Model->convertCoordinateToArray($cell);
 
+            // Get the name from the Google Sheet
+            $data['name'] = $this->GoogleSheets_Model->getCellContents(('C' . $row), ('C' . $row))[0][0];
+
             /*
              * Send confirmation email if this is the first time the user has called the stripePaymentSuccessful()
              * function, as if the user is highlighted, this means that this function has been called already. This is
@@ -250,7 +253,7 @@ class EnrollmentForm extends ASPA_Controller
             $alreadyHighlighted = $this->Verification_Model->hasUserPaidEvent($data['email'], $this->eventData['gsheet_name']);
             if (!$alreadyHighlighted) {
                 $this->load->model('Email_Model');
-                $this->Email_Model->sendConfirmationEmail($data['email'], "online", $this->eventData);
+                $this->Email_Model->sendConfirmationEmail($data['name'], $data['email'], "online", $this->eventData);
 
                 // Highlight this row since it is paid, placed inside this code block to prevent unnecessary calls
                 $this->GoogleSheets_Model->highlightRow($row ,[0.69803923, 0.8980392, 0.69803923]);
