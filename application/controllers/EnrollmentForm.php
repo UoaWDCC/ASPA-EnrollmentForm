@@ -63,7 +63,7 @@ class EnrollmentForm extends ASPA_Controller
             $this->load->view('EnrollmentForm', $this->eventData);
         } else {
             // TODO: Load a disabled view.
-            echo "This ASPA form is currently disabled.";
+            $this->load->view('FormDisabled');
         }
 	}
 
