@@ -1,5 +1,6 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
+require ('vendor/autoload.php');
 /**
  * Handles all admin-checkup app related endpoints and views.
  *  @property GoogleSheets_Model $GoogleSheets_Model
@@ -39,7 +40,6 @@ class Admin extends ASPA_Controller
         //get google sheets
         $this->load->library('../controllers/EnrollmentForm.php');
         echo $this->EnrollmentForm->loadEventData();
-
         
         $isEmail = $this->Verification_Model->isEmailOnSheet($email, REGISTRATION_SPREADSHEET_ID, $this->eventData['gsheet_name']);
         $isUpi = $this->Verification_Model->isUpiOnSheet($upi, REGISTRATION_SPREADSHEET_ID, $this->eventData['gsheet_name']);
