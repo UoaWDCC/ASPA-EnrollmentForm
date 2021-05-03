@@ -54,7 +54,6 @@ class EnrollmentForm extends ASPA_Controller
         }
 	}
 
-<<<<<<< HEAD
     public function loadData(){
         $eventTemp;
         // Load GSheets Model as this is used for everything
@@ -81,11 +80,6 @@ class EnrollmentForm extends ASPA_Controller
             $eventTemp["form_enabled"] = False;
         }
         return  $eventTemp;
-=======
-    public function loadEventData(){
-        $eventTemp = "hello";
-        return $eventTemp;
->>>>>>> 8056349 (fixed merge conflict)
     }
 
     /**
