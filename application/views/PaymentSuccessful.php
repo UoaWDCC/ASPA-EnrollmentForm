@@ -27,7 +27,7 @@
             The href of this button link is left empty as it would otherwise not work on localhost.
             When the page is finished, this should be changed to the websites url "aspa.wdcc.co.nz"
             -->
-            <br><a href=""><img align="left" alt="Home Page Button" alt="Home Page" src="assets/images/iconmonstr-home-6.svg" width="30px"></a><br><br>
+            <br><a href="/"><img align="left" alt="Home Page Button" alt="Home Page" src="assets/images/iconmonstr-home-grey.svg" width="30px"></a><br><br>
 
             <image id="green-tick" src="assets/images/Green-Confirmation-Tick.jfif"<?php echo $has_paid ? "" : "style='filter: grayscale(1); -webkit-filter: grayscale(1)'"; ?> />
 
