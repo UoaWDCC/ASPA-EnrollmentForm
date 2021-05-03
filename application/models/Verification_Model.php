@@ -40,6 +40,31 @@ class Verification_Model extends CI_Model {
     }
 
     /**
+     * Checks if an UPI is on the spreadsheet.
+     *
+     * @param $Upi
+     * @param $sheetId
+     * @param $sheetName
+     *
+     * @return bool
+     */
+    function isUpiOnSheet($Upi, $sheetId, $sheetName ){
+        //Validate UPI
+
+        $this->load->model('GoogleSheets_Model');
+        $this->GoogleSheets_Model->setSpreadsheetID($sheetId);
+        $this->GoogleSheets_Model->setCurrentSheetName($sheetName);
+
+        $sheetSize = $this->GoogleSheets_Model->getNumberOfRecords();
+
+        //an array of array of all existing UPI
+        $this->addresses = array_column($this->GoogleSheets_Model->getCellContents('E2', 'E' . ($sheetSize+1)), 0);
+
+        //return if UPI exists in google sheet
+        return in_array($Upi, $this->addresses);
+
+    }
+    /**
      * Checks if a user has a paid membership on the membership spreadsheet.
      *
      * @param string $emailAddress The email of the user.
