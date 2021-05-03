@@ -16,6 +16,8 @@ class Admin extends ASPA_Controller
         $this->load-model('GoogleSheets_Model');
         //get verification model
         $this->load-model('Verficiation_Model');
+        //get stripe mode
+        $this->load->model('Stripe_Model');
         /** 
          * TODO LIST:
          * 
@@ -35,7 +37,7 @@ class Admin extends ASPA_Controller
         $isEmail = $this->Verification_Model->isEmailOnSheet($email, REGISTRATION_SPREADSHEET_ID, $this->eventData['gsheet_name']);
         $isUpi = $this->Verification_Model->isUpiOnSheet($upi, REGISTRATION_SPREADSHEET_ID, $this->eventData['gsheet_name']);
         //if email or upi is not found in the google sheets.
-        if(!($isEmail) || !($isUpi)){
+        if(!($isEmail) && !($isUpi)){
             return http_response_code(404);
         }
         if($email !== null && $upi !== null){
