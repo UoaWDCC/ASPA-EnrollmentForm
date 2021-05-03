@@ -27,9 +27,12 @@
 
 <body>
   <div class="centre-page">
+    <img src="assets/images/ASPA_logo.png" />
     <h1>Sorry about that.</h1>
-    <p>Sign up is not open yet. Stay posted to ASPA social media pages to stay up to date on the latest events! Contact
-      <a href="mailto:uoapool@gmail.com">uoapool@gmail.com</a> if you have any questions.
+    <p>Sign up is not open yet. Stay posted to ASPA social media pages to stay up to date on the latest events!</p>
+    <p>Contact
+      <a href="mailto:uoapool@gmail.com">uoapool@gmail.com</a> 
+      if you have any questions.
     </p>
   </div>
 

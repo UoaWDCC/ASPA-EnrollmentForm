@@ -43,4 +43,20 @@ p {
 
         transform: translate(0, 0);
     }
+
+    h1 {
+        font-size: 2.5em;
+    }
+}
+
+@media screen and (max-width: 900px) {
+    body {
+        background-color: rgb(246, 246, 246);
+    }
+    .centre-page {
+        position: absolute;
+    }
+    h1 {
+        font-size: 2.5em;
+    }
 }
