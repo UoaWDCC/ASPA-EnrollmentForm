@@ -65,13 +65,6 @@ class Admin extends ASPA_Controller
                 return var_dump(http_response_code(200));
             }
         }
-        else{
-            //if both are not specified 
-            return var_dump(http_response_code(412));
-        }
-
-
-
     }
 
     public function paymentStatus() {

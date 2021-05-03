@@ -39,8 +39,8 @@ class Verification_Model extends CI_Model {
         return in_array($emailAddress, $this->addresses);
     }
 
-        /**
-     * Checks if an email/user is on the spreadsheet.
+    /**
+     * Checks if upi is on sheet is on the spreadsheet.
      *
      * @param $emailAddress
      * @param $sheetId
