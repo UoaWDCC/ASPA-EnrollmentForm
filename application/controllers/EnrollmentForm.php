@@ -244,7 +244,7 @@ class EnrollmentForm extends ASPA_Controller
 
             // Get the name from the Google Sheet
             $data['name'] = $this->GoogleSheets_Model->getCellContents(('C' . $row), ('C' . $row))[0][0];
-
+            
             /*
              * Send confirmation email if this is the first time the user has called the stripePaymentSuccessful()
              * function, as if the user is highlighted, this means that this function has been called already. This is
