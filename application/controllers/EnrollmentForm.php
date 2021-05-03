@@ -67,6 +67,34 @@ class EnrollmentForm extends ASPA_Controller
         }
 	}
 
+    public function getNameAndUpi() {
+	    $name = "";
+	    $upi = "";
+        $row_number = 0;
+        $email = "ych663@aucklanduni.ac.nz";
+
+        // Load GSheets Model as this is used for everything
+        $this->load->model("GoogleSheets_Model");
+
+        $this->GoogleSheets_Model->setSpreadsheetId(MEMBERSHIP_SPREADSHEET_ID);
+        $this->GoogleSheets_Model->setCurrentSheetName(MEMBERSHIP_SHEET_NAME);
+
+        $sizeOfSheet = $this->GoogleSheets_Model->getNumberOfRecords();
+        $emailContents = $this->GoogleSheets_Model->getCellContents("B2", "B" . ($sizeOfSheet + 1));
+
+        for($i=0;$i<$sizeOfSheet;$i++) {
+            if($emailContents[$i][0]==$email){
+                $row_number = $i+2;
+            }
+        }
+        
+        $name = $this->GoogleSheets_Model->getCellContents("C".($row_number), "C".($row_number))[0][0];
+        $upi = $this->GoogleSheets_Model->getCellContents("H".($row_number), "H".($row_number))[0][0];
+        
+        echo $name . " " . $upi;
+        
+    }
+
 	/**
      * POST request to validate an email.
      *
