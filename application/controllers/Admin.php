@@ -1,29 +1,21 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
+require ('vendor/autoload.php');
 /**
  * Handles all admin-checkup app related endpoints and views.
- * @property GoogleSheets_Model $GoogleSheets_Model
- * @property Verification_Model $Verification_Model
- * @property Email_Model $Email_Model
- * @property Stripe_Model $Stripe_Model
- * @property CI_Input $input
+ *  @property GoogleSheets_Model $GoogleSheets_Model
  */
 class Admin extends ASPA_Controller
 {
+
     public function markAsPaid() {
-        include('./controllers/EnrollmentForm.php');
-        //get google sheets
-        //$this->load->model("GoogleSheets_Model");
-        // //get verification model
-        $this->load->model("Verification_Model");
-        // //get stripe mode
-        $this->load->model("Stripe_Model");
-        
         // TODO: ASPA-31
-        //get the members email and upi 
-        //ONE OF THEM IS REQUIRED, EITHER.
-        $email = $this->input->get('email');
-        $upi = $this->input->get('upi');
+
+        $this->load->model('GoogleSheets_Model');
+        //get verification model
+        $this->load->model('Verification_Model');
+        //get stripe model
+        $this->load->model('Stripe_Model');
         /** 
          * TODO LIST:
          * 
@@ -39,23 +31,38 @@ class Admin extends ASPA_Controller
          * CODE 412: Precondition failed if both query parameters were no specified 
          * CODE 404: NOT FOUND (if attendee was not found in the registration )
          * */ 
+
         //code 404
-        $isEmail = ($this->Verification_Model->isEmailOnSheet($email, REGISTRATION_SPREADSHEET_ID, $this->eventData['gsheet_name']));
-        $isUpi = ($this->Verification_Model->isUpiOnSheet($upi, REGISTRATION_SPREADSHEET_ID, $this->eventData['gsheet_name']));
-        // //if email or upi is not found in the google sheets.
-        echo $isEmail; 
-        echo $isUpi;
-        if(!($isEmail) || !($isUpi)){
-            $this->output->set_status_header(404, "Not found")->_display ("Attendee not found");
+        //get the members email and upi 
+        //ONE OF THEM IS REQUIRED, EITHER.
+        $email = $this->input->get('email');
+        $upi = $this->input->get('upi');
+
+        $this->load->library('../application/controllers/EnrollmentForm');
+        
+        $eventData = $this->EnrollmentForm->loadEventData();
+        
+        $isEmail = $this->Verification_Model->isEmailOnSheet($email, REGISTRATION_SPREADSHEET_ID, $this->eventData['gsheet_name']);
+        // $isUpi = $this->Verification_Model->isUpiOnSheet($upi, REGISTRATION_SPREADSHEET_ID, $this->eventData['gsheet_name']);
+
+        //if email or upi is not found in the google sheets.
+        if(!$isEmail){
+            $this->output->set_status_header(404, "error")->_display("Attendee not found");
         }
-        // if($email || $upi){
-        //      $this->output->set_status_header(200, "it works")->_display ("Successfully, marked attendee's as paid");
+        else{
+            echo "found";
+        }
+        // if($email || $upi ){
+        //     $this->output->set_status_header(200)->_display("Successfully, marked attendee as paid");
         // }
         // else{
-        //     $this->output->set_status_header(412, "queries not specified")->_display ("Queries not specified");
+        //     $this->output->set_status_header(412)->_display("Queries not specified");
+
         // }
     }
+
     public function paymentStatus() {
         // TODO: ASPA-14
     }
+
 }
