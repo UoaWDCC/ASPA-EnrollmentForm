@@ -62,7 +62,6 @@ class EnrollmentForm extends ASPA_Controller
         if (filter_var($this->eventData["form_enabled"], FILTER_VALIDATE_BOOLEAN)) {
             $this->load->view('EnrollmentForm', $this->eventData);
         } else {
-            // TODO: Load a disabled view.
             $this->load->view('FormDisabled');
         }
 	}
