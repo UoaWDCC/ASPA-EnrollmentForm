@@ -54,6 +54,11 @@ class EnrollmentForm extends ASPA_Controller
         }
 	}
 
+    public function loadEventData(){
+        $eventTemp = "hello";
+        return $eventTemp;
+    }
+
     /**
      * The "home" page.
      */
