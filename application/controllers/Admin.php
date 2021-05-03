@@ -1,10 +1,5 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-<<<<<<< HEAD
-
-=======
-require ('vendor/autoload.php');
->>>>>>> ed23162 (add http status header)
 /**
  * Handles all admin-checkup app related endpoints and views.
  *  @property GoogleSheets_Model $GoogleSheets_Model
@@ -14,26 +9,12 @@ class Admin extends ASPA_Controller
 
     public function markAsPaid() {
         // TODO: ASPA-31
-<<<<<<< HEAD
-        //get the members email and upi 
-        //ONE OF THEM IS REQUIRED, EITHER.
-        $email = $this->input->get('email');
-        $upi = $this->input->get('UPI');
-
-        //get google sheets
-        $this->load-model('GoogleSheets_Model');
-        //get verification model
-        $this->load-model('Verficiation_Model');
-
-
-=======
 
         $this->load->model('GoogleSheets_Model');
         //get verification model
         $this->load->model('Verification_Model');
         //get stripe model
         $this->load->model('Stripe_Model');
->>>>>>> ed23162 (add http status header)
         /** 
          * TODO LIST:
          * 
@@ -73,31 +54,9 @@ class Admin extends ASPA_Controller
         if($email || $upi ){
             $this->output->set_status_header(200)->_display("Successfully, marked attendee as paid");
         }
-<<<<<<< HEAD
-
-         
-        if($email !== null && $upi !== null){
-            // Get the row of the specific email from google sheets
-            $cell = $this->GoogleSheets_Model->getCellCoordinate($email, 'B');
-            if (!isset($cell))
-            {
-                show_error("Something went wrong, your email was not found in the ASPA member list. Error Code: 002","500");
-            }
-
-            // Split up the cell column and row
-            list(, $row) = $this->GoogleSheets_Model->convertCoordinateToArray($cell);
-
-            $alreadyHighlighted = $this->Verification_Model->hasUserPaidEvent($email, $this->eventData['gsheet_name']);
-            if (!$alreadyHighlighted) {
-                // Highlight this row since it is paid, placed inside this code block to prevent unnecessary calls
-                $this->GoogleSheets_Model->highlightRow($row ,[0.69803923, 0.8980392, 0.69803923]);
-                return var_dump(http_response_code(200));
-            }
-=======
         else{
             $this->output->set_status_header(412)->_display("Queries not specified");
 
->>>>>>> ed23162 (add http status header)
         }
     }
 
