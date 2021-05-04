@@ -37,12 +37,30 @@ class Admin extends ASPA_Controller
         //ONE OF THEM IS REQUIRED, EITHER.
         $email = $this->input->get('email');
         $upi = $this->input->get('upi');
+        
+        $eventData;
 
-        $this->load->library('../application/controllers/EnrollmentForm');
+        // $this->GoogleSheets_Model->setCurrentSheetName("CurrentEventDetails");
+        // $data = $this->GoogleSheets_Model->getCellContents('A2', 'C' . ($this->GoogleSheets_Model->getNumberOfRecords() + 2));
+
+        // // Important variables we care about
+        // $elements = ['time', 'date', 'location', 'title', 'tagline', 'price', 'acc_num', 'desc', 'gsheet_name', 'form_enabled'];
+
+        // // If the data from spreadsheet contains event details we are looking for, set them.
+        // for ($i = 0; $i < sizeof($data); $i++) {
+        //     if (in_array($data[$i][0], $elements)) {
+        //         $this->eventData[$data[$i][0]] = $data[$i][2];
+        //     }
+        // }
+
+        // if ($this->eventData['gsheet_name']) {
+        //     $this->GoogleSheets_Model->setCurrentSheetName($this->eventData['gsheet_name']);
+        // } else {
+        //     // disable form if no event sheet is found.
+        //     $this->eventData["form_enabled"] = False;
+        // }
         
-        $eventData = $this->EnrollmentForm->loadEventData();
-        
-        $isEmail = $this->Verification_Model->isEmailOnSheet($email, REGISTRATION_SPREADSHEET_ID, $this->eventData['gsheet_name']);
+        // $isEmail = $this->Verification_Model->isEmailOnSheet($email, REGISTRATION_SPREADSHEET_ID, $this->eventData['gsheet_name']);
         // $isUpi = $this->Verification_Model->isUpiOnSheet($upi, REGISTRATION_SPREADSHEET_ID, $this->eventData['gsheet_name']);
 
         //if email or upi is not found in the google sheets.
