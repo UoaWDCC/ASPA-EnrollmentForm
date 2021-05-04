@@ -107,7 +107,7 @@ class Admin extends ASPA_Controller
             $this->output->set_status_header(412)->_display("Queries not specified");
 >>>>>>> a11cd04 (fixed cannot modify header information)
 
-        // }
+        }
     }
 
     public function paymentStatus() {
