@@ -60,7 +60,7 @@ class Admin extends ASPA_Controller
             //if email or upi is not found in the google sheets.
             if(!$isEmail){
                 $this->output->set_status_header(404, "error")->_display("Attendee not found");
-                exit();
+            
             }
             $this->output->set_status_header(200)->_display("Successfully, marked attendee as paid");
         }
