@@ -38,7 +38,7 @@ class EnrollmentForm extends ASPA_Controller
      * CHECKS 
      *  - if google sheet name is set 
      */
-    public function loadEventData(){
+    public function loadEventData() {
         $eventTemp;
         // Load GSheets Model as this is used for everything
         $this->load->model("GoogleSheets_Model");
