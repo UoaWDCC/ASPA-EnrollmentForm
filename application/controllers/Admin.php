@@ -89,7 +89,7 @@ class Admin extends ASPA_Controller
         else{
             $this->output->set_status_header(412)->_display("Queries not specified");
 
-        // }
+        }
     }
 
     public function paymentStatus() {
