@@ -37,8 +37,6 @@ class Admin extends ASPA_Controller
         //ONE OF THEM IS REQUIRED, EITHER.
         $email = $this->input->get('email');
         $upi = $this->input->get('upi');
-<<<<<<< HEAD
-=======
         //get google sheets
         // $this->load->library('../controllers/EnrollmentForm.php');
         // echo $this->EnrollmentForm->loadEventData();
@@ -54,7 +52,6 @@ class Admin extends ASPA_Controller
                 $this->eventData[$data[$i][0]] = $data[$i][2];
             }
         }
->>>>>>> a11cd04 (fixed cannot modify header information)
         
         $eventData;
 
@@ -81,20 +78,6 @@ class Admin extends ASPA_Controller
         // $isEmail = $this->Verification_Model->isEmailOnSheet($email, REGISTRATION_SPREADSHEET_ID, $this->eventData['gsheet_name']);
         // $isUpi = $this->Verification_Model->isUpiOnSheet($upi, REGISTRATION_SPREADSHEET_ID, $this->eventData['gsheet_name']);
 
-<<<<<<< HEAD
-        //if email or upi is not found in the google sheets.
-        if(!$isEmail){
-            $this->output->set_status_header(404, "error")->_display("Attendee not found");
-        }
-        else{
-            echo "found";
-        }
-        // if($email || $upi ){
-        //     $this->output->set_status_header(200)->_display("Successfully, marked attendee as paid");
-        // }
-        // else{
-        //     $this->output->set_status_header(412)->_display("Queries not specified");
-=======
         if($email || $upi ){
             //if email or upi is not found in the google sheets.
             if(!$isEmail){
@@ -105,7 +88,6 @@ class Admin extends ASPA_Controller
         }
         else{
             $this->output->set_status_header(412)->_display("Queries not specified");
->>>>>>> a11cd04 (fixed cannot modify header information)
 
         }
     }
