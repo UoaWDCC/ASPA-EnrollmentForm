@@ -32,22 +32,25 @@ class Admin extends ASPA_Controller
                 $this->output->set_status_header(404, "error")->_display("Attendee not found");
                 exit();
             }
-            $cell = $this->GoogleSheets_Model->getCellCoordinate($email, 'B');
-            if (!isset($cell))
-            {
-                show_error("Something went wrong, your email was not found in the ASPA member list. Error Code: 002","500");
-            }
+            
+            $cell = $this->GoogleSheets_Model->getUpiCellCoordinate($upi, 'E');
+            // if (!isset($cell))
+            // {
+            //     show_error("Something went wrong, your email was not found in the ASPA member list. Error Code: 002","500");
+            // }
 
             // Split up the cell column and row
             list(, $row) = $this->GoogleSheets_Model->convertCoordinateToArray($cell);
             
 
-            $alreadyHighlighted = $this->Verification_Model->hasUserPaidEvent($email, $this->eventData['gsheet_name']);
-            if (!$alreadyHighlighted) {
+            // $alreadyHighlighted = $this->Verification_Model->hasUserPaidEvent($email, $this->eventData['gsheet_name']);
+            // if (!$alreadyHighlighted) {
 
-                // Highlight this row since it is paid, placed inside this code block to prevent unnecessary calls
-                $this->GoogleSheets_Model->highlightRow($row ,[0.968, 0.670, 0.886]);
-            }
+            //     // Highlight this row since it is paid, placed inside this code block to prevent unnecessary calls
+            //     $this->GoogleSheets_Model->highlightRow($row ,[0.968, 0.670, 0.886]);
+            // }
+            $this->GoogleSheets_Model->highlightRow($row ,[0.968, 0.670, 0.886]);
+
             $this->output->set_status_header(200)->_display("Successfully, marked attendee as paid");
         }
         else{
