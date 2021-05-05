@@ -5,12 +5,17 @@ defined('BASEPATH') or exit('No direct script access allowed');
 // So that all controllers can inherit common controller functions
 class ASPA_Controller extends CI_Controller
 {
+    /**
+     * @var mixed All the information for this event (retrieved from google sheet).
+     */
+    protected $eventData;
 
     function __construct()
     {
         parent::__construct();
         // $this->load->helper();
 		// $this->load->model();
+        $this->eventData = $this->loadEventData();
     }
 
 	/**
@@ -33,6 +38,34 @@ class ASPA_Controller extends CI_Controller
             ->set_output(json_encode($array, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES))
             ->_display();
         exit;
+    }
+
+    private function loadEventData() {
+        $eventTemp;
+        // Load GSheets Model as this is used for everything
+        $this->load->model("GoogleSheets_Model");
+
+        // // Get event details from spreadsheet from range A2 to size of spreadsheet
+        $this->GoogleSheets_Model->setCurrentSheetName("CurrentEventDetails");
+        $data = $this->GoogleSheets_Model->getCellContents('A2', 'C' . ($this->GoogleSheets_Model->getNumberOfRecords() + 2));
+
+        // Important variables we care about
+        $elements = ['time', 'date', 'location', 'title', 'tagline', 'price', 'acc_num', 'desc', 'gsheet_name', 'form_enabled'];
+
+        // If the data from spreadsheet contains event details we are looking for, set them.
+        for ($i = 0; $i < sizeof($data); $i++) {
+            if (in_array($data[$i][0], $elements)) {
+                $eventTemp[$data[$i][0]] = $data[$i][2];
+            }
+        }
+
+        if ($eventTemp['gsheet_name']) {
+            $this->GoogleSheets_Model->setCurrentSheetName($eventTemp['gsheet_name']);
+        } else {
+            // disable form if no event sheet is found.
+            $eventTemp["form_enabled"] = False;
+        }
+        return $eventTemp;
     }
 }
 
