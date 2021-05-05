@@ -14,11 +14,6 @@ require ('vendor/autoload.php');
 class EnrollmentForm extends ASPA_Controller
 {
 
-    /**
-     * @var mixed All the information for this event (retrieved from google sheet).
-     */
-    private $eventData;
-
 
     /**
      * EnrollmentForm constructor that runs every time before the web page loads.
@@ -28,43 +23,8 @@ class EnrollmentForm extends ASPA_Controller
 
         log_message('debug', "=====New Controller Function Initialized====");
         log_message('debug', "-- from IP address: ". $this->input->ip_address());
-
-        $this->eventData = $this->loadEventData();
 	}
     
-    /**
-     * loadEventData function is to initialise googlesheet
-     * 
-     * CHECKS 
-     *  - if google sheet name is set 
-     */
-    public function loadEventData(){
-        $eventTemp;
-        // Load GSheets Model as this is used for everything
-        $this->load->model("GoogleSheets_Model");
-
-        // Get event details from spreadsheet from range A2 to size of spreadsheet
-        $this->GoogleSheets_Model->setCurrentSheetName("CurrentEventDetails");
-        $data = $this->GoogleSheets_Model->getCellContents('A2', 'C' . ($this->GoogleSheets_Model->getNumberOfRecords() + 2));
-
-        // Important variables we care about
-        $elements = ['time', 'date', 'location', 'title', 'tagline', 'price', 'acc_num', 'desc', 'gsheet_name', 'form_enabled'];
-
-        // If the data from spreadsheet contains event details we are looking for, set them.
-        for ($i = 0; $i < sizeof($data); $i++) {
-            if (in_array($data[$i][0], $elements)) {
-                $this->eventData[$data[$i][0]] = $data[$i][2];
-            }
-        }
-
-        if ($this->eventData['gsheet_name']) {
-            $this->GoogleSheets_Model->setCurrentSheetName($this->eventData['gsheet_name']);
-        } else {
-            // disable form if no event sheet is found.
-            $this->eventData["form_enabled"] = False;
-        }
-	}
-
     /**
      * The "home" page.
      */
