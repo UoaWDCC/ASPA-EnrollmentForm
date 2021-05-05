@@ -28,6 +28,11 @@ p {
     body {
         background-color: rgb(246, 246, 246);
     }
+
+    h1 {
+        font-size: 2.5em;
+    }
+
     .centre-page {
         position: absolute;
         box-sizing: border-box;
@@ -43,20 +48,18 @@ p {
 
         transform: translate(0, 0);
     }
-
-    h1 {
-        font-size: 2.5em;
-    }
 }
 
 @media screen and (max-width: 900px) {
     body {
         background-color: rgb(246, 246, 246);
     }
-    .centre-page {
-        position: absolute;
-    }
+
     h1 {
         font-size: 2.5em;
+    }
+
+    .centre-page {
+        position: absolute;
     }
 }
