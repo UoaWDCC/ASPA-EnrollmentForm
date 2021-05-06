@@ -196,9 +196,11 @@ class GoogleSheets_Model extends CI_Model {
 
         // Will return the cell for the first instance of email
         for ($i = 0; $i < sizeof($emails_arr); $i++) {
-            if (strtolower($emails_arr[$i][0]) == $check_str) {
-                // echo $emails_arr[$i][0] . ' = ' . $emails_str . "<br />";
-                return $column . ($i + 2);
+            for($j = 0; $j < sizeof($emails_arr[$i]); $j++){ //to prevent undefined offset error
+                if (strtolower($emails_arr[$i][$j]) === $check_str) {
+                    // return  $upi_arr[$i][$j] . ' = ' . $check_str . "<br />";
+                     return $column . ($i + 2); //this will return the column number
+                }
             }
         }
 
@@ -206,6 +208,9 @@ class GoogleSheets_Model extends CI_Model {
         return NULL;
     }
 
+    /**
+     * HAVE TO CHECK WITH THE
+     */
     public function getUpiCellCoordinate($check_str, $column)
     {
         $check_str = strtolower($check_str);
