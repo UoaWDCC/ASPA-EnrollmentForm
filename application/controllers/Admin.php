@@ -8,11 +8,15 @@ require ('vendor/autoload.php');
 class Admin extends ASPA_Controller
 {
 
+    /**
+     * Marks the attendee as paid by highlighting their row. 
+     * It checks if either the email or upi is found in the spreadsheet. 
+     * If it does, it highlights the specified row
+     * 
+     */
 
     public function markAsPaid() {
-        // TODO: ASPA-31
-        
-        //get the members email and upi 
+    
         $this->load->model('GoogleSheets_Model');
         //get verification model
         $this->load->model('Verification_Model');
@@ -20,6 +24,7 @@ class Admin extends ASPA_Controller
         $this->load->model('Stripe_Model');
 
         //ONE OF THEM IS REQUIRED, EITHER.
+        //get the members email and upi 
         $email = $this->input->get('email');
         $upi = $this->input->get('upi');
 
@@ -28,24 +33,16 @@ class Admin extends ASPA_Controller
         $isUpi = $this->Verification_Model->isUpiOnSheet($upi, REGISTRATION_SPREADSHEET_ID, $this->eventData['gsheet_name']);
         
         if($email || $upi ){
+
             //if email or upi is not found in the google sheets.
-
-
             if(!$isEmail && !$isUpi){
-                //code 404
+                //return HTTP status code 404, to state that both queries were specified BUT are not found in the spreadsheet
                  $this->output->set_status_header(404, "error")->_display("Attendee not found");
                 exit();
             }
-<<<<<<< HEAD
 
-            if($isEmail){
-                $cell = $this->GoogleSheets_Model->getCellCoordinate($email, 'B');
-            }
-
-            if($isUpi){
-                $cell = $this->GoogleSheets_Model->getUpiCellCoordinate($upi, 'E');
-            }
-=======
+            //If email is only found, find the cell that contains email
+            //If upi is only found, find the cell that contains upi
             if($isEmail && !$isUpi){
                 $cell = $this->GoogleSheets_Model->getCellCoordinate($email, 'B');
                 $isColoured = $this->GoogleSheets_Model->getCellColour($cell);
@@ -57,7 +54,6 @@ class Admin extends ASPA_Controller
             }
 
             
->>>>>>> 84b71900f96462053fa0a96183bfa7b76707bd89
             if (!isset($cell))
             {
                 show_error("Something went wrong, your email was not found in the ASPA member list. Error Code: 002","500");
@@ -66,27 +62,18 @@ class Admin extends ASPA_Controller
             // Split up the cell column and row
             list(, $row) = $this->GoogleSheets_Model->convertCoordinateToArray($cell);
             
-<<<<<<< HEAD
-
-            // $alreadyHighlighted = $this->Verification_Model->hasUserPaidEvent($email, $this->eventData['gsheet_name']);
-            // if (!$alreadyHighlighted) {
-
-            //     // Highlight this row since it is paid, placed inside this code block to prevent unnecessary calls
-            // }
-            $this->GoogleSheets_Model->highlightRow($row ,[0.968, 0.670, 0.886]);
-             $this->output->set_status_header(200)->_display("Successfully, marked attendee as paid");
-=======
+            // Check if the cell is coloured, if not hightlight the cell with pink :)
             if ($isColoured == '000000' || $isColoured == 'fffff') {
 
                 // Highlight this row since it is paid, placed inside this code block to prevent unnecessary calls
                 $this->GoogleSheets_Model->highlightRow($row ,[0.968, 0.670, 0.886]);
             }
-            // $this->GoogleSheets_Model->highlightRow($row ,[0.968, 0.670, 0.886]);
 
+            //return HTTP status code 200, to signify that it has successfully marked attendee as paid
             $this->output->set_status_header(200)->_display("Successfully, marked attendee as paid");
->>>>>>> 84b71900f96462053fa0a96183bfa7b76707bd89
         }
         else{
+            //return HTTP status code 412, to signify that both queries are not specified
              $this->output->set_status_header(412)->_display("Queries not specified");
         }
     }

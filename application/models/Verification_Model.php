@@ -39,22 +39,17 @@ class Verification_Model extends CI_Model {
         return in_array($emailAddress, $this->addresses);
     }
 
-        /**
-     * Checks if an email/user is on the spreadsheet.
+    /**
+     * Checks if an upi is on the spreadsheet.
      *
-     * @param $emailAddress
+     * @param $upi
      * @param $sheetId
      * @param $sheetName
      *
      * @return bool
      */
-    function isUpiOnSheet($Upi, $sheetId, $sheetName)
+    function isUpiOnSheet($upi, $sheetId, $sheetName)
     {
-        // // If format of email is incorrect, return false
-        // if (!Verification_Model::isValidEmail($emailAddress)) {
-        //     return false;
-        // }
-
         $this->load->model('GoogleSheets_Model');
         $this->GoogleSheets_Model->setSpreadsheetId($sheetId);
         $this->GoogleSheets_Model->setCurrentSheetName($sheetName);
