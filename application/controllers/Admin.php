@@ -20,8 +20,6 @@ class Admin extends ASPA_Controller
         $this->load->model('GoogleSheets_Model');
         //get verification model
         $this->load->model('Verification_Model');
-        //get stripe model
-        $this->load->model('Stripe_Model');
 
         //ONE OF THEM IS REQUIRED, EITHER.
         //get the members email and upi 
