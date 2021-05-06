@@ -60,7 +60,7 @@ class Verification_Model extends CI_Model {
         $this->addresses = array_column($this->GoogleSheets_Model->getCellContents('E2', 'E' . ($sheetSize+1)), 0);
 
         // Return true if email exists in google sheet
-        return in_array($Upi, $this->addresses);
+        return in_array($upi, $this->addresses);
     }
 
 

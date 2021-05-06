@@ -37,7 +37,7 @@ class Admin extends ASPA_Controller
             //if email or upi is not found in the google sheets.
             if(!$isEmail && !$isUpi){
                 //return HTTP status code 404, to state that both queries were specified BUT are not found in the spreadsheet
-                 $this->output->set_status_header(404, "error")->_display("Attendee not found");
+                return $this->output->set_status_header(404, "error")->_display("Attendee not found");
                 exit();
             }
 
@@ -70,11 +70,11 @@ class Admin extends ASPA_Controller
             }
 
             //return HTTP status code 200, to signify that it has successfully marked attendee as paid
-            $this->output->set_status_header(200)->_display("Successfully, marked attendee as paid");
+            return $this->output->set_status_header(200)->_display("Successfully, marked attendee as paid");
         }
         else{
             //return HTTP status code 412, to signify that both queries are not specified
-             $this->output->set_status_header(412)->_display("Queries not specified");
+            return $this->output->set_status_header(412)->_display("Queries not specified");
         }
     }
 
