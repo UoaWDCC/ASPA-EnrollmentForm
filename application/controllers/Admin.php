@@ -40,6 +40,18 @@ class Admin extends ASPA_Controller
                 return $this->output->set_status_header(404, "error")->_display("Attendee not found");
                 exit();
             }
+            else if($isEmail && $isUpi){
+                //This is check if both queries were inputted
+                //verify if they are on the same row number, if not return an error
+                $emailCell = $this->GoogleSheets_Model->getCellCoordinate($email, 'B');
+                $upiCell = $this->GoogleSheets_Model->getUpiCellCoordinate($upi, 'E');
+                list(, $emailRow) = $this->GoogleSheets_Model->convertCoordinateToArray($emailCell);
+                list(, $upiRow) = $this->GoogleSheets_Model->convertCoordinateToArray($upiCell);
+                if($emailRow != $upiRow){
+                    return $this->output->set_status_header(404, "error")->_display("Attendee not the same row");
+                    exit();
+                }
+            }
 
             //If email is only found, find the cell that contains email
             //If upi is only found, find the cell that contains upi
@@ -50,10 +62,8 @@ class Admin extends ASPA_Controller
             else{
                 $cell = $this->GoogleSheets_Model->getUpiCellCoordinate($upi, 'E');
                 $isColoured = $this->GoogleSheets_Model->getCellColour($cell);
-
             }
-
-            
+   
             if (!isset($cell))
             {
                 show_error("Something went wrong, your email was not found in the ASPA member list. Error Code: 002","500");
