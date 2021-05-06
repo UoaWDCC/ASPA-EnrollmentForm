@@ -26,23 +26,23 @@ class Admin extends ASPA_Controller
         $isEmail = $this->Verification_Model->isEmailOnSheet($email, REGISTRATION_SPREADSHEET_ID, $this->eventData['gsheet_name']);
         $isUpi = $this->Verification_Model->isUpiOnSheet($upi, REGISTRATION_SPREADSHEET_ID, $this->eventData['gsheet_name']);
         
-        if($email || $upi ){
+        if($email || $upi ) {
             //if email or upi is not found in the google sheets.
-            if(!$isEmail && !$isUpi){
+            if(!$isEmail && !$isUpi) {
                 $this->output->set_status_header(404, "error")->_display("Attendee not found");
                 exit();
             }
-            if($isEmail && !$isUpi){
+            
+            if($isEmail && !$isUpi) { 
                 $cell = $this->GoogleSheets_Model->getCellCoordinate($email, 'B');
                 $isColoured = $this->GoogleSheets_Model->getCellColour($cell);
             }
-            else{
+            else {
                 $cell = $this->GoogleSheets_Model->getUpiCellCoordinate($upi, 'E');
                 $isColoured = $this->GoogleSheets_Model->getCellColour($cell);
 
             }
 
-            
             if (!isset($cell))
             {
                 show_error("Something went wrong, your email was not found in the ASPA member list. Error Code: 002","500");
@@ -57,7 +57,6 @@ class Admin extends ASPA_Controller
                 $this->GoogleSheets_Model->highlightRow($row ,[0.968, 0.670, 0.886]);
             }
             // $this->GoogleSheets_Model->highlightRow($row ,[0.968, 0.670, 0.886]);
-
             $this->output->set_status_header(200)->_display("Successfully, marked attendee as paid");
         }
         else{
