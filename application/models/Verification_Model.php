@@ -63,6 +63,32 @@ class Verification_Model extends CI_Model {
         return in_array($upi, $this->addresses);
     }
 
+    /**
+     * Check if User's email address and upi are on the same row
+     * 
+     * @param $email
+     * @param $upi
+     * 
+     * @return bool
+     */
+    function isUserSameRow($email, $upi)
+    {
+        //Gets the cell range value by finding an email and upi match
+        $emailCell = $this->GoogleSheets_Model->getCellCoordinate($email, 'B');
+        $upiCell = $this->GoogleSheets_Model->getCellCoordinate($upi, 'E');
+
+        //get email and upi's row number
+        list(, $emailRow) = $this->GoogleSheets_Model->convertCoordinateToArray($emailCell);
+        list(, $upiRow) = $this->GoogleSheets_Model->convertCoordinateToArray($upiCell);
+
+        //if both row numbers do not match, return false
+        if($emailRow != $upiRow){
+            return false;
+        } else {
+            return true;
+        }
+    }
+
 
     /**
      * Checks if a user has a paid membership on the membership spreadsheet.

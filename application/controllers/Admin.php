@@ -41,26 +41,22 @@ class Admin extends ASPA_Controller
                 exit();
             }
             else if($isEmail && $isUpi){
-                //This is check if both queries were inputted
+                //This is to check if both queries were inputted
                 //verify if they are on the same row number, if not return an error
-                $emailCell = $this->GoogleSheets_Model->getCellCoordinate($email, 'B');
-                $upiCell = $this->GoogleSheets_Model->getUpiCellCoordinate($upi, 'E');
-                list(, $emailRow) = $this->GoogleSheets_Model->convertCoordinateToArray($emailCell);
-                list(, $upiRow) = $this->GoogleSheets_Model->convertCoordinateToArray($upiCell);
-                if($emailRow != $upiRow){
+                $isSameRow = $this->Verification_Model->isUserSameRow($email, $upi);
+                if(!$isSameRow){
                     return $this->output->set_status_header(404, "error")->_display("Attendee not the same row");
                     exit();
                 }
             }
 
-            //If email is only found, find the cell that contains email
-            //If upi is only found, find the cell that contains upi
             if($isEmail && !$isUpi){
+                //If email is only found, find the cell that contains email
                 $cell = $this->GoogleSheets_Model->getCellCoordinate($email, 'B');
                 $isColoured = $this->GoogleSheets_Model->getCellColour($cell);
-            }
-            else{
-                $cell = $this->GoogleSheets_Model->getUpiCellCoordinate($upi, 'E');
+            } else {
+                //If upi is only found, find the cell that contains upi
+                $cell = $this->GoogleSheets_Model->getCellCoordinate($upi, 'E');
                 $isColoured = $this->GoogleSheets_Model->getCellColour($cell);
             }
    
@@ -81,8 +77,7 @@ class Admin extends ASPA_Controller
 
             //return HTTP status code 200, to signify that it has successfully marked attendee as paid
             return $this->output->set_status_header(200)->_display("Successfully, marked attendee as paid");
-        }
-        else{
+        } else {
             //return HTTP status code 412, to signify that both queries are not specified
             return $this->output->set_status_header(412)->_display("Queries not specified");
         }
