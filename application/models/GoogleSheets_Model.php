@@ -206,6 +206,25 @@ class GoogleSheets_Model extends CI_Model {
         return NULL;
     }
 
+    public function getUpiCellCoordinate($check_str, $column)
+    {
+        $check_str = strtolower($check_str);
+
+        $range = [$column . '2', $column . ($this->getNumberOfRecords() + 1)];
+        $upi;
+        $upi = $this->getCellContents($range[0], $range[1]);
+
+        // Will return the cell for the first instance of email
+        for ($i = 0; $i < sizeof($upi); $i++) {
+            if (strtolower($upi[$i][0]) == $check_str) {
+                // echo $emails_arr[$i][0] . ' = ' . $emails_str . "<br />";
+                return $column . ($i + 2);
+            }
+        }
+        // If email does not exist in this sheet
+        return NULL;
+    }
+
     /**
      * Updates the cell for payment method to be of $paymentType. This is called
      * in EnrollmentForm.php when the email is found in the google sheets.

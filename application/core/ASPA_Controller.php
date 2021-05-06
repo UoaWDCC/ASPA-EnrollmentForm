@@ -40,6 +40,13 @@ class ASPA_Controller extends CI_Controller
         exit;
     }
 
+    /**
+     * This function handles the loading of event 
+     * data from google sheets
+     * 
+     * @return string|null
+     */
+
     private function loadEventData() {
         $eventTemp;
         // Load GSheets Model as this is used for everything
