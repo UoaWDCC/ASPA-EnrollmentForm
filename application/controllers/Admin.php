@@ -56,7 +56,7 @@ class Admin extends ASPA_Controller
                 // Highlight this row since it is paid, placed inside this code block to prevent unnecessary calls
                 $this->GoogleSheets_Model->highlightRow($row ,[0.968, 0.670, 0.886]);
             }
-            // $this->GoogleSheets_Model->highlightRow($row ,[0.968, 0.670, 0.886]);
+
             $this->output->set_status_header(200)->_display("Successfully, marked attendee as paid");
         }
         else{
