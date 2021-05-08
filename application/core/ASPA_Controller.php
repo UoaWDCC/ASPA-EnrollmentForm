@@ -3,10 +3,17 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 // Modified base CI controller 
 // So that all controllers can inherit common controller functions
+
+/**
+ * Class ASPA_Controller
+ *
+ * @property GoogleSheets_Model $GoogleSheets_Model
+ */
 class ASPA_Controller extends CI_Controller
 {
+
     /**
-     * @var mixed All the information for this event (retrieved from google sheet).
+     * @var array All the information for this event (retrieved from google sheet).
      */
     protected $eventData;
 
@@ -41,18 +48,16 @@ class ASPA_Controller extends CI_Controller
     }
 
     /**
-     * This function handles the loading of event 
-     * data from google sheets
+     * This function handles the loading of event data from google sheets.
      * 
-     * @return string|null
+     * @return array
      */
-
     private function loadEventData() {
-        $eventTemp;
-        // Load GSheets Model as this is used for everything
         $this->load->model("GoogleSheets_Model");
 
-        // // Get event details from spreadsheet from range A2 to size of spreadsheet
+        $eventTemp = [];
+
+        // Get event details from spreadsheet from range A2 to size of spreadsheet
         $this->GoogleSheets_Model->setCurrentSheetName("CurrentEventDetails");
         $data = $this->GoogleSheets_Model->getCellContents('A2', 'C' . ($this->GoogleSheets_Model->getNumberOfRecords() + 2));
 
