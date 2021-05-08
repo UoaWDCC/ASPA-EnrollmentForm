@@ -191,15 +191,15 @@ class GoogleSheets_Model extends CI_Model {
     {
         $check_str = strtolower($check_str);
 
-        $range = [$column . '2', $column . ($this->getNumberOfRecords() + 1)];
-        $emails_arr = $this->getCellContents($range[0], $range[1]);
+        // This will return an array of values in the column we are checking in
+        $columnCells = $this->getCellContents($column . '2', $column . ($this->getNumberOfRecords() + 1));
 
         // Will return the cell for the first instance of email
-        for ($i = 0; $i < sizeof($emails_arr); $i++) {
-            for($j = 0; $j < sizeof($emails_arr[$i]); $j++){ //to prevent undefined offset error
-                if (strtolower($emails_arr[$i][$j]) === $check_str) {
-                    // return  $upi_arr[$i][$j] . ' = ' . $check_str . "<br />";
-                     return $column . ($i + 2); //this will return the column number
+        for ($i = 0; $i < sizeof($columnCells); $i++) {
+            // If there is no content in a cell, the cell will have a length of 0.
+            if (sizeof($columnCells[$i]) > 0) {
+                if (strtolower($columnCells[$i][0]) === $check_str) {
+                    return $column . ($i + 2);
                 }
             }
         }
