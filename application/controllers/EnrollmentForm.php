@@ -14,7 +14,6 @@ require ('vendor/autoload.php');
 class EnrollmentForm extends ASPA_Controller
 {
 
-
     /**
      * EnrollmentForm constructor that runs every time before the web page loads.
      */
