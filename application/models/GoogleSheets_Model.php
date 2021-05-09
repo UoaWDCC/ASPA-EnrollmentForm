@@ -118,18 +118,18 @@ class GoogleSheets_Model extends CI_Model {
     public function markAsPresent($eventName, $email = null, $upi = null)
     {
         // This should probably be in a try/catch block
-        if (is_null($email) and if_null($upi))
-            throw new Exception("That email/UPI doesn't exist in the spreadsheet.");
+        if (is_null($email) and if_null($upi)) {
+            throw new Exception("You need to enter an email or UPI.");
+            return false;
+        }
 
-        if (is_null($sheetName))
-            throw new Exception("That event doesn't have a spreadsheet associated with it.");
+        if (is_null($eventName)) {
+            throw new Exception("You need to enter a sheet name.");
+            return false;
+        }
         
         //  Navigate to the correct spreadsheet
-        setCurrentSheetName($sheetName);
-
-        //  Get the spreadsheet ID of sheet name param
-        $newSheetId = $this->getSheetId($this->sheetName),
-        setSpreadsheetId($newSheedId);
+        $this->setCurrentSheetName($eventName);
 
         //  If they do exist, find the cell coordinates where you want to place a 'P'
         $emailCell = $this->getCellCoordinate($email, 'B');
@@ -139,17 +139,18 @@ class GoogleSheets_Model extends CI_Model {
         if ($emailCell != NULL)
             list(, $row) = $this->convertCoordinateToArray($emailCell);
         else {
-            $upiCell->getCellCoordinate($upi, 'E');
+            $upiCell = $this->getCellCoordinate($upi, 'B');
+
             if ($upiCell != NULL)
                 list(, $row) = $this->convertCoordinateToArray($upiCell);
             else
-                throw new Exception("That user cannot be found!");
+                return false;
         }
 
         $range = $this->sheetName . "!G" . $row;
-        $value = "P";
+        $values = [["P"]];
 
-        $requestBody = new Google_Service_Sheets_ValueRange(['value' => $value]);
+        $requestBody = new Google_Service_Sheets_ValueRange(['values' => $values]);
 
         // Setting input option to RAW text format (i.e no format parsing)
         // NB: Risk level = MED, may need some parsing for harmful injections into gsheet document
