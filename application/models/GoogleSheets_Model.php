@@ -191,15 +191,15 @@ class GoogleSheets_Model extends CI_Model {
     {
         $check_str = strtolower($check_str);
 
-        $range = [$column . '2', $column . ($this->getNumberOfRecords() + 1)];
-        $emails_arr = $this->getCellContents($range[0], $range[1]);
+        // This will return an array of values in the column we are checking in
+        $columnCells = $this->getCellContents($column . '2', $column . ($this->getNumberOfRecords() + 1));
 
         // Will return the cell for the first instance of email
-        for ($i = 0; $i < sizeof($emails_arr); $i++) {
-            for($j = 0; $j < sizeof($emails_arr[$i]); $j++){ //to prevent undefined offset error
-                if (strtolower($emails_arr[$i][$j]) === $check_str) {
-                    // return  $upi_arr[$i][$j] . ' = ' . $check_str . "<br />";
-                     return $column . ($i + 2); //this will return the column number
+        for ($i = 0; $i < sizeof($columnCells); $i++) {
+            // If there is no content in a cell, the cell will have a length of 0.
+            if (sizeof($columnCells[$i]) > 0) {
+                if (strtolower($columnCells[$i][0]) === $check_str) {
+                    return $column . ($i + 2);
                 }
             }
         }
@@ -208,29 +208,6 @@ class GoogleSheets_Model extends CI_Model {
         return NULL;
     }
 
-    /**
-     * HAVE TO CHECK WITH THE
-     */
-    public function getUpiCellCoordinate($check_str, $column)
-    {
-        $check_str = strtolower($check_str);
-
-        $range = [$column . '2', $column . ($this->getNumberOfRecords() + 1)]; //number of attendees 
-        $upi_arr = $this->getCellContents($range[0], $range[1], 0); //Range of the specified column
-
-        // Will return the cell for the first instance of email
-        for ($i = 0; $i < sizeof($upi_arr); $i++) {
-            for($j = 0; $j < sizeof($upi_arr[$i]); $j++){ //to prevent undefined offset error
-                if (strtolower($upi_arr[$i][$j]) === $check_str) {
-                    // return  $upi_arr[$i][$j] . ' = ' . $check_str . "<br />";
-                     return $column . ($i + 2); //this will return the column number
-                }
-            }
-        }
-
-        // If email does not exist in this sheet
-        return NULL;
-    }
     /**
      * Updates the cell for payment method to be of $paymentType. This is called
      * in EnrollmentForm.php when the email is found in the google sheets.

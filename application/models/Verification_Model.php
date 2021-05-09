@@ -39,36 +39,6 @@ class Verification_Model extends CI_Model {
         return in_array($emailAddress, $this->addresses);
     }
 
-        /**
-     * Checks if an email/user is on the spreadsheet.
-     *
-     * @param $emailAddress
-     * @param $sheetId
-     * @param $sheetName
-     *
-     * @return bool
-     */
-    function isUpiOnSheet($Upi, $sheetId, $sheetName)
-    {
-        // // If format of email is incorrect, return false
-        // if (!Verification_Model::isValidEmail($emailAddress)) {
-        //     return false;
-        // }
-
-        $this->load->model('GoogleSheets_Model');
-        $this->GoogleSheets_Model->setSpreadsheetId($sheetId);
-        $this->GoogleSheets_Model->setCurrentSheetName($sheetName);
-
-        $sheetSize = $this->GoogleSheets_Model->getNumberOfRecords();
-
-        
-        $this->addresses = array_column($this->GoogleSheets_Model->getCellContents('E2', 'E' . ($sheetSize+1)), 0);
-
-        // Return true if email exists in google sheet
-        return in_array($Upi, $this->addresses);
-    }
-
-
     /**
      * Checks if a user has a paid membership on the membership spreadsheet.
      *
