@@ -108,7 +108,7 @@ class GoogleSheets_Model extends CI_Model {
         $result = $this->service->spreadsheets_values->update($this->spreadsheetId, $range, $body, $params);
     }
 
-        /**
+    /**
      * Mark an attendees attendance in the google sheets
      *
      * @param string $eventName The name of the event
@@ -127,14 +127,24 @@ class GoogleSheets_Model extends CI_Model {
         //  Navigate to the correct spreadsheet
         setCurrentSheetName($sheetName);
 
-        // Check if they exist in the spreadsheet
+        //  Get the spreadsheet ID of sheet name param
+        $newSheetId = $this->getSheetId($this->sheetName),
+        setSpreadsheetId($newSheedId);
 
-        //  If they do exist, set their attendance column to attending
+        //  If they do exist, find the cell coordinates where you want to place a 'P'
         $emailCell = $this->getCellCoordinate($email, 'B');
-        list(, $row) = $this->convertCoordinateToArray($emailCell);
 
-        $upiCell->getCellCoordinate($upi, 'E');
-        list(, $row) = $this->convertCoordinateToArray($upiCell);
+        list(, $row) = NULL;
+
+        if ($emailCell != NULL)
+            list(, $row) = $this->convertCoordinateToArray($emailCell);
+        else {
+            $upiCell->getCellCoordinate($upi, 'E');
+            if ($upiCell != NULL)
+                list(, $row) = $this->convertCoordinateToArray($upiCell);
+            else
+                throw new Exception("That user cannot be found!");
+        }
 
         $range = $this->sheetName . "!G" . $row;
         $value = "P";
@@ -144,10 +154,6 @@ class GoogleSheets_Model extends CI_Model {
         // Setting input option to RAW text format (i.e no format parsing)
         // NB: Risk level = MED, may need some parsing for harmful injections into gsheet document
         $params = ['valueInputOption' => 'USER_ENTERED'];
-
-
-        //  Need to get spreadsheet ID of current event
-
 
         // Appends user information to sheet
         $response = $this->service->spreadsheets_values->update($this->spreadsheetId, $range, $requestBody, $params);
