@@ -124,6 +124,35 @@ class GoogleSheets_Model extends CI_Model {
         if (is_null($sheetName))
             throw new Exception("That event doesn't have a spreadsheet associated with it.");
         
+        //  Navigate to the correct spreadsheet
+        setCurrentSheetName($sheetName);
+
+        // Check if they exist in the spreadsheet
+
+        //  If they do exist, set their attendance column to attending
+        $emailCell = $this->getCellCoordinate($email, 'B');
+        list(, $row) = $this->convertCoordinateToArray($emailCell);
+
+        $upiCell->getCellCoordinate($upi, 'E');
+        list(, $row) = $this->convertCoordinateToArray($upiCell);
+
+        $range = $this->sheetName . "!G" . $row;
+        $value = "P";
+
+        $requestBody = new Google_Service_Sheets_ValueRange(['value' => $value]);
+
+        // Setting input option to RAW text format (i.e no format parsing)
+        // NB: Risk level = MED, may need some parsing for harmful injections into gsheet document
+        $params = ['valueInputOption' => 'USER_ENTERED'];
+
+
+        //  Need to get spreadsheet ID of current event
+
+
+        // Appends user information to sheet
+        $response = $this->service->spreadsheets_values->update($this->spreadsheetId, $range, $requestBody, $params);
+
+        return true;
     }
 
     /**
