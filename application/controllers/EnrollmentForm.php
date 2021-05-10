@@ -70,8 +70,7 @@ class EnrollmentForm extends ASPA_Controller
                 $this->create_json('True', '', 'Success');
                 return;
             } else {
-                if ($this->Verification_Model->isEmailOnSheet($emailAddress, MEMBERSHIP_SPREADSHEET_ID,
-                                                              MEMBERSHIP_SHEET_NAME)) {
+                if ($this->Verification_Model->isEmailOnSheet($emailAddress, MEMBERSHIP_SPREADSHEET_ID, MEMBERSHIP_SHEET_NAME)) {
                     $this->create_json('False', '', 'Error: signed up but not paid');
                     return;
                 } else {
@@ -80,8 +79,7 @@ class EnrollmentForm extends ASPA_Controller
                 }
             }
         } else {
-            if ($this->Verification_Model->isEmailOnSheet($emailAddress, MEMBERSHIP_SPREADSHEET_ID,
-                                                          MEMBERSHIP_SHEET_NAME)) {
+            if ($this->Verification_Model->isEmailOnSheet($emailAddress, MEMBERSHIP_SPREADSHEET_ID, MEMBERSHIP_SHEET_NAME)) {
                 $this->create_json('True', '', 'Success');
             } else {
                 $this->create_json('False', '', 'Error: not signed up');
@@ -111,14 +109,12 @@ class EnrollmentForm extends ASPA_Controller
         if (CHECK_MEMBERSHIP_PAYMENT) {
             $paid_member = ($this->Verification_Model->hasUserPaidMembership($data['email']));
             if (!$paid_member) {
-                show_error("Something went wrong, your email was not found in the ASPA member list or haven't paid. Error Code: 002",
-                           "500");
+                show_error("Something went wrong, your email was not found in the ASPA member list or haven't paid. Error Code: 002", "500");
             }
         }
 
         // Only record if the email is not found
-        if (!($this->Verification_Model->isEmailOnSheet($data['email'], REGISTRATION_SPREADSHEET_ID,
-                                                        $this->eventData['gsheet_name']))) {
+        if (!($this->Verification_Model->isEmailOnSheet($data['email'], REGISTRATION_SPREADSHEET_ID, $this->eventData['gsheet_name']))) {
             $this->GoogleSheets_Model->addNewRecord($data['email'], $data['name'], 'Stripe');
         } else {
             // Email is found, so find the cell
@@ -126,8 +122,7 @@ class EnrollmentForm extends ASPA_Controller
             // Get the row of the specific email from google sheets
             $cell = $this->GoogleSheets_Model->getCellCoordinate($data['email'], 'B');
             if (!isset($cell)) {
-                show_error("Something went wrong, your email was not found in the ASPA member list.Error Code: 002",
-                           "500");
+                show_error("Something went wrong, your email was not found in the ASPA member list.Error Code: 002", "500");
             }
 
             // Split up the cell column and row
@@ -164,8 +159,7 @@ class EnrollmentForm extends ASPA_Controller
         $this->load->model('Email_Model');
 
         // Only record if the email is not found
-        if (!($this->Verification_Model->isEmailOnSheet($data['email'], REGISTRATION_SPREADSHEET_ID,
-                                                        $this->eventData['gsheet_name']))) {
+        if (!($this->Verification_Model->isEmailOnSheet($data['email'], REGISTRATION_SPREADSHEET_ID, $this->eventData['gsheet_name']))) {
             $this->GoogleSheets_Model->addNewRecord($data['email'], $data['name'], ucfirst($data['paymentMethod']));
         } else {
             // Email is found, so find the cell then edit the "How would you like your payment" to be of Offline payment
@@ -179,8 +173,7 @@ class EnrollmentForm extends ASPA_Controller
         }
 
         // Send offline confirmation email
-        $this->Email_Model->sendConfirmationEmail($data["name"], $data["email"], $data['paymentMethod'],
-                                                  $this->eventData);
+        $this->Email_Model->sendConfirmationEmail($data["name"], $data["email"], $data['paymentMethod'], $this->eventData);
 
         // Redirect to the page with grey tick
         $this->load->view('PaymentSuccessful.php', array_merge($this->eventData, $data));
@@ -200,8 +193,7 @@ class EnrollmentForm extends ASPA_Controller
 
         // Check if there is a session ID, or else redirect back to index
         if (!$data['session_id']) {
-            show_error("Error occurred during redirection. If your payment was processed correctly, please contact uoa.wdcc@gmail.com. Error Code: 001",
-                       "500");
+            show_error("Error occurred during redirection. If your payment was processed correctly, please contact uoa.wdcc@gmail.com. Error Code: 001", "500");
         }
 
         // Sets boolean to whether payment was made
@@ -215,8 +207,7 @@ class EnrollmentForm extends ASPA_Controller
             // Get the row of the specific email from google sheets
             $cell = $this->GoogleSheets_Model->getCellCoordinate($data['email'], 'B');
             if (!isset($cell)) {
-                show_error("Something went wrong, your email was not found in the ASPA member list. Error Code: 002",
-                           "500");
+                show_error("Something went wrong, your email was not found in the ASPA member list. Error Code: 002", "500");
             }
 
             // Split up the cell column and row
@@ -230,8 +221,7 @@ class EnrollmentForm extends ASPA_Controller
                    * function, as if the user is highlighted, this means that this function has been called already. This is
                    * an important check to prevent sending duplicate emails to users if they refresh the confirmation page.
                    */
-            $alreadyHighlighted = $this->Verification_Model->hasUserPaidEvent($data['email'],
-                                                                              $this->eventData['gsheet_name']);
+            $alreadyHighlighted = $this->Verification_Model->hasUserPaidEvent($data['email'], $this->eventData['gsheet_name']);
             if (!$alreadyHighlighted) {
                 $this->load->model('Email_Model');
                 $this->Email_Model->sendConfirmationEmail($data['name'], $data['email'], "online", $this->eventData);
@@ -243,8 +233,7 @@ class EnrollmentForm extends ASPA_Controller
             // Redirect to the page with green tick
             $this->load->view('PaymentSuccessful.php', array_merge($this->eventData, $data));
         } else {
-            show_error("Something went wrong, your payment wasn't processed correctly. Please contact uoa.wdcc@gmail.com. Error Code: 003",
-                       "500");
+            show_error("Something went wrong, your payment wasn't processed correctly. Please contact uoa.wdcc@gmail.com. Error Code: 003", "500");
         }
     }
 }
