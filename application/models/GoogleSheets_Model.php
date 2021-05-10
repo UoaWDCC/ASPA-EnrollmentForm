@@ -127,6 +127,7 @@ class GoogleSheets_Model extends CI_Model {
 
         //  If they do exist, find the cell coordinates where you want to place a 'P'
         $emailCell = $this->getCellCoordinate($email, 'B');
+        $upiCell = $this->getCellCoordinate($upi, 'E');
 
         // If either $emailCell or $upiCell is defined, then get the row number with priority on email. Otherwise, set $row to null
         list(, $row) = ($emailCell || $upiCell) ? $this->convertCoordinateToArray($emailCell ?? $upiCell) : null;
