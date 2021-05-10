@@ -18,7 +18,7 @@ let proceedPayment = document.getElementById("div-proceedpayment"); // proceed p
 let back4 = document.getElementById("div-back-page4"); // back button from page 4
 
 // get name and email inputs on page 3
-let inputName = document.getElementById("field");
+// let inputName = document.getElementById("field");
 let inputEmail = document.getElementById("field-2");
 
 // get email validation icons/messages on page 3
@@ -50,7 +50,7 @@ let payPoli = document.getElementById("btn-poliay");
 
 // Email Address
 let emailAddress = "";
-let name = "";
+// let name = "";
 let paymentMethod = "";
 
 // ==========================================
@@ -107,7 +107,8 @@ function nextPage() {
 			page2.style.display = "none";
 			page3.style.display = "flex";
 			page4.style.display = "none";
-			setTimeout(() => inputName.focus(), 1000); // autofocus to name field
+			
+			// setTimeout(() => inputName.focus(), 1000); // autofocus to name field
 			break;
 		case 3:
 			page3.classList.remove("page3-appear");
@@ -190,14 +191,14 @@ ok3.onclick = function () {
 	
 	hideAllWarnings();
 	emailAddress = inputEmail.value.trim(); // collect email
-	name = inputName.value.trim(); // collect name
+	// name = inputName.value.trim(); // collect name
 
-	if (name.length === 0) {
-		inputName.style.border = "1px solid red";
-	}
-	else {
-		inputName.style.border = "1px solid #00A22C";
-	}
+	// if (name.length === 0) {
+	// 	inputName.style.border = "1px solid red";
+	// }
+	// else {
+	// 	inputName.style.border = "1px solid #00A22C";
+	// }
 	
 	if (emailAddress.length === 0) {
 		inputEmail.style.border = "1px solid red";
@@ -206,7 +207,7 @@ ok3.onclick = function () {
 		inputEmail.style.border = "1px solid #00A22C";
 	}
 
-	if (name.length === 0 || emailAddress.length === 0) {
+	if (emailAddress.length === 0) {
 		return;
 	}
 

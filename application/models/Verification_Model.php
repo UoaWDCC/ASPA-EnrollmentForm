@@ -1,6 +1,10 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-
+function console_log( $dt ){
+    echo '<script>';
+    echo 'console.log('. json_encode( $dt ) .')';
+    echo '</script>';
+  }
 /**
  * Class Verification_Model
  *
@@ -107,6 +111,47 @@ class Verification_Model extends CI_Model {
         }
     }
 
+
+
+    /**
+     * Get user's full name, UPI and UID on the membership spreadsheet.
+     *
+     * @param string $emailAddress The email of the user.
+     *
+     * @return array [full_name, UPI, UID]
+     */
+    public function getUserInfo($emailAddress)
+    {
+        $this->load->model("GoogleSheets_Model");
+
+        if (!$this->isEmailOnSheet($emailAddress, MEMBERSHIP_SPREADSHEET_ID, MEMBERSHIP_SHEET_NAME)) {
+            return false;
+        }
+
+         // Given that the email exists in the sheet, find its index
+        $emailKey = array_search($emailAddress, $this->addresses);
+
+        // Convert key to google coordinate
+        $nameIndex = 'C' . ($emailKey+2);
+        $upiIndex = 'H' . ($emailKey+2);
+        $uidIndex = 'G' . ($emailKey+2);
+
+
+        // Get user's full name
+        $userFullName = $this->GoogleSheets_Model->getCellContents($nameIndex, $nameIndex)[0][0];
+        console_log($userFullName);
+
+        // Get user's UPI
+        $userUpi = $this->GoogleSheets_Model->getCellContents($upiIndex, $upiIndex)[0][0] == null ? 'N/A' : $this->GoogleSheets_Model->getCellContents($upiIndex, $upiIndex)[0][0];
+        console_log($userUpi);
+
+        // Get user's UID
+        $userUid = $this->GoogleSheets_Model->getCellContents($uidIndex, $uidIndex)[0][0] == null ? 'N/A' : $this->GoogleSheets_Model->getCellContents($uidIndex, $uidIndex)[0][0];
+        console_log([$userFullName, $userUpi, $userUid]);
+
+        return [$userFullName, $userUpi, $userUid];
+
+    }
 
     /*
      * Private functions
