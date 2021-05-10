@@ -64,27 +64,18 @@ class EnrollmentForm extends ASPA_Controller
             return;
         }
 
-        // Check if feature toggle for check membership payment is on
-        if (CHECK_MEMBERSHIP_PAYMENT) {
-            if ($this->Verification_Model->hasUserPaidMembership($emailAddress)) {
-                $this->create_json('True', '', 'Success');
-                return;
-            } else {
-                if ($this->Verification_Model->isEmailOnSheet($emailAddress, MEMBERSHIP_SPREADSHEET_ID, MEMBERSHIP_SHEET_NAME)) {
-                    $this->create_json('False', '', 'Error: signed up but not paid');
-                    return;
-                } else {
-                    $this->create_json('False', '', 'Error: not signed up');
-                    return;
-                }
-            }
-        } else {
-            if ($this->Verification_Model->isEmailOnSheet($emailAddress, MEMBERSHIP_SPREADSHEET_ID, MEMBERSHIP_SHEET_NAME)) {
-                $this->create_json('True', '', 'Success');
-            } else {
-                $this->create_json('False', '', 'Error: not signed up');
-            }
+        // If payment method is not checked, return true
+        if (!CHECK_MEMBERSHIP_PAYMENT) {
+            $this->create_json('True', '', "Success");
+            return;
         }
+
+        if ($this->Verification_Model->hasUserPaidMembership($emailAddress)) {
+            $this->create_json('True', '', 'Success');
+            return;
+        }
+
+        $this->create_json("False", "Error: not paid for membership");
     }
 
     /**
@@ -217,10 +208,10 @@ class EnrollmentForm extends ASPA_Controller
             $data['name'] = $this->GoogleSheets_Model->getCellContents(('C' . $row), ('C' . $row))[0][0];
 
             /*
-                   * Send confirmation email if this is the first time the user has called the stripePaymentSuccessful()
-                   * function, as if the user is highlighted, this means that this function has been called already. This is
-                   * an important check to prevent sending duplicate emails to users if they refresh the confirmation page.
-                   */
+             * Send confirmation email if this is the first time the user has called the stripePaymentSuccessful()
+             * function, as if the user is highlighted, this means that this function has been called already. This is
+             * an important check to prevent sending duplicate emails to users if they refresh the confirmation page.
+             */
             $alreadyHighlighted = $this->Verification_Model->hasUserPaidEvent($data['email'], $this->eventData['gsheet_name']);
             if (!$alreadyHighlighted) {
                 $this->load->model('Email_Model');
