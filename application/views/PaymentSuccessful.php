@@ -3,7 +3,6 @@
 <html>
 
     <head>
-
         <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js" type="text/javascript"></script>
         <script type="text/javascript">WebFont.load({  google: {    families: ["Droid Sans:400,700","PT Serif:400,400italic,700,700italic"]  }});</script>
 
@@ -21,9 +20,15 @@
 
     <body>
         <div class="centre-page">
-
             <br />
-            <image id="green-tick" src="assets/images/Green-Confirmation-Tick.jfif"<?php echo $has_paid ? "" : "style='filter: grayscale(1); -webkit-filter: grayscale(1)'"; ?> />
+            <br />
+            <br />
+            <a href="/">
+                <img align="left" alt="Home Page Button" alt="Home Page" src="assets/images/iconmonstr-home-grey.svg" width="30px">
+            </a>
+            <br />
+
+            <img id="green-tick" src="assets/images/Green-Confirmation-Tick.jfif"<?php echo $has_paid ? "" : "style='filter: grayscale(1); -webkit-filter: grayscale(1)'"; ?> />
 
             <h1>
                 <?php echo $has_paid ? "Paid!" : "Submitted!"; ?>
