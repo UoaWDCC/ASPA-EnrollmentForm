@@ -51,30 +51,26 @@ class EnrollmentForm extends ASPA_Controller
         log_message('debug', "-- validate function called");
         $emailAddress = $this->input->post('emailAddress');
 
-        if (!isset($emailAddress)) {
-            $this->create_json('False', '', 'Error: Email not specified');
-        }
-
         $this->load->model('Verification_Model');
 
-        // Has user paid for the event already?
+        // If the email does not exist or is not on the membership spreadsheet, return false
+        if (!isset($emailAddress) || $this->Verification_Model->isEmailOnSheet($emailAddress, MEMBERSHIP_SPREADSHEET_ID, MEMBERSHIP_SHEET_NAME)) {
+            $this->create_json('False', '', 'Error: Email incorrect or not found on sheet');
+        }
+
+        // If the user has already paid for the event, return false
         if ($this->Verification_Model->hasUserPaidEvent($emailAddress, $this->eventData['gsheet_name'])) {
             $this->create_json('False', '', 'Error: already paid for event');
             return;
         }
 
-        // If payment method is not checked, return true
-        if (!CHECK_MEMBERSHIP_PAYMENT) {
-            $this->create_json('True', '', "Success");
+        // If membership payment status is checked, and user's membership fee has not been paid, return false
+        if (CHECK_MEMBERSHIP_PAYMENT && !$this->Verification_Model->hasUserPaidMembership($emailAddress)) {
+            $this->create_json("False", "Error: signed up but not paid");
             return;
         }
 
-        if ($this->Verification_Model->hasUserPaidMembership($emailAddress)) {
-            $this->create_json('True', '', 'Success');
-            return;
-        }
-
-        $this->create_json("False", "Error: not paid for membership");
+        $this->create_json('True', '', 'Success');
     }
 
     /**

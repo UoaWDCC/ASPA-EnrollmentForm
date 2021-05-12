@@ -19,6 +19,7 @@ class Verification_Model extends CI_Model {
      *
      * @return bool
      */
+    // TODO: Make this more specific to the membership spreadsheet
     function isEmailOnSheet($emailAddress, $sheetId, $sheetName)
     {
         // If format of email is incorrect, return false
@@ -62,11 +63,10 @@ class Verification_Model extends CI_Model {
         $colourIs = $this->GoogleSheets_Model->getCellColour($emailIndex);
         
         // Uncoloured cells return as 000000 (or sometimes ffffff because google sheets is extra like that)
-        if ($colourIs == '000000' || $colourIs == 'ffffff') {
-            return false;
-        } else {
-            return true;
-        }
+        // Members who have paid their membership fee are highlighted in a different colour from the default white
+        // TODO: Correct this assumption and make this more reliable
+        $hasPaidMembership = $colourIs != '000000' && $colourIs != 'ffffff';
+        return $hasPaidMembership;
     }
 
     /**
