@@ -54,7 +54,7 @@ class EnrollmentForm extends ASPA_Controller
         $this->load->model('Verification_Model');
 
         // If the email does not exist or is not on the membership spreadsheet, return false
-        if (!isset($emailAddress) || $this->Verification_Model->isEmailOnSheet($emailAddress, MEMBERSHIP_SPREADSHEET_ID, MEMBERSHIP_SHEET_NAME)) {
+        if (!isset($emailAddress) || !$this->Verification_Model->isEmailOnSheet($emailAddress, MEMBERSHIP_SPREADSHEET_ID, MEMBERSHIP_SHEET_NAME)) {
             $this->create_json('False', '', 'Error: Email incorrect or not found on sheet');
         }
 
