@@ -55,6 +55,10 @@ class Admin extends ASPA_Controller
         }
     }
 
+    public function auth() {
+
+    }
+
     public function paymentStatus() {
         // TODO: ASPA-14
     }
