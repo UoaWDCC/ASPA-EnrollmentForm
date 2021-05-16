@@ -83,7 +83,6 @@ class EnrollmentForm extends ASPA_Controller
         $this->load->model('Verification_Model');
 
         // Receive data from form, method=POST
-        // $data['name'] = $this->input->post('name');
         $data['email'] = $this->input->post('email');
         [$data['name'], $data['upi'], $data['uid']] = $this->Verification_Model->getUserInfo($data["email"]);
 
@@ -136,7 +135,6 @@ class EnrollmentForm extends ASPA_Controller
         $this->load->model('Email_Model');
         log_message('debug', "-- makeOfflinePayment function called");
         $data['has_paid'] = false;
-        // $data['name'] = $this->input->post("name");
         $data["email"] = $this->input->post("email");
         $data['paymentMethod'] = $this->input->post("paymentMethod");
         [$data['name'], $data['upi'], $data['uid']] = $this->Verification_Model->getUserInfo($data["email"]);

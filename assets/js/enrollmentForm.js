@@ -18,7 +18,6 @@ let proceedPayment = document.getElementById("div-proceedpayment"); // proceed p
 let back4 = document.getElementById("div-back-page4"); // back button from page 4
 
 // get name and email inputs on page 3
-// let inputName = document.getElementById("field");
 let inputEmail = document.getElementById("field-2");
 
 // get email validation icons/messages on page 3
@@ -191,14 +190,6 @@ ok3.onclick = function () {
 	
 	hideAllWarnings();
 	emailAddress = inputEmail.value.trim(); // collect email
-	// name = inputName.value.trim(); // collect name
-
-	// if (name.length === 0) {
-	// 	inputName.style.border = "1px solid red";
-	// }
-	// else {
-	// 	inputName.style.border = "1px solid #00A22C";
-	// }
 	
 	if (emailAddress.length === 0) {
 		inputEmail.style.border = "1px solid red";
@@ -207,9 +198,6 @@ ok3.onclick = function () {
 	else {
 		inputEmail.style.border = "1px solid #00A22C";
 	}
-
-	// if (emailAddress.length === 0) {
-	// }
 
 	// Disabling the ok button to prevent user from clicking on it multiple times
 	document.getElementById("ok3").classList.add("btn-disabled"); // stopping the ok button from increasing in size when hovered over
