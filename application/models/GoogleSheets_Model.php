@@ -111,6 +111,50 @@ class GoogleSheets_Model extends CI_Model {
     }
 
     /**
+     * Mark an attendees attendance in the google sheets
+     *
+     * @param string $eventName The name of the event
+     * @param string $email The email of the user to record.
+     * @param string @upi The upi of the user if it exists
+     */
+    public function markAsPresent($eventName, $email = null, $upi = null)
+    {
+        // This should probably be in a try/catch block
+        if (!$email && !$upi) {
+            throw new Exception("You need to enter an email or UPI.");
+        }
+        
+        //  Navigate to the correct spreadsheet
+        $this->setCurrentSheetName($eventName);
+
+        //  If they do exist, find the cell coordinates where you want to place a 'P'
+        $emailCell = $this->getCellCoordinate($email, 'B');
+        $upiCell = $this->getCellCoordinate($upi, 'E');
+
+        // If either $emailCell or $upiCell is defined, then get the row number with priority on email. Otherwise, set $row to null
+        list(, $row) = ($emailCell || $upiCell) ? $this->convertCoordinateToArray($emailCell ?? $upiCell) : null;
+
+        // If row is not defined (i.e. no user row was found), return false
+        if (!$row) {
+            return false;
+        }
+
+        $range = $this->sheetName . "!G" . $row;
+        $values = [["P"]];
+
+        $requestBody = new Google_Service_Sheets_ValueRange(['values' => $values]);
+
+        // Setting input option to RAW text format (i.e no format parsing)
+        // NB: Risk level = MED, may need some parsing for harmful injections into gsheet document
+        $params = ['valueInputOption' => 'USER_ENTERED'];
+
+        // Appends user information to sheet
+        $response = $this->service->spreadsheets_values->update($this->spreadsheetId, $range, $requestBody, $params);
+
+        return true;
+    }
+
+    /**
      * Returns the number of records in the registration sheet.
      *
      * @return int Number of records.
@@ -193,14 +237,16 @@ class GoogleSheets_Model extends CI_Model {
     {
         $check_str = strtolower($check_str);
 
-        $range = [$column . '2', $column . ($this->getNumberOfRecords() + 1)];
-        $emails_arr = $this->getCellContents($range[0], $range[1]);
+        // This will return an array of values in the column we are checking in
+        $columnCells = $this->getCellContents($column . '2', $column . ($this->getNumberOfRecords() + 1));
 
         // Will return the cell for the first instance of email
-        for ($i = 0; $i < sizeof($emails_arr); $i++) {
-            if (strtolower($emails_arr[$i][0]) == $check_str) {
-                // echo $emails_arr[$i][0] . ' = ' . $emails_str . "<br />";
-                return $column . ($i + 2);
+        for ($i = 0; $i < sizeof($columnCells); $i++) {
+            // If there is no content in a cell, the cell will have a length of 0.
+            if (sizeof($columnCells[$i]) > 0) {
+                if (strtolower($columnCells[$i][0]) === $check_str) {
+                    return $column . ($i + 2);
+                }
             }
         }
 

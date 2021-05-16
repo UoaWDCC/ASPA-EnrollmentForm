@@ -1,6 +1,6 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
-require ('vendor/autoload.php');
+defined('BASEPATH') or exit('No direct script access allowed');
+require('vendor/autoload.php');
 
 /**
  * Class EnrollmentForm
@@ -15,103 +15,63 @@ class EnrollmentForm extends ASPA_Controller
 {
 
     /**
-     * @var mixed All the information for this event (retrieved from google sheet).
-     */
-    private $eventData;
-
-
-    /**
      * EnrollmentForm constructor that runs every time before the web page loads.
      */
-	function __construct() {
+    function __construct()
+    {
         parent::__construct();
 
         log_message('debug', "=====New Controller Function Initialized====");
-        log_message('debug', "-- from IP address: ". $this->input->ip_address());
-
-        // Load GSheets Model as this is used for everything
-        $this->load->model("GoogleSheets_Model");
-
-        // Get event details from spreadsheet from range A2 to size of spreadsheet
-        $this->GoogleSheets_Model->setCurrentSheetName("CurrentEventDetails");
-        $data = $this->GoogleSheets_Model->getCellContents('A2', 'C' . ($this->GoogleSheets_Model->getNumberOfRecords() + 2));
-
-        // Important variables we care about
-        $elements = ['time', 'date', 'location', 'title', 'tagline', 'price', 'acc_num', 'desc', 'gsheet_name', 'form_enabled'];
-
-        // If the data from spreadsheet contains event details we are looking for, set them.
-        for ($i = 0; $i < sizeof($data); $i++) {
-            if (in_array($data[$i][0], $elements)) {
-                $this->eventData[$data[$i][0]] = $data[$i][2];
-            }
-        }
-
-        if ($this->eventData['gsheet_name']) {
-            $this->GoogleSheets_Model->setCurrentSheetName($this->eventData['gsheet_name']);
-        } else {
-            // disable form if no event sheet is found.
-            $this->eventData["form_enabled"] = False;
-        }
-	}
+        log_message('debug', "-- from IP address: " . $this->input->ip_address());
+    }
 
     /**
      * The "home" page.
      */
-	public function index()	{
+    public function index()
+    {
         log_message('debug', "-- Index Function called");
         if (filter_var($this->eventData["form_enabled"], FILTER_VALIDATE_BOOLEAN)) {
             $this->load->view('EnrollmentForm', $this->eventData);
         } else {
-            // TODO: Load a disabled view.
-            echo "This ASPA form is currently disabled.";
+            $this->load->view('FormDisabled');
         }
-	}
+    }
 
-	/**
+    /**
      * POST request to validate an email.
      *
-	 * Checks the following:
-	 *  - Email is a valid format
-	 *  - Email is on the ASPA membership spreadsheet
+     * Checks the following:
+     *  - Email is a valid format
+     *  - Email is on the ASPA membership spreadsheet
      *  - Email is not already a paid event member (to prevent duplicate payments)
-	 */
-	public function validate()
+     */
+    public function validate()
     {
         log_message('debug', "-- validate function called");
         $emailAddress = $this->input->post('emailAddress');
 
-        if(!isset($emailAddress)) {
-            $this->create_json('False', '', 'Error: Email not specified');
-        }
-
         $this->load->model('Verification_Model');
 
-        // Has user paid for the event already?
+        // If the email does not exist or is not on the membership spreadsheet, return false
+        if (!isset($emailAddress) || !$this->Verification_Model->isEmailOnSheet($emailAddress, MEMBERSHIP_SPREADSHEET_ID, MEMBERSHIP_SHEET_NAME)) {
+            $this->create_json('False', '', 'Error: Email incorrect or not found on sheet');
+        }
+
+        // If the user has already paid for the event, return false
         if ($this->Verification_Model->hasUserPaidEvent($emailAddress, $this->eventData['gsheet_name'])) {
             $this->create_json('False', '', 'Error: already paid for event');
             return;
         }
 
-        // Check if feature toggle for check membership payment is on
-        if (CHECK_MEMBERSHIP_PAYMENT) {
-            if ($this->Verification_Model->hasUserPaidMembership($emailAddress)) {
-                $this->create_json('True', '', 'Success');
-                return;
-            } else if ($this->Verification_Model->isEmailOnSheet($emailAddress, MEMBERSHIP_SPREADSHEET_ID, MEMBERSHIP_SHEET_NAME)){
-                $this->create_json('False', '', 'Error: signed up but not paid');
-                return;
-            } else {
-                $this->create_json('False', '', 'Error: not signed up');
-                return;
-            }
-        } else {
-            if ($this->Verification_Model->isEmailOnSheet($emailAddress, MEMBERSHIP_SPREADSHEET_ID, MEMBERSHIP_SHEET_NAME)){
-                $this->create_json('True', '', 'Success');
-            } else {
-                $this->create_json('False', '', 'Error: not signed up');
-            }
+        // If membership payment status is checked, and user's membership fee has not been paid, return false
+        if (CHECK_MEMBERSHIP_PAYMENT && !$this->Verification_Model->hasUserPaidMembership($emailAddress)) {
+            $this->create_json("False", "Error: signed up but not paid");
+            return;
         }
-	}
+
+        $this->create_json('True', '', 'Success');
+    }
 
     /**
      * When the stripe payment method is selected.
@@ -128,16 +88,15 @@ class EnrollmentForm extends ASPA_Controller
         [$data['name'], $data['upi'], $data['uid']] = $this->Verification_Model->getUserInfo($data["email"]);
 
         // Stopping direct access to this method
-        if ( !isset($data['name']) || !isset($data['email']) )
-        {
-            show_error("Sorry, this page you are requesting is either not found or you don't have permission to access this page. Error Code:001","404");
+        if (!isset($data['name']) || !isset($data['email'])) {
+            show_error("Sorry, this page you are requesting is either not found or you don't have permission to access this page. Error Code:001",
+                       "404");
         }
 
         if (CHECK_MEMBERSHIP_PAYMENT) {
             $paid_member = ($this->Verification_Model->hasUserPaidMembership($data['email']));
-            if (!$paid_member)
-            {
-                show_error("Something went wrong, your email was not found in the ASPA member list or haven't paid. Error Code: 002","500");
+            if (!$paid_member) {
+                show_error("Something went wrong, your email was not found in the ASPA member list or haven't paid. Error Code: 002", "500");
             }
         }
 
@@ -149,9 +108,8 @@ class EnrollmentForm extends ASPA_Controller
             // Then edit the "How would you like your payment" to be of Stripe payment
             // Get the row of the specific email from google sheets
             $cell = $this->GoogleSheets_Model->getCellCoordinate($data['email'], 'B');
-            if (!isset($cell))
-            {
-                show_error("Something went wrong, your email was not found in the ASPA member list.Error Code: 002","500");
+            if (!isset($cell)) {
+                show_error("Something went wrong, your email was not found in the ASPA member list.Error Code: 002", "500");
             }
 
             // Split up the cell column and row
@@ -184,7 +142,7 @@ class EnrollmentForm extends ASPA_Controller
         [$data['name'], $data['upi'], $data['uid']] = $this->Verification_Model->getUserInfo($data["email"]);
 
         if (!isset($data['name']) || !isset($data["email"]) || !isset($data['paymentMethod'])) {
-            show_error("Something went wrong. Please contact uoa.wdcc@gmail.com. Error Code: 001","500");
+            show_error("Something went wrong. Please contact uoa.wdcc@gmail.com. Error Code: 001", "500");
         }
 
         // Only record if the email is not found
@@ -222,7 +180,7 @@ class EnrollmentForm extends ASPA_Controller
 
         // Check if there is a session ID, or else redirect back to index
         if (!$data['session_id']) {
-            show_error("Error occurred during redirection. If your payment was processed correctly, please contact uoa.wdcc@gmail.com. Error Code: 001","500");
+            show_error("Error occurred during redirection. If your payment was processed correctly, please contact uoa.wdcc@gmail.com. Error Code: 001", "500");
         }
 
         // Sets boolean to whether payment was made
@@ -235,9 +193,8 @@ class EnrollmentForm extends ASPA_Controller
             // HighLight the row (get the user's email)
             // Get the row of the specific email from google sheets
             $cell = $this->GoogleSheets_Model->getCellCoordinate($data['email'], 'B');
-            if (!isset($cell))
-            {
-                show_error("Something went wrong, your email was not found in the ASPA member list. Error Code: 002","500");
+            if (!isset($cell)) {
+                show_error("Something went wrong, your email was not found in the ASPA member list. Error Code: 002", "500");
             }
 
             // Split up the cell column and row
@@ -257,14 +214,13 @@ class EnrollmentForm extends ASPA_Controller
                 $this->Email_Model->sendConfirmationEmail($data['name'], $data['email'], "online", $this->eventData);
 
                 // Highlight this row since it is paid, placed inside this code block to prevent unnecessary calls
-                $this->GoogleSheets_Model->highlightRow($row ,[0.69803923, 0.8980392, 0.69803923]);
+                $this->GoogleSheets_Model->highlightRow($row, [0.69803923, 0.8980392, 0.69803923]);
             }
 
             // Redirect to the page with green tick
             $this->load->view('PaymentSuccessful.php', array_merge($this->eventData, $data));
         } else {
-            show_error("Something went wrong, your payment wasn't processed correctly. Please contact uoa.wdcc@gmail.com. Error Code: 003","500");
+            show_error("Something went wrong, your payment wasn't processed correctly. Please contact uoa.wdcc@gmail.com. Error Code: 003", "500");
         }
     }
-
 }
