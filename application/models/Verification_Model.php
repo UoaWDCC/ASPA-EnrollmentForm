@@ -1,10 +1,6 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-function console_log( $dt ){
-    echo '<script>';
-    echo 'console.log('. json_encode( $dt ) .')';
-    echo '</script>';
-  }
+
 /**
  * Class Verification_Model
  *

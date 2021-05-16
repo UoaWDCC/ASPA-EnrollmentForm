@@ -88,6 +88,8 @@ class GoogleSheets_Model extends CI_Model {
      *
      * @param string $email The email of the user to record.
      * @param string $fullName The full name of the user.
+     * @param string @userUpi The UPI of the user. 
+     * @param string @userUid the ID number of the user. 
      * @param string $paymentMethod The type of payment the user is selecting.
      */
     public function addNewRecord($email, $fullName, $userUpi, $userUid, $paymentMethod)
