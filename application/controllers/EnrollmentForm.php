@@ -187,10 +187,6 @@ class EnrollmentForm extends ASPA_Controller
             show_error("Something went wrong. Please contact uoa.wdcc@gmail.com. Error Code: 001","500");
         }
 
-       
-
-        // $data['upi'] = $this->Verification_Model->getUserInfo($data["email"]);
-        // console_log( $data['upi'] );
         // Only record if the email is not found
         if (!($this->Verification_Model->isEmailOnSheet($data['email'], REGISTRATION_SPREADSHEET_ID, $this->eventData['gsheet_name']))) {
             $this->GoogleSheets_Model->addNewRecord($data['email'], $data['name'], $data['upi'], $data['uid'], ucfirst($data['paymentMethod']));
