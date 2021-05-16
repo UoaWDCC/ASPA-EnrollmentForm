@@ -135,15 +135,12 @@ class Verification_Model extends CI_Model {
 
         // Get user's full name
         $userFullName = $this->GoogleSheets_Model->getCellContents($nameIndex, $nameIndex)[0][0];
-        console_log($userFullName);
 
         // Get user's UPI
         $userUpi = $this->GoogleSheets_Model->getCellContents($upiIndex, $upiIndex)[0][0] == null ? 'N/A' : $this->GoogleSheets_Model->getCellContents($upiIndex, $upiIndex)[0][0];
-        console_log($userUpi);
 
         // Get user's UID
         $userUid = $this->GoogleSheets_Model->getCellContents($uidIndex, $uidIndex)[0][0] == null ? 'N/A' : $this->GoogleSheets_Model->getCellContents($uidIndex, $uidIndex)[0][0];
-        console_log([$userFullName, $userUpi, $userUid]);
 
         return [$userFullName, $userUpi, $userUid];
 
