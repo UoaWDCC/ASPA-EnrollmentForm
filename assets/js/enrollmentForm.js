@@ -108,7 +108,7 @@ function nextPage() {
 			page3.style.display = "flex";
 			page4.style.display = "none";
 			
-			// setTimeout(() => inputName.focus(), 1000); // autofocus to name field
+			setTimeout(() => inputEmail.focus(), 1000); // autofocus to name field
 			break;
 		case 3:
 			page3.classList.remove("page3-appear");
@@ -202,14 +202,14 @@ ok3.onclick = function () {
 	
 	if (emailAddress.length === 0) {
 		inputEmail.style.border = "1px solid red";
+		return;
 	}
 	else {
 		inputEmail.style.border = "1px solid #00A22C";
 	}
 
-	if (emailAddress.length === 0) {
-		return;
-	}
+	// if (emailAddress.length === 0) {
+	// }
 
 	// Disabling the ok button to prevent user from clicking on it multiple times
 	document.getElementById("ok3").classList.add("btn-disabled"); // stopping the ok button from increasing in size when hovered over
