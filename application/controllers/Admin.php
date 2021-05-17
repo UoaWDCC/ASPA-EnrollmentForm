@@ -12,7 +12,9 @@ require ('vendor/autoload.php');
  */
 class Admin extends ASPA_Controller
 {
-
+    public function index() {
+        $this->load->view('admin');
+    }
     /**
      * Marks the attendee as paid by highlighting their row. 
      * It checks if either the email or upi is found in the spreadsheet. 
