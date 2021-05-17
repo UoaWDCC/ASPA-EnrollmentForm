@@ -59,14 +59,14 @@ class Admin extends ASPA_Controller
      * Checks if input key matches. If it does, a cookie is set.
      */
     public function authenticate() {
+        $key = '';
         $key = $this->input->get('key');
 
         if ($key != 'key') {
-            console.log('key does not match')
             return false;
         }
 
-        console.log('this part works');
+        echo 'this part works';
     }
 
     public function paymentStatus() {
