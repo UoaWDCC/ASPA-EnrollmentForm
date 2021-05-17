@@ -6,6 +6,7 @@ require ('vendor/autoload.php');
  * Handles all admin-checkup app related endpoints and views.
  *
  * @property GoogleSheets_Model $GoogleSheets_Model
+ * @property Verification_Model $Verification_Model
  * @property CI_Input $input
  * @property CI_Output $output
 
@@ -55,9 +56,11 @@ class Admin extends ASPA_Controller
         }
     }
 
+    /**
+     * Checks the current payment status of the user with
+     * their email or UPI through [GET].
+     */
     public function paymentStatus() {
-        // TODO: ASPA-14
-
         $this->load->model('GoogleSheets_Model');
 
         // ONE OF THEM IS REQUIRED, EITHER.
@@ -67,7 +70,8 @@ class Admin extends ASPA_Controller
 
         // If email and UPI both don't exist, return 412 to signify query params are not correct
         if (!$email && !$upi) {
-            $this->output->set_status_header(412, "Queries not specified")->_display("412: Precondition failed");
+            $this->output->set_status_header(412, "Queries not specified")
+                    ->_display("412: Precondition failed");
             return;
         }
 
@@ -76,43 +80,47 @@ class Admin extends ASPA_Controller
             : $this->GoogleSheets_Model->getCellCoordinate($upi, 'E');
 
         if (!$cell) {
-            $this->output->set_status_header(404, "error")->_display("404: Attendee not found");
+            $this->output->set_status_header(404, "error")
+                    ->_display("404: Attendee not found");
             return;
         }
 
-        //Get attendance cell value
-        $attendance_row_value = $cell[1];
-        $attendance_cell_id = 'G' . $attendance_row_value;
-        $attendance = $this->GoogleSheets_Model->getCellContents($attendance_cell_id, $attendance_cell_id)[0][0];
+        $this->load->model("Verification_Model");
 
-        //Get cell colour
-        $cellColour = $this->GoogleSheets_Model->getCellColour($cell);
+        $hasUserPaid = $this->Verification_Model->hasUserPaidEvent($email, $this->eventData["gsheet_name"]);
+
+        //Get attendance cell value
+        $attendanceRowValue = $cell[1];
+        $attendanceCellId = 'G' . $attendanceRowValue;
+        $attendance = $this->GoogleSheets_Model->getCellContents($attendanceCellId, $attendanceCellId)[0][0];
 
         /**
          * 200 – OK, paymentMade = true` if `green` and `attendance=false` from the registration sheet
          * (this means the attendee has paid)
          */
-        if($cellColour == 'b2e4b2' && $attendance != 'P'){
-            $this->output->set_status_header(200)->_display("200: Attendee has paid");
-            return;
-        }
-
-        /**
-         * 200 - OK, paymentMade = false` if `uncoloured` and `attendance=false` from the registration sheet
-         * (this means the user has not paid)
-         */
-        if (($cellColour == 'ffffff' || $cellColour == '000000') && $attendance != 'P'){
-            $this->output->set_status_header(200)->_display("200: User has not paid");
+        if ($hasUserPaid && $attendance != 'P') {
+            $this->output->set_status_header(200)
+                    ->set_output(json_encode(array('paymentMade' => true)));
             return;
         }
 
         /**
          * 409 CONFLICT` if `green` and `attendance=true`, this means there is a duplicate email used
          */
-        if ($cellColour == 'b2e4b2' && $attendance == 'P'){
-            $this->output->set_status_header(409)->_display("409: Duplicate email used");
-            return;
+        if ($hasUserPaid && $attendance == 'P') {
+            $this->output->set_status_header(409)
+                    ->_display("409: Duplicate email used");
         }
+
+        /**
+         * 200 - OK, paymentMade = false` if `uncoloured` and `attendance=false` from the registration sheet
+         * (this means the user has not paid)
+         */
+        if (!$hasUserPaid) {
+            $this->output->set_status_header(200)
+                    ->set_output(json_encode(array('paymentMade' => false)));
+        }
+
     }
 
 }
