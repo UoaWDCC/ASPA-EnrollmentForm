@@ -159,7 +159,7 @@ class EnrollmentForm extends ASPA_Controller
         }
 
         // Send offline confirmation email
-        $this->Email_Model->sendConfirmationEmail($data["name"], $data["email"], $data['paymentMethod'], $this->eventData);
+        $this->Email_Model->sendConfirmationEmail(str_replace("'", "&apos;", $data['name']), $data["email"], $data['paymentMethod'], $this->eventData);
 
         // Redirect to the page with grey tick
         $this->load->view('PaymentSuccessful.php', array_merge($this->eventData, $data));
