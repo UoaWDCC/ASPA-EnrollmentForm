@@ -14,17 +14,17 @@ p {
 
 .centre-page {
 
-    position: fixed;
-    top: 50%;
+    position: absolute;
     left: 50%;
     /* bring your own prefixes */
-    transform: translate(-50%, -50%);
+    transform: translate(-50%, 0);
 
     text-align: center;
     width: 400px;
     background-color: rgb(246,246,246);
     padding: 25px;
     border-radius: 25px;
+    height: auto;
 }
 
 #green-tick {

@@ -14,13 +14,12 @@
     	<meta name="author" content="UoA Web Development & Consulting Club members">
 
         <base href="<?php echo base_url(); ?>" >
-        <link type='text/css' rel='stylesheet' href='assets/css/ConfirmationStyle.css' />
+        <link type='text/css' rel='stylesheet' href='assets/css/ConfirmationStyle.css?v=1.6' />
         <link href="assets/images/favicon.png" rel="icon" type="image/png">
     </head>
 
     <body>
         <div class="centre-page">
-            <br />
             <br />
             <br />
             <a href="/">
