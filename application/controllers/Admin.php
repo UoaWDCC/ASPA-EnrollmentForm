@@ -1,6 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 require ('vendor/autoload.php');
+use \Firebase\JWT\JWT;
 
 /**
  * Handles all admin-checkup app related endpoints and views.
@@ -56,17 +57,27 @@ class Admin extends ASPA_Controller
     }
 
     /**
-     * Checks if input key matches. If it does, a cookie is set.
+     * Checks an input key against a key stored in a file. If it matches, store a cookie on the users browser.
      */
     public function authenticate() {
-        $key = '';
-        $key = $this->input->get('key');
+        $jwtKey = 'JWTKEY';
 
+        $key = $this->input->get('key');
+        
         if ($key != 'key') {
             return false;
         }
 
-        echo 'this part works';
+        $name = 'cookiename';
+
+        $payload = array(
+            "key" => $key,
+        );
+
+        $jwt = JWT::encode($payload, $jwtKey);
+
+        setcookie($name , $jwt); 
+        return true;
     }
 
     public function paymentStatus() {
