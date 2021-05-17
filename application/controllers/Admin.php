@@ -68,7 +68,7 @@ class Admin extends ASPA_Controller
             return false;
         }
 
-        $name = 'cookiename';
+        $cookieName = 'admin_authentication';
 
         $payload = array(
             "key" => $key,
@@ -76,8 +76,41 @@ class Admin extends ASPA_Controller
 
         $jwt = JWT::encode($payload, $jwtKey);
 
-        setcookie($name , $jwt); 
+        setcookie($cookieName , $jwt); 
         return true;
+    }
+
+
+    /**
+     * Check if a user has a specific cookie, and if they do allow them to do different things.
+     */
+    public function checkCookie() {
+        $jwtKey = 'JWTKEY';
+        $cookieName = 'admin_authentication';
+
+        if(!isset($_COOKIE[$cookieName])) {
+            echo 'Doesn\'t exist';
+            return false;
+        }
+
+        $jwt = $_COOKIE[$cookieName];
+
+        try {
+        $decoded = JWT::decode($jwt, $jwtKey, array('HS256'));
+        } catch (Exception $e) {
+            echo 'Caught exception: ',  $e->getMessage(), "\n";
+            return false;   
+        }
+
+        if ($decoded->key == "key") {
+            echo 'Exists, and matches';
+            return true;
+        }
+        else
+        {
+            echo 'Exists, but doesn\'t match';
+            return false;
+        }
     }
 
     public function paymentStatus() {
