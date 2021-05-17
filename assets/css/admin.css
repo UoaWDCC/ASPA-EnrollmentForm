@@ -1,0 +1,30 @@
+body {
+    background-color: #e9eef2;
+}
+
+
+/* Button rounded corners */
+
+.button {
+    border-radius: 5px;
+    color: white;
+    background-color: #4B8CC3;
+    padding: 10px;
+    border-color: #4B8CC3;
+}
+
+
+/* Top left text */
+
+.top {
+    position: absolute;
+    top: 8px;
+    align-self: center;
+}
+
+
+/* Email button */
+
+.email-button {
+    position: absolute;
+}
