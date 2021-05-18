@@ -114,9 +114,9 @@ class Verification_Model extends CI_Model {
      *
      * @param string $emailAddress The email of the user.
      *
-     * @return array [full_name, UPI, UID]
+     * @return array [full_name, UPI]
      */
-    public function getUserInfo($emailAddress)
+    public function getMemberInfo($emailAddress)
     {
         $this->load->model("GoogleSheets_Model");
 
@@ -137,13 +137,9 @@ class Verification_Model extends CI_Model {
         $userFullName = $this->GoogleSheets_Model->getCellContents($nameIndex, $nameIndex)[0][0];
 
         // Get user's UPI
-        $userUpi = $this->GoogleSheets_Model->getCellContents($upiIndex, $upiIndex)[0][0] == null ? 'N/A' : $this->GoogleSheets_Model->getCellContents($upiIndex, $upiIndex)[0][0];
+        $userUpi = $this->GoogleSheets_Model->getCellContents($upiIndex, $upiIndex)[0][0] == null ? '' : $this->GoogleSheets_Model->getCellContents($upiIndex, $upiIndex)[0][0];
 
-        // Get user's UID
-        $userUid = $this->GoogleSheets_Model->getCellContents($uidIndex, $uidIndex)[0][0] == null ? 'N/A' : $this->GoogleSheets_Model->getCellContents($uidIndex, $uidIndex)[0][0];
-
-        return [$userFullName, $userUpi, $userUid];
-
+        return [$userFullName, $userUpi];
     }
 
     /*
