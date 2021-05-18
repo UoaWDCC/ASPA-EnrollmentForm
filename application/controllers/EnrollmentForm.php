@@ -84,7 +84,7 @@ class EnrollmentForm extends ASPA_Controller
 
         // Receive data from form, method=POST
         $data['email'] = $this->input->post('email');
-        [$data['name'], $data['upi'], $data['uid']] = $this->Verification_Model->getUserInfo($data["email"]);
+        [$data['name'], $data['upi']] = $this->Verification_Model->getUserInfo($data["email"]);
 
         // Stopping direct access to this method
         if (!isset($data['name']) || !isset($data['email'])) {
@@ -101,7 +101,7 @@ class EnrollmentForm extends ASPA_Controller
 
         // Only record if the email is not found
         if (!($this->Verification_Model->isEmailOnSheet($data['email'], REGISTRATION_SPREADSHEET_ID, $this->eventData['gsheet_name']))) {
-            $this->GoogleSheets_Model->addNewRecord($data['email'], $data['name'], $data['upi'], $data['uid'], 'Stripe');
+            $this->GoogleSheets_Model->addNewRecord($data['email'], $data['name'], $data['upi'], 'Stripe');
         } else {
             // Email is found, so find the cell
             // Then edit the "How would you like your payment" to be of Stripe payment
@@ -137,7 +137,7 @@ class EnrollmentForm extends ASPA_Controller
         $data['has_paid'] = false;
         $data["email"] = $this->input->post("email");
         $data['paymentMethod'] = $this->input->post("paymentMethod");
-        [$data['name'], $data['upi'], $data['uid']] = $this->Verification_Model->getUserInfo($data["email"]);
+        [$data['name'], $data['upi']] = $this->Verification_Model->getUserInfo($data["email"]);
 
         if (!isset($data['name']) || !isset($data["email"]) || !isset($data['paymentMethod'])) {
             show_error("Something went wrong. Please contact uoa.wdcc@gmail.com. Error Code: 001", "500");
@@ -145,7 +145,7 @@ class EnrollmentForm extends ASPA_Controller
 
         // Only record if the email is not found
         if (!($this->Verification_Model->isEmailOnSheet($data['email'], REGISTRATION_SPREADSHEET_ID, $this->eventData['gsheet_name']))) {
-            $this->GoogleSheets_Model->addNewRecord($data['email'], $data['name'], $data['upi'], $data['uid'], ucfirst($data['paymentMethod']));
+            $this->GoogleSheets_Model->addNewRecord($data['email'], $data['name'], $data['upi'], ucfirst($data['paymentMethod']));
         } else {
             // Email is found, so find the cell then edit the "How would you like your payment" to be of Offline payment
             // Get the row of the specific email from google sheets
