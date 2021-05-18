@@ -88,18 +88,17 @@ class GoogleSheets_Model extends CI_Model {
      *
      * @param string $email The email of the user to record.
      * @param string $fullName The full name of the user.
-     * @param string @userUpi The UPI of the user. 
-     * @param string @userUid the ID number of the user. 
+     * @param string $upi The UPI of the user. 
      * @param string $paymentMethod The type of payment the user is selecting.
      */
-    public function addNewRecord($email, $fullName, $userUpi, $userUid, $paymentMethod)
+    public function addNewRecord($email, $fullName, $upi, $paymentMethod)
     {
         $size = $this->getNumberOfRecords() + 2;
         $range = $this->sheetName . '!A' . $size;
 
         // Creating an array for record
         $timestamp = strval(date("d/m/Y h:i:s"));
-        $values = [[$timestamp, $email, $fullName, $userUpi, $userUid, $paymentMethod]];
+        $values = [[$timestamp, $email, $fullName, $upi, $paymentMethod]];
         $body = new Google_Service_Sheets_ValueRange(['values' => $values]);
 
         // Setting input option to RAW text format (i.e no format parsing)
