@@ -195,9 +195,7 @@ ok3.onclick = function () {
 		inputEmail.style.border = "1px solid red";
 		return;
 	}
-	else {
-		inputEmail.style.border = "1px solid #00A22C";
-	}
+	inputEmail.style.border = "1px solid #00A22C";
 
 	// Disabling the ok button to prevent user from clicking on it multiple times
 	document.getElementById("ok3").classList.add("btn-disabled"); // stopping the ok button from increasing in size when hovered over
