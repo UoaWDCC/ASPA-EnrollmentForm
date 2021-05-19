@@ -123,4 +123,12 @@ class Admin extends ASPA_Controller
 
     }
 
+    public function cleanString() {
+        $name = $this->input->get('name');
+
+        $cleanName = str_replace(array("'", "#", ";", "\\"), "", $name);
+        echo $cleanName;
+    }
+
+
 }

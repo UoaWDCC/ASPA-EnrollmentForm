@@ -32,7 +32,7 @@ class Email_Model extends CI_Model {
         $EVENT_DATETIME = explode(" ", $eventData["date"])[1] . ' ' . explode(" ", $eventData["date"])[2] . "<br />" . $eventData["time"];
         $EVENT_LOCATION = $eventData["location"];
         $EVENT_IMAGE = "https://user-images.githubusercontent.com/19633284/115980245-417e0500-a5df-11eb-9741-3b7a10499ef5.png";
-        
+
         // transfer details
         $TRANSFER_AMOUNT = "$" . (string) number_format((float) $eventData["price"], 2, '.', '');
         $TRANSFER_ACCOUNT = $eventData["acc_num"];
