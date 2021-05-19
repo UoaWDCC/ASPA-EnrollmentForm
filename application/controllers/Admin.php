@@ -72,6 +72,7 @@ class Admin extends ASPA_Controller
 
         $payload = array(
             "key" => $key,
+            "iat" => microtime(),
         );
 
         $jwt = JWT::encode($payload, $jwtKey);
@@ -96,7 +97,7 @@ class Admin extends ASPA_Controller
         $jwt = $_COOKIE[$cookieName];
 
         try {
-        $decoded = JWT::decode($jwt, $jwtKey, array('HS256'));
+            $decoded = JWT::decode($jwt, $jwtKey, array('HS256'));
         } catch (Exception $e) {
             echo 'Caught exception: ',  $e->getMessage(), "\n";
             return false;   
