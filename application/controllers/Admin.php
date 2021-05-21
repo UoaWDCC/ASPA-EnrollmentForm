@@ -60,24 +60,38 @@ class Admin extends ASPA_Controller
      * Checks an input key against a key stored in a file. If it matches, store a cookie on the users browser.
      */
     public function authenticate() {
+
+        //gets the passkey from private_keys/auth_props.json
+        if (!defined('Passkey')) {
+            $json = file_get_contents("private_keys/auth_props.json");
+            $authProps = json_decode($json, true);
+        
+            define('Passkey', $authProps["auth.passkey"]);
+        }
+        // Scrambler key
         $jwtKey = 'JWTKEY';
 
-        $key = $this->input->get('key');
+        // Gets a key from the URL from the form admin/authenticate?key=xyz
+        $urlKey = $this->input->get('key');
         
-        if ($key != 'key') {
+        // Check if it matches a key we have stored
+        if ($urlKey != Passkey) {
+            echo("Key is incorrect");
             return false;
         }
 
         $cookieName = 'admin_authentication';
 
         $payload = array(
-            "key" => $key,
+            "key" => $urlKey,
             "iat" => microtime(),
         );
 
         $jwt = JWT::encode($payload, $jwtKey);
 
         setcookie($cookieName , $jwt); 
+        
+        echo 'Cookie set';
         return true;
     }
 
@@ -86,6 +100,14 @@ class Admin extends ASPA_Controller
      * Check if a user has a specific cookie, and if they do allow them to do different things.
      */
     public function checkCookie() {
+
+        if (!defined('Passkey')) {
+            $json = file_get_contents("private_keys/auth_props.json");
+            $authProps = json_decode($json, true);
+        
+            define('Passkey', $authProps["auth.passkey"]);
+        }
+
         $jwtKey = 'JWTKEY';
         $cookieName = 'admin_authentication';
 
@@ -100,10 +122,11 @@ class Admin extends ASPA_Controller
             $decoded = JWT::decode($jwt, $jwtKey, array('HS256'));
         } catch (Exception $e) {
             echo 'Caught exception: ',  $e->getMessage(), "\n";
-            return false;   
+            return false;
         }
 
-        if ($decoded->key == "key") {
+        // needs to be changed
+        if ($decoded->key == Passkey) {
             echo 'Exists, and matches';
             return true;
         }
