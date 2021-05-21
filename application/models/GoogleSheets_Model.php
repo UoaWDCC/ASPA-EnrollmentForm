@@ -98,7 +98,7 @@ class GoogleSheets_Model extends CI_Model {
 
         // Creating an array for record
         $timestamp = strval(date("d/m/Y h:i:s"));
-        $values = [[$timestamp, $email, $fullName, $upi, '', $paymentMethod]];
+        $values = [[$timestamp, $email, $fullName, '', $upi, $paymentMethod]];
         $body = new Google_Service_Sheets_ValueRange(['values' => $values]);
 
         // Setting input option to RAW text format (i.e no format parsing)
