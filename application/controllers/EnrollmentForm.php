@@ -84,7 +84,7 @@ class EnrollmentForm extends ASPA_Controller
 
         // Receive data from form, method=POST
         $data['email'] = $this->input->post('email');
-        [$data['name'], $data['upi']] = $this->Verification_Model->getUserInfo($data["email"]);
+        [$data['name'], $data['upi']] = $this->Verification_Model->getMemberInfo($data["email"]);
 
         // Stopping direct access to this method
         if (!isset($data['name']) || !isset($data['email'])) {
@@ -137,7 +137,7 @@ class EnrollmentForm extends ASPA_Controller
         $data['has_paid'] = false;
         $data["email"] = $this->input->post("email");
         $data['paymentMethod'] = $this->input->post("paymentMethod");
-        [$data['name'], $data['upi']] = $this->Verification_Model->getUserInfo($data["email"]);
+        [$data['name'], $data['upi']] = $this->Verification_Model->getMemberInfo($data["email"]);
 
         if (!isset($data['name']) || !isset($data["email"]) || !isset($data['paymentMethod'])) {
             show_error("Something went wrong. Please contact uoa.wdcc@gmail.com. Error Code: 001", "500");
