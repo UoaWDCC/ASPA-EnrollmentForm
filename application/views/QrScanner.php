@@ -17,39 +17,64 @@
   <title>QR Scanner • ASPA</title>
 
   <meta charset="utf-8">
-  <meta name="description" content="QR reader">
+  <meta name="description" content="QR scanner">
   <meta name='viewport' content='initial-scale=1.0' />
   <meta name="author" content="UoA Web Development & Consulting Club members">
 
   <link href="assets/css/normalize.css" rel="stylesheet" type="text/css">
   <link href="assets/css/webflow.css" rel="stylesheet" type="text/css">
   <link href="assets/css/aspa.webflow.css" rel="stylesheet" type="text/css">
-  <link href='assets/css/formDisabled.css' rel='stylesheet' type='text/css' />
+  <link href='assets/css/qrScanner.css' rel='stylesheet' type='text/css' />
   <link href="assets/images/favicon.png" rel="icon" type="image/png">
 
   <script type="text/javascript" src="assets/js/instascan.min.js"></script>
 </head>
 
 <body>
-  <video id="preview"></video>
-  <script type="text/javascript">
+  <div class="centre-page">
+    <h1>Scan QR:</h1>
+    <div class="video-wrap">
+      <video id="preview"></video>
+    </div>
+    <p class="p" id="log"></p>
+  </div>
 
-    //great issue fix
-    //https://github.com/schmich/instascan/issues/251
-    const args = {
-      video: document.getElementById('preview')
-    };
+  <!-- TODO: implement going back to admin dashboard -->
+  <div class="div-back div-page-page3"><a id="btn-back-page3" href="#" class="btn-back w-button">← Back</a></div>
+
+  <script type="text/javascript">
+    // HTML fields
+    const logField = document.getElementById("log");
+
+    // create scanner instance
+    const args = { video: document.getElementById('preview') };
     window.URL.createObjectURL = (stream) => {
       args.video.srcObject = stream;
       return stream;
     };
-
     let scanner = new Instascan.Scanner(args);
 
+    // listens to detection of a qrcode
     scanner.addListener('scan', function(content) {
-      console.log(content);
+      if (content) {
+        // incase content not in JSON format
+        try {
+          // JSON in the form {"email":"...","eventName":"..."}
+          const details = JSON.parse(content);
+          console.log(details);
+
+          // TODO: mark as present
+
+          logField.textContent = "Email: " + details.email + " ✔️";
+
+        } catch (e) {
+          console.error(e);
+          logField.textContent = "QR code not correct";
+        }
+      }
     });
 
+    // unlocks access to camera
     Instascan.Camera.getCameras().then(function(cameras) {
       if (cameras.length > 0) {
         scanner.start(cameras[0]);
@@ -58,6 +83,7 @@
       }
     }).catch(function(e) {
       console.error(e);
+      logField.textContent = e;
     });
   </script>
 </body>
