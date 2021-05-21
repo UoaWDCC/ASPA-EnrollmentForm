@@ -114,14 +114,14 @@ class Verification_Model extends CI_Model {
      *
      * @param string $emailAddress The email of the user.
      *
-     * @return array [full_name, UPI]
+     * @return array [member's full name, member's UPI]
      */
     public function getMemberInfo($emailAddress)
     {
         $this->load->model("GoogleSheets_Model");
 
         if (!$this->isEmailOnSheet($emailAddress, MEMBERSHIP_SPREADSHEET_ID, MEMBERSHIP_SHEET_NAME)) {
-            return false;
+            log_message("error", "The member is was not found on the sheet when recording to sheet");
         }
 
          // Given that the email exists in the sheet, find its index
@@ -130,16 +130,12 @@ class Verification_Model extends CI_Model {
         // Convert key to google coordinate
         $nameIndex = 'C' . ($emailKey+2);
         $upiIndex = 'H' . ($emailKey+2);
-        $uidIndex = 'G' . ($emailKey+2);
 
+        // Get member's full name and UPI – these are by default blank string ('') if they do not exist
+        $memberFullName = $this->GoogleSheets_Model->getCellContents($nameIndex, $nameIndex)[0][0] ?? '';
+        $memberUpi = $this->GoogleSheets_Model->getCellContents($upiIndex, $upiIndex)[0][0] ?? '';
 
-        // Get user's full name
-        $userFullName = $this->GoogleSheets_Model->getCellContents($nameIndex, $nameIndex)[0][0];
-
-        // Get user's UPI
-        $userUpi = $this->GoogleSheets_Model->getCellContents($upiIndex, $upiIndex)[0][0] == null ? '' : $this->GoogleSheets_Model->getCellContents($upiIndex, $upiIndex)[0][0];
-
-        return [$userFullName, $userUpi];
+        return [$memberFullName, $memberUpi];
     }
 
     /*

@@ -199,7 +199,8 @@ class EnrollmentForm extends ASPA_Controller
             list(, $row) = $this->GoogleSheets_Model->convertCoordinateToArray($cell);
 
             // Get the name from the Google Sheet
-            $data['name'] = $this->GoogleSheets_Model->getCellContents(('C' . $row), ('C' . $row))[0][0];
+            // Default email message to "Hi there," if ASPA's membership spreadsheet does not have a member's name
+            $data['name'] = $this->GoogleSheets_Model->getCellContents(('C' . $row), ('C' . $row))[0][0] ?? 'there';
 
             /*
              * Send confirmation email if this is the first time the user has called the stripePaymentSuccessful()
