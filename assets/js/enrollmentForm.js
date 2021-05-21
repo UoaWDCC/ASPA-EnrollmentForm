@@ -145,6 +145,8 @@ function previousPage() {
 // Enter key (keycode 13) triggers the click event of the appropriate buttons to go to next page.
 window.addEventListener("keydown", function (e) {
 	if (e.keyCode === 13) {
+		// Prevent form submission from clicking the enter key
+		e.preventDefault();
 		switch (findActivePage()) {
 			case 1:
 				buttonReg.click(); //buttonReg does not need an onclick function declaration because it is handled by Webflow
