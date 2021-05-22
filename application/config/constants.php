@@ -112,6 +112,15 @@ if (!defined('MAIL_AUTH_EMAIL')) {
     define('MAIL_AUTH_PASSWORD', $authProps["mail.password"]);
 }
 
+//Constants for authenticate() and checkCookie() in controllers/Admin.php
+if (!defined('ADMIN_AUTH_PASSKEY')) {
+    $json = file_get_contents("private_keys/auth_props.json");
+    $authProps = json_decode($json, true);
+
+    define('ADMIN_AUTH_PASSKEY', $authProps["auth.passkey"]);
+    define('ADMIN_AUTH_JWTKEY', $authProps["auth.jwtkey"]);
+}
+
 /**
  * Google sheet ID and sheet name for ASPA's membership spreadsheet.
  */

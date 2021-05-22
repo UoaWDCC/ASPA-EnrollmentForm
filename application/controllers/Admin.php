@@ -61,21 +61,11 @@ class Admin extends ASPA_Controller
      */
     public function authenticate() {
 
-        //gets the passkey from private_keys/auth_props.json
-        if (!defined('Passkey')) {
-            $json = file_get_contents("private_keys/auth_props.json");
-            $authProps = json_decode($json, true);
-        
-            define('Passkey', $authProps["auth.passkey"]);
-        }
-        // Scrambler key
-        $jwtKey = 'JWTKEY';
-
         // Gets a key from the URL from the form admin/authenticate?key=xyz
         $urlKey = $this->input->get('key');
         
-        // Check if it matches a key we have stored
-        if ($urlKey != Passkey) {
+        // Check if it matches a key we have stored in auth_props.json
+        if ($urlKey != ADMIN_AUTH_PASSKEY) {
             echo("Key is incorrect");
             return false;
         }
@@ -87,7 +77,7 @@ class Admin extends ASPA_Controller
             "iat" => microtime(),
         );
 
-        $jwt = JWT::encode($payload, $jwtKey);
+        $jwt = JWT::encode($payload, ADMIN_AUTH_JWTKEY);
 
         setcookie($cookieName , $jwt); 
         
@@ -97,18 +87,10 @@ class Admin extends ASPA_Controller
 
 
     /**
-     * Check if a user has a specific cookie, and if they do allow them to do different things.
+     * Check if a user has a specific cookie, and if they do, allow them to do something
      */
     public function checkCookie() {
 
-        if (!defined('Passkey')) {
-            $json = file_get_contents("private_keys/auth_props.json");
-            $authProps = json_decode($json, true);
-        
-            define('Passkey', $authProps["auth.passkey"]);
-        }
-
-        $jwtKey = 'JWTKEY';
         $cookieName = 'admin_authentication';
 
         if(!isset($_COOKIE[$cookieName])) {
@@ -119,14 +101,13 @@ class Admin extends ASPA_Controller
         $jwt = $_COOKIE[$cookieName];
 
         try {
-            $decoded = JWT::decode($jwt, $jwtKey, array('HS256'));
+            $decoded = JWT::decode($jwt, ADMIN_AUTH_JWTKEY, array('HS256'));
         } catch (Exception $e) {
             echo 'Caught exception: ',  $e->getMessage(), "\n";
             return false;
         }
 
-        // needs to be changed
-        if ($decoded->key == Passkey) {
+        if ($decoded->key == ADMIN_AUTH_PASSKEY) {
             echo 'Exists, and matches';
             return true;
         }
