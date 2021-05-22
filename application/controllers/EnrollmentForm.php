@@ -131,18 +131,20 @@ class EnrollmentForm extends ASPA_Controller
     public function makeOfflinePayment()
     {
         log_message('debug', "-- makeOfflinePayment function called");
+
+        $this->load->model("GoogleSheets_Model");
+        $this->load->model("Verification_Model");
+        $this->load->model('Email_Model');
+
         $data['has_paid'] = false;
-        $data['name'] = $this->input->post("name");
-        $data["email"] = $this->input->post("email");
+        $data['name'] = $this->Verification_Model->cleanString($this->input->post("name"));
+        $data["email"] = $this->Verification_Model->cleanString($this->input->post("email"));
         $data['paymentMethod'] = $this->input->post("paymentMethod");
 
         if (!isset($data['name']) || !isset($data["email"]) || !isset($data['paymentMethod'])) {
             show_error("Something went wrong. Please contact uoa.wdcc@gmail.com. Error Code: 001", "500");
         }
 
-        $this->load->model("GoogleSheets_Model");
-        $this->load->model("Verification_Model");
-        $this->load->model('Email_Model');
 
         // Only record if the email is not found
         if (!($this->Verification_Model->isEmailOnSheet($data['email'], REGISTRATION_SPREADSHEET_ID, $this->eventData['gsheet_name']))) {
@@ -159,7 +161,7 @@ class EnrollmentForm extends ASPA_Controller
         }
 
         // Send offline confirmation email
-        $this->Email_Model->sendConfirmationEmail(str_replace("'", "&apos;", $data['name']), $data["email"], $data['paymentMethod'], $this->eventData);
+        $this->Email_Model->sendConfirmationEmail($data['name'], $data["email"], $data['paymentMethod'], $this->eventData);
 
         // Redirect to the page with grey tick
         $this->load->view('PaymentSuccessful.php', array_merge($this->eventData, $data));
@@ -201,7 +203,7 @@ class EnrollmentForm extends ASPA_Controller
 
             // Get the name from the Google Sheet
             $data['name'] = $this->GoogleSheets_Model->getCellContents(('C' . $row), ('C' . $row))[0][0];
-
+            $data['name'] = $this->Verification_Model->cleanString($data['name']);
             /*
              * Send confirmation email if this is the first time the user has called the stripePaymentSuccessful()
              * function, as if the user is highlighted, this means that this function has been called already. This is

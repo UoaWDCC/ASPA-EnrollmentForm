@@ -17,6 +17,8 @@ class Email_Model extends CI_Model {
     public function sendConfirmationEmail(string $recipientName, string $recipientEmail, string $paymentMethod, array $eventData)
     {
         // Email details
+        $this->load->model('Verification_Model');
+        
         $EMAIL_RECEIVER = $recipientEmail;
         $EMAIL_SENDER = "uoawdcc@gmail.com";
         //receiver's full name
@@ -65,7 +67,7 @@ class Email_Model extends CI_Model {
 
         // Body of email in HTML format (Extracted from mailchimp template)
         // NOTE: It is important all quote marks used inside this email body are double quotes "
-        $message = '
+        $message =  $this->Verification_Model->cleanString('
         <html>
         <head>
         </head>
@@ -271,7 +273,7 @@ class Email_Model extends CI_Model {
         </tbody>
         </table>
         </body>
-        </html>';
+        </html>');
 
         $cmdlineArgs = [
                 self::sanitize(MAIL_AUTH_EMAIL),
