@@ -15,7 +15,7 @@
     });
   </script>
 
-  <title>Form disabled • ASPA</title>
+  <title>Admin Check In • ASPA</title>
 
   <meta charset="utf-8">
   <meta name="description" content="Admin Page">
@@ -41,25 +41,52 @@
       <h2>Sign In</h2>
     </div>
     <br> -->
-
-    <button class="button" onClick="switchPage(2)">Email/UPI</button>
-    <button class="button" onClick="switchPage(3)">QR Code</button>
+    <center>
+      <button class="button" id="email-btn" onClick="switchPage(2)">Email/UPI</button>
+      <button class="button" id="qr-btn" onClick="switchPage(3)">QR Code</button>
+    </center>
   </div>
 
   <div class="page" id="email-page">
-    <p>UPI:*</p>
-    <input type="text" id="login-upi" name="login-upi">
-    <p>Email:*</p>
-    <input type="text" id="login-email" name="login-email">
-    <br>
-    <button class="button">Check User</button>
-    <br>
+    <center>
+      <p>UPI:*</p>
+      <input type="text" id="login-upi" name="login-upi">
+      <br>
+      <p>Email:*</p>
+      <input type="text" id="login-email" name="login-email">
+      <br><br><br>
+      <button class="button">Check User</button>
+      <br>
+    </center>
   </div>
 
 
   <div class="page" id="qr-code-page">
-    <p>Scan QR Code</p>
+    <center>
+      <p>Scan QR Code</p>
+    </center>
     <br>
+  </div>
+
+  <div class="page" id="message-page">
+
+    <div id="HTTP-200-true">
+      <p>Member has successfully paid!</p>
+    </div>
+
+    <div id="HTTP-200-false">
+      <p>Member has registered but hasn't paid yet.</p>
+      <button class="button">Manual Payment</button>
+    </div>
+
+    <div id="HTTP-409">
+      <p>QR Code or Input Email has already been used.</p>
+    </div>
+
+    <div id="HTTP-404">
+      <p>Member has not registered for the event.</p>
+    </div>
+
   </div>
 
 
@@ -68,9 +95,10 @@
   const homePage = document.getElementById("home-page");
   const emailPage = document.getElementById("email-page");
   const qrCodePage = document.getElementById("qr-code-page");
+  const messagePage = document.getElementById("message-page");
 
   // 1 - home page, 2 - email page, 3 - qr code page
-  const pages = [homePage, emailPage, qrCodePage];
+  const pages = [homePage, emailPage, qrCodePage, messagePage];
 
   function switchPage(pageNumber) {
     for (const page of pages) {
@@ -80,11 +108,25 @@
     pages[pageNumber - 1].style.display = 'block';
   }
 
-  function checkUser() {
-    console.log("User is being checked :)");
-  }
-
   switchPage(1);
+
+  const message1 = document.getElementById("HTTP-200-true"); //Registered and paid
+  const message2 = document.getElementById("HTTP-200-false"); //Registered not paid
+  const message3 = document.getElementById("HTTP-409"); //QR Code/Email Input Duplicate
+  const message4 = document.getElementById("HTTP-404"); //Not registered for eventt
+
+  // 1 = HTTP-200-true, 2 = HTTP-200-false, 3 = HTTP-409, 4 = HTTP-404
+  const messages = [message1, message2, message3, message4];
+
+  function checkUser() {
+    
+    const upi = document.getElementById('check-upi').value;
+    const email = document.getElementById('check-email').value;
+
+    //check if user has registered/paid using ASPA-14 
+
+  }
+  
 
   </script>
 

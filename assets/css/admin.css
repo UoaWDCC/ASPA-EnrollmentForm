@@ -1,5 +1,5 @@
 body {
-    background-color: #e9eef2;
+    background-color: #E5E5E5;
 }
 
 
@@ -34,7 +34,27 @@ body {
     width: 100vw;
 }
 
+
+/* commenting out
+#email-page {
+    top: 50%;
+}
+*/
+
 #back-btn {
-    position: 'fixed';
-    bottom: 50px;
+    position: absolute;
+    top: 85%;
+    left: 5%;
+}
+
+#email-btn {
+    position: absolute;
+    top: 50%;
+    left: 35%;
+}
+
+#qr-btn {
+    position: absolute;
+    top: 50%;
+    left: 55%;
 }
