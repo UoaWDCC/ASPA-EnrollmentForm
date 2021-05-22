@@ -17,8 +17,6 @@ class Email_Model extends CI_Model {
     public function sendConfirmationEmail(string $recipientName, string $recipientEmail, string $paymentMethod, array $eventData)
     {
         // Email details
-        $this->load->model('Verification_Model');
-        
         $EMAIL_RECEIVER = $recipientEmail;
         $EMAIL_SENDER = "uoawdcc@gmail.com";
         //receiver's full name
@@ -67,7 +65,7 @@ class Email_Model extends CI_Model {
 
         // Body of email in HTML format (Extracted from mailchimp template)
         // NOTE: It is important all quote marks used inside this email body are double quotes "
-        $message =  $this->Verification_Model->cleanString('
+        $message ='
         <html>
         <head>
         </head>
@@ -273,7 +271,7 @@ class Email_Model extends CI_Model {
         </tbody>
         </table>
         </body>
-        </html>');
+        </html>';
 
         $cmdlineArgs = [
                 self::sanitize(MAIL_AUTH_EMAIL),
@@ -281,7 +279,7 @@ class Email_Model extends CI_Model {
                 self::sanitize($recipientEmail),
                 self::sanitize($recipientName),
                 self::sanitize($EMAIL_SUBJECT),
-                self::sanitize($message)
+                self::sanitize(self::cleanString($message))
         ];
 
         // Build the command that will be executed
@@ -289,6 +287,20 @@ class Email_Model extends CI_Model {
 
         // Run the command, and run in the background by appending dev/null stuff
         exec($command . '  > /dev/null 2> /dev/null &');
+    }
+
+    /**
+     * Escapes single quote so that when an email is sent to the user, 
+     * the email body won't get cut off.
+     * 
+     * @param $stringCheck
+     * 
+     * @return string
+     */
+    private static function cleanString($stringCheck)
+    {
+        // escape apostrophe
+        return str_replace("'", "&apos;", $stringCheck);
     }
 
 
@@ -301,7 +313,7 @@ class Email_Model extends CI_Model {
      */
     private static function sanitize(string $str): string
     {
-        return "'" . $str . "'";
+        return "'" . str_replace("'", '', $str) . "'";
     }
 
 }

@@ -107,19 +107,7 @@ class Verification_Model extends CI_Model {
         }
     }
 
-    /**
-     * Escapes single quote so that when an email is sent to the user, 
-     * the email body won't get cut off.
-     * 
-     * @param $stringCheck
-     * 
-     * @return string
-    */
-    public function cleanString($stringCheck)
-    {
-        // escape apostrophe
-        return str_replace("'", "&apos;", $string);
-    }
+
 
 
     /*
