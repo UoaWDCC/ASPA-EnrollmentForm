@@ -7,6 +7,7 @@
 
 
   <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js" type="text/javascript"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script type="text/javascript">
     WebFont.load({
       google: {
@@ -32,6 +33,7 @@
 </head>
 
 <body>
+  <div id="base_url" style="display: none"><?php echo base_url(); ?></div>
   <button class="button" id="back-btn" onClick="switchPage(1)">Back</button>
 
   <div class="page" id="home-page">
@@ -50,12 +52,12 @@
   <div class="page" id="email-page">
     <center>
       <p>UPI:*</p>
-      <input type="text" id="login-upi" name="login-upi">
+      <input type="text" id="check-upi" name="login-upi">
       <br>
       <p>Email:*</p>
-      <input type="text" id="login-email" name="login-email">
+      <input type="text" id="check-email" name="login-email">
       <br><br><br>
-      <button class="button">Check User</button>
+      <button class="button" onClick="checkUser()">Check User</button>
       <br>
     </center>
   </div>
@@ -123,7 +125,31 @@
     const upi = document.getElementById('check-upi').value;
     const email = document.getElementById('check-email').value;
 
-    //check if user has registered/paid using ASPA-14 
+    console.log(upi, email);
+
+    //check if user has registered/paid using ASPA-14
+
+    $.ajax({
+      cache: false,
+      url: document.getElementById("base_url").innerHTML + "index.php/Admin/paymentStatus",
+      method: "GET",
+      data: { 
+        "upi": upi, 
+        "email": email
+      },
+      statusCode: {
+        200: function (data) {
+          console.log("Successfully check user.")
+          console.log(JSON.parse(data).paymentMade);
+        },
+        404: function (data) {
+          console.log("Error, user not found!");
+        },
+        409: function (data) {
+          console.log("Error, conflicting user!");
+        }
+      }
+	});
 
   }
   
