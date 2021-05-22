@@ -22,49 +22,71 @@
   <meta name='viewport' content='initial-scale=1.0' />
   <meta name="author" content="UoA Web Development & Consulting Club members">
 
-  <link href="assets/css/admin.css" rel="stylesheet" type="text/css">
+  <link href="assets/images/favicon.png" rel="icon" type="image/png">
 
+  <link href="assets/css/normalize.css" rel="stylesheet" type="text/css">
+  <link href="assets/css/webflow.css" rel="stylesheet" type="text/css">
+  <link href="assets/css/aspa.webflow.css" rel="stylesheet" type="text/css">
+
+  <link href="assets/css/admin.css" rel="stylesheet" type="text/css">
 </head>
 
 <body>
-  <div class="admin-page">
-    <img src="assets/images/ASPA-admin.jpg"/>
+  <button class="button" id="back-btn" onClick="switchPage(1)">Back</button>
+
+  <div class="page" id="home-page">
+    <!-- <img src="assets/images/ASPA-admin.jpg"/>
 
     <div class="top">
       <h2>Sign In</h2>
     </div>
-    <br>
+    <br> -->
 
-    <div class="email-button">
-      <button class="button">Email/UPI</button>
-    </div>
-    <br>
-
-
-    <button class="button">QR Code</button>
-    <br>
-    <button class="button">Back</button>
-    
+    <button class="button" onClick="switchPage(2)">Email/UPI</button>
+    <button class="button" onClick="switchPage(3)">QR Code</button>
   </div>
 
-  <div class="email-page">
+  <div class="page" id="email-page">
     <p>UPI:*</p>
     <input type="text" id="login-upi" name="login-upi">
     <p>Email:*</p>
     <input type="text" id="login-email" name="login-email">
     <br>
-    <button class="button">Log In</button>
+    <button class="button">Check User</button>
     <br>
-    <button class="button">Back</button> 
   </div>
 
 
-  <div class="QR-code-page">
+  <div class="page" id="qr-code-page">
     <p>Scan QR Code</p>
     <br>
-    <button class="button">Back</button>
-</div>
+  </div>
 
+
+  <script type="text/javascript">
+
+  const homePage = document.getElementById("home-page");
+  const emailPage = document.getElementById("email-page");
+  const qrCodePage = document.getElementById("qr-code-page");
+
+  // 1 - home page, 2 - email page, 3 - qr code page
+  const pages = [homePage, emailPage, qrCodePage];
+
+  function switchPage(pageNumber) {
+    for (const page of pages) {
+      page.style.display = 'none';
+    }
+
+    pages[pageNumber - 1].style.display = 'block';
+  }
+
+  function checkUser() {
+    console.log("User is being checked :)");
+  }
+
+  switchPage(1);
+
+  </script>
 
   
 </body>

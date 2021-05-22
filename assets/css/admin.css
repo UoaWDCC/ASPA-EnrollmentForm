@@ -28,3 +28,13 @@ body {
 .email-button {
     position: absolute;
 }
+
+.page {
+    height: 100vh;
+    width: 100vw;
+}
+
+#back-btn {
+    position: 'fixed';
+    bottom: 50px;
+}
