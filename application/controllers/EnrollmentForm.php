@@ -161,7 +161,7 @@ class EnrollmentForm extends ASPA_Controller
         }
 
         // Send offline confirmation email
-        $this->Email_Model->sendConfirmationEmail($data['name'], $data["email"], $data['paymentMethod'], $this->eventData);
+        $this->Email_Model->sendConfirmationEmail($data["name"], $data["email"], $data['paymentMethod'], $this->eventData);
 
         // Redirect to the page with grey tick
         $this->load->view('PaymentSuccessful.php', array_merge($this->eventData, $data));
@@ -203,7 +203,7 @@ class EnrollmentForm extends ASPA_Controller
 
             // Get the name from the Google Sheet
             $data['name'] = $this->GoogleSheets_Model->getCellContents(('C' . $row), ('C' . $row))[0][0];
-            $data['name'] = $data['name'];
+
             /*
              * Send confirmation email if this is the first time the user has called the stripePaymentSuccessful()
              * function, as if the user is highlighted, this means that this function has been called already. This is

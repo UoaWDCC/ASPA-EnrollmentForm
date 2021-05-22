@@ -41,21 +41,18 @@ class Email_Model extends CI_Model {
         $MSG_COLOUR = "#ff0000";
 
         // change email details based on different payment method
-        if ($paymentMethod == "online")
-        {
+        if ($paymentMethod == "online") {
             $EMAIL_SUBJECT = "Payment Confirmation - " . $eventData["title"];
             $TICK_IMAGE = "assets/images/Green_Tick.png";
             $PAYMENT_DETAIL = "ONLINE PAYMENT";
             $MSG_COLOUR = "#00ff00";
-		$TRANSFER_DETAIL = "";
-        }
-        elseif ($paymentMethod == "cash") {
+            $TRANSFER_DETAIL = "";
+        } elseif ($paymentMethod == "cash") {
             $EMAIL_SUBJECT = "Event Registration - " . $eventData["title"];
             $TICK_IMAGE = "assets/images/Grey_Tick.jpg";
             $PAYMENT_DETAIL = "CASH";
             $TRANSFER_DETAIL = "";
-        }
-        else {
+        } else {
             $EMAIL_SUBJECT = "Event Registration - " . $eventData["title"];
             $TICK_IMAGE = "assets/images/Grey_tick.png";
             $PAYMENT_DETAIL = "TRANSFER";
@@ -65,7 +62,7 @@ class Email_Model extends CI_Model {
 
         // Body of email in HTML format (Extracted from mailchimp template)
         // NOTE: It is important all quote marks used inside this email body are double quotes "
-        $message ='
+        $message = '
         <html>
         <head>
         </head>
@@ -303,7 +300,6 @@ class Email_Model extends CI_Model {
         return str_replace("'", "&apos;", $stringCheck);
     }
 
-
     /**
      * Adds single quotes in front of every string.
      *
@@ -313,7 +309,7 @@ class Email_Model extends CI_Model {
      */
     private static function sanitize(string $str): string
     {
-        return "'" . str_replace("'", '', $str) . "'";
+        return "'" . str_replace("'", "", $str) . "'";
     }
 
 }
