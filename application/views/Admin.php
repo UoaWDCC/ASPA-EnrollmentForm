@@ -56,7 +56,7 @@
       <p>Email:*</p>
       <input type="text" id="check-email" name="login-email">
       <br><br><br>
-      <button class="button" onClick="checkUser()">Check User</button>
+      <button class="button" onClick="checkMemberPaymentStatus()">Check Status</button>
       <br>
     </center>
   </div>
@@ -79,12 +79,12 @@
   <div class="page" id="message-page">
 
     <div id="HTTP-200-true">
-      <p>Member has successfully paid!</p>
+      <p>Member has paid for the event. All good!</p>
     </div>
 
     <div id="HTTP-200-false">
       <p>Member has registered but hasn't paid yet.</p>
-      <button class="button" onClick="markUserAsPaid">Manual Payment</button>
+      <button class="button" onClick="markUserAsPaid()">Manual Payment</button>
     </div>
 
     <div id="HTTP-409">
@@ -98,51 +98,84 @@
   </div>
 
   <script type="text/javascript">
+    const ADMIN_ENDPOINT = document.getElementById("base_url").innerHTML + "index.php/Admin";
+
     const homePage = document.getElementById("home-page");
     const emailPage = document.getElementById("email-page");
     const qrCodePage = document.getElementById("qr-code-page");
     const messagePage = document.getElementById("message-page");
+    const pages = [homePage, emailPage, qrCodePage, messagePage];
 
-    const ADMIN_ENDPOINT = document.getElementById("base_url").innerHTML + "index.php/Admin";
-
-
-  function switchPage(pageNumber) {
-    for (const page of pages) {
-      page.style.display = 'none';
-      pages[pageNumber - 1].style.display = 'block';
-    }
-
-    switchPage(1);
-
-    const message1 = document.getElementById("HTTP-200-true"); //Registered and paid
-    const message2 = document.getElementById("HTTP-200-false"); //Registered not paid
-    const message3 = document.getElementById("HTTP-409"); //QR Code/Email Input Duplicate
-    const message4 = document.getElementById("HTTP-404"); //Not registered for eventt
-
+    // Messages to display on the message page
+    const message1 = document.getElementById("HTTP-200-true"); // Registered and paid
+    const message2 = document.getElementById("HTTP-200-false"); // Registered not paid
+    const message3 = document.getElementById("HTTP-409"); // QR Code/Email Input Duplicate
+    const message4 = document.getElementById("HTTP-404"); // Not registered for event
     // 1 = HTTP-200-true, 2 = HTTP-200-false, 3 = HTTP-409, 4 = HTTP-404
     const messages = [message1, message2, message3, message4];
 
-    // Marks the given user as paid
-    function markUserAsPaid() {
-      const email = document.getElementById("check-upi").value;
+    // Input boxes for the input page
+    const emailInput = document.getElementById("check-email");
+    const upiInput = document.getElementById("check-upi");
 
+    // Status text display for the QR code page
+    const logField = document.getElementById("log");
+
+    let memberEmail = "";
+    let memberUpi = "";
+
+    /**
+     * Switches page to the specified page number.
+     * 1 – Home page
+     * 2 – Email / UPI input page
+     * 3 - QR code page
+     * 4 - Message response page
+     */
+    function switchPage(pageNumber) {
+      // Hide all pages
+      for (const page of pages) {
+        page.style.display = 'none';
+      }
+
+      // Unhide the specified page
+      pages[pageNumber - 1].style.display = 'block';
+
+      // If we go back to home, reset all values to empty
+      if (pageNumber == 1) {
+        memberEmail = "";
+        memberUpi = "";
+        emailInput.value = "";
+        upiInput.value = "";
+      }
+    }
+
+    /**
+     * Marks the given user (by the current global email/upi) as paid.
+     */
+    function markUserAsPaid() {
       $.ajax({
         cache: false,
         url: ADMIN_ENDPOINT + "/markAsPaid",
         method: "GET",
         data: {
-          "upi": upi,
-          "email": email
+          "email": memberEmail,
+          "upi": memberUpi
         },
-        success: {
-          // Reset all values and switch page
-          document.getElementById("check-upi").value = "";
-          document.getElementById("check-email").value = "";
-          switchPage(1);
+        error: function (errorBody) {
+          console.log(`Failed to mark ${memberEmail || memberUpi} as paid: ${errorBody}`)
         }
       });
+
+      switchPage(1);
     }
 
+    /**
+     * Loads the relevant response message.
+     * 1 - Registered and paid
+     * 2 - Registered and NOT paid
+     * 3 - Duplicate input (i.e. paid and attended)
+     * 4 - Not registered for the event yet
+     */
     function showResponseMessage(messageIndex) {
       // Clear all messages
       for (message of messages) {
@@ -154,61 +187,60 @@
       messages[messageIndex - 1].style.display = 'block';
     }
 
-    function checkUser() {
-      const upi = document.getElementById('check-upi').value;
-      const email = document.getElementById('check-email').value;
+    /**
+     * Checks if the member has paid / other attributes.
+     * Based on this, will call the relevant command to display response message.
+     */
+    function checkMemberPaymentStatus(email = null) {
+      // Set our global member fields (for use in the rest of the application)
+      memberEmail = email || emailInput.value;
+      memberUpi = upiInput.value;
 
-      console.log(upi, email);
-
-      //check if user has registered/paid using ASPA-14
+      console.log(memberEmail, memberUpi);
 
       $.ajax({
         cache: false,
         url: ADMIN_ENDPOINT + "/paymentStatus",
         method: "GET",
         data: {
-          "upi": upi,
-          "email": email
+          "email": memberEmail,
+          "upi": memberUpi
         },
         statusCode: {
           200: function (data) {
-            console.log("Successfully check user.")
-            console.log(JSON.parse(data).paymentMade);
+            const paymentMade = JSON.parse(data).paymentMade;
+            console.log("Successfully checked for the user: " + (paymentMade ? "Paid member" : "Unpaid"));
+            showResponseMessage(paymentMade ? 1 : 2);
           },
           404: function (data) {
             console.log("Error, user not found!");
+            showResponseMessage(4);
           },
           409: function (data) {
             console.log("Error, conflicting user!");
+            showResponseMessage(3);
           }
         }
   	  });
-
     }
 
-    // Set the page height by window for CSS
+    // Set the page height by window for CSS and show home page by default
     $(".page").css("height", `${window.innerHeight}px`);
+    switchPage(1);
   </script>
 
   <script type="text/javascript">
-    const logField = document.getElementById("log");
-    let lastEmail = "";
-
     QrScanner.WORKER_PATH = 'assets/lib/qr-scanner-worker.min.js';
 
-<<<<<<< Updated upstream
-    function checkScanResult(result) {
+    function onScanResult(result) {
       try {
         const decoded = JSON.parse(result);
         logField.innerHTML = "Email: " + decoded.email;
-=======
-  }
 
->>>>>>> Stashed changes
-
-        if (lastEmail !== decoded.email) {
-          checkUser(null, decoded.email);
-          lastEmail = decoded.email;
+        // This check prevents multiple calls to our server from being made
+        if (memberEmail !== decoded.email) {
+          memberEmail = decoded.email;
+          checkMemberPaymentStatus(decoded.email);
         }
       } catch (e) {
         console.log(e);
@@ -217,7 +249,7 @@
     }
 
     const videoElem = document.getElementById("preview");
-    const qrScanner = new QrScanner(videoElem, checkScanResult);
+    const qrScanner = new QrScanner(videoElem, onScanResult);
     qrScanner.start();
   </script>
 
