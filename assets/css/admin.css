@@ -35,7 +35,7 @@ h1 {
 }
 
 .page {
-    height: 100vh;
+    height: calc(var(--vh, 1vh) * 100);
     width: 100vw;
 }
 
@@ -92,7 +92,7 @@ h1 {
     left: 50%;
     /* bring your own prefixes */
     transform: translate(-50%, -50%);
-    
+
     text-align: center;
     width: 600px;
     padding: 25px;
@@ -108,11 +108,11 @@ h1 {
         top: 0;
         left: 0;
         right: 0;
-        
+
         border-radius: 0;
         width: 100%;
         height: auto;
-        
+
         transform: translate(0, 0);
     }
 }

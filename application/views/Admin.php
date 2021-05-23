@@ -153,9 +153,12 @@
             console.log("Error, conflicting user!");
           }
         }
-  	});
+  	  });
 
     }
+
+    // Set the page height by window for CSS
+    document.documentElement.style.setProperty('--vh', `${window.innerHeight * 0.01}px`);
   </script>
 
   <script type="text/javascript">
@@ -182,8 +185,6 @@
     const videoElem = document.getElementById("preview");
     const qrScanner = new QrScanner(videoElem, checkScanResult);
     qrScanner.start();
-
-
   </script>
 
 
