@@ -77,24 +77,20 @@
   </div>
 
   <div class="page" id="message-page">
-
-    <div id="HTTP-200-true">
-      <p>Member has paid for the event. All good!</p>
+    <div id="message1">
+      <p>Member has successfully paid!</p>
     </div>
-
-    <div id="HTTP-200-false">
+    <div id="message2">
       <p>Member has registered but hasn't paid yet.</p>
       <button class="button" onClick="markUserAsPaid()">Manual Payment</button>
     </div>
-
-    <div id="HTTP-409">
+    <div id="message3">
       <p>QR Code or Input Email has already been used.</p>
     </div>
-
-    <div id="HTTP-404">
+    <div id="message4">
       <p>Member has not registered for the event.</p>
     </div>
-
+    <!--<button class="button" onClick="window.location.reload();">Check New User</button> this button refreshes the page for new input-->
   </div>
 
   <script type="text/javascript">
@@ -104,14 +100,17 @@
     const emailPage = document.getElementById("email-page");
     const qrCodePage = document.getElementById("qr-code-page");
     const messagePage = document.getElementById("message-page");
+
+    // 1 - home page, 2 - email page, 3 - qr code page, 4 - message page
     const pages = [homePage, emailPage, qrCodePage, messagePage];
 
     // Messages to display on the message page
-    const message1 = document.getElementById("HTTP-200-true"); // Registered and paid
-    const message2 = document.getElementById("HTTP-200-false"); // Registered not paid
-    const message3 = document.getElementById("HTTP-409"); // QR Code/Email Input Duplicate
-    const message4 = document.getElementById("HTTP-404"); // Not registered for event
-    // 1 = HTTP-200-true, 2 = HTTP-200-false, 3 = HTTP-409, 4 = HTTP-404
+    const message1 = document.getElementById("message1"); // Registered and paid
+    const message2 = document.getElementById("message2"); // Registered not paid
+    const message3 = document.getElementById("message3"); // QR Code/Email Input Duplicate
+    const message4 = document.getElementById("message4"); // Not registered for event
+
+    // 1 - 200 true (registered and paid), 2 - 200 false (registered, not paid), 3 - 409 (duplicate entry), 4 - 404 (not registered)
     const messages = [message1, message2, message3, message4];
 
     // Input boxes for the input page
@@ -197,6 +196,12 @@
       memberUpi = upiInput.value;
 
       console.log(memberEmail, memberUpi);
+
+      for (const message of messages) {
+        message.style.display = 'none';
+      }
+
+      switchPage(4);
 
       $.ajax({
         cache: false,
