@@ -99,7 +99,9 @@ class Admin extends ASPA_Controller
 
         // Get attendance cell value
         $attendanceCellId = 'G' . $this->GoogleSheets_Model->convertCoordinateToArray($cell)[1];
-        $attendance = $this->GoogleSheets_Model->getCellContents($attendanceCellId, $attendanceCellId)[0][0];
+        $attendanceCell = $this->GoogleSheets_Model->getCellContents($attendanceCellId, $attendanceCellId)
+        $attendance = $attendanceCell ? $attendanceCell[0][0] : null;
+        
         /**
          * 200 – OK, paymentMade = true` if `green` and `attendance=false` from the registration sheet
          * (this means the attendee has paid)
