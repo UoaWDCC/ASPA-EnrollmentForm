@@ -18,7 +18,7 @@ class Admin extends ASPA_Controller
      * Loads the main admin dashboard view.
      */
     public function index() {
-        $this->load->view('admin');
+        $this->load->view('Admin');
     }
 
     /**
