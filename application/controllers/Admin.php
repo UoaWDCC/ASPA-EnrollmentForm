@@ -13,9 +13,14 @@ require ('vendor/autoload.php');
  */
 class Admin extends ASPA_Controller
 {
+
+    /**
+     * Loads the main admin dashboard view.
+     */
     public function index() {
-        $this->load->view('admin');
+        $this->load->view('Admin');
     }
+
     /**
      * Marks the attendee as paid by highlighting their row.
      * It checks if either the email or upi is found in the spreadsheet.
