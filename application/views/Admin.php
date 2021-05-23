@@ -158,7 +158,7 @@
     }
 
     // Set the page height by window for CSS
-    document.documentElement.style.setProperty('--vh', `${window.innerHeight * 0.01}px`);
+    $(".page").css("height", `${window.innerHeight}px`);
   </script>
 
   <script type="text/javascript">

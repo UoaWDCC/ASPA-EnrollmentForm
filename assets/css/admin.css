@@ -35,7 +35,7 @@ h1 {
 }
 
 .page {
-    height: calc(var(--vh, 1vh) * 100);
+    height: 100vh;
     width: 100vw;
 }
 
