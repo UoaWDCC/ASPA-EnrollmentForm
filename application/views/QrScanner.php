@@ -33,8 +33,8 @@
 <body>
   <div class="centre-page">
     <h1>Scan QR:</h1>
-    <div class="video-wrap">
-      <video id="preview"></video>
+    <div class="video-container">
+      <video id="preview" width="100px" height="100px"></video>
     </div>
     <p class="p" id="log"></p>
   </div>
@@ -47,7 +47,9 @@
     const logField = document.getElementById("log");
 
     // create scanner instance
-    const args = { video: document.getElementById('preview') };
+    const args = {
+      video: document.getElementById('preview')
+    };
     window.URL.createObjectURL = (stream) => {
       args.video.srcObject = stream;
       return stream;

@@ -2,15 +2,17 @@ body {
   background-color: #E9EEF2;
 }
 
-.video-wrap {
-  border: 5px solid black;
-  margin: 20px;
+.video-container { 
+  /* border: 5px solid red; */
+  /* margin: 20px; */
 }
 
-video {
-  display: block;
-  width: 100%;
-  height: 100%;
+.video-container video {
+  width: 0%;
+  height: 0%;
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
 }
 
 .centre-page {
