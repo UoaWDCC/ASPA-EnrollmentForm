@@ -71,24 +71,20 @@
   </div>
 
   <div class="page" id="message-page">
-
-    <div id="HTTP-200-true">
+    <div id="message1">
       <p>Member has successfully paid!</p>
     </div>
-
-    <div id="HTTP-200-false">
+    <div id="message2">
       <p>Member has registered but hasn't paid yet.</p>
       <button class="button">Manual Payment</button>
     </div>
-
-    <div id="HTTP-409">
+    <div id="message3">
       <p>QR Code or Input Email has already been used.</p>
     </div>
-
-    <div id="HTTP-404">
+    <div id="message4">
       <p>Member has not registered for the event.</p>
     </div>
-
+    <!--<button class="button" onClick="window.location.reload();">Check New User</button> this button refreshes the page for new input--> 
   </div>
 
 
@@ -99,7 +95,7 @@
   const qrCodePage = document.getElementById("qr-code-page");
   const messagePage = document.getElementById("message-page");
 
-  // 1 - home page, 2 - email page, 3 - qr code page
+  // 1 - home page, 2 - email page, 3 - qr code page, 4 - message page
   const pages = [homePage, emailPage, qrCodePage, messagePage];
 
   function switchPage(pageNumber) {
@@ -112,12 +108,12 @@
 
   switchPage(1);
 
-  const message1 = document.getElementById("HTTP-200-true"); //Registered and paid
-  const message2 = document.getElementById("HTTP-200-false"); //Registered not paid
-  const message3 = document.getElementById("HTTP-409"); //QR Code/Email Input Duplicate
-  const message4 = document.getElementById("HTTP-404"); //Not registered for eventt
+  // 1 - 200 true (registered and paid), 2 - 200 false (registered, not paid), 3 - 409 (duplicate entry), 4 - 404 (not registered)
+  const message1 = document.getElementById("message1");
+  const message2 = document.getElementById("message2");
+  const message3 = document.getElementById("message3");
+  const message4 = document.getElementById("message4");
 
-  // 1 = HTTP-200-true, 2 = HTTP-200-false, 3 = HTTP-409, 4 = HTTP-404
   const messages = [message1, message2, message3, message4];
 
   function checkUser() {
@@ -125,10 +121,13 @@
     const upi = document.getElementById('check-upi').value;
     const email = document.getElementById('check-email').value;
 
-    console.log(upi, email);
+    for (const message of messages) {
+      message.style.display = 'none';
+    }
 
-    //check if user has registered/paid using ASPA-14
+    switchPage(4);
 
+    //check if user has registered/paid
     $.ajax({
       cache: false,
       url: document.getElementById("base_url").innerHTML + "index.php/Admin/paymentStatus",
@@ -140,23 +139,24 @@
       statusCode: {
         200: function (data) {
           console.log("Successfully check user.")
-          console.log(JSON.parse(data).paymentMade);
+          paid = JSON.parse(data).paymentMade;
+          if (paid == true) {
+            message1.style.display = 'block';
+          } else {
+            message2.style.display = 'block';
+          }
         },
         404: function (data) {
           console.log("Error, user not found!");
+          message3.style.display = 'block';
         },
         409: function (data) {
           console.log("Error, conflicting user!");
+          message4.style.display = 'block';
         }
       }
 	});
-
   }
-  
-
   </script>
-
-  
 </body>
-
 </html>
