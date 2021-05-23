@@ -19,32 +19,11 @@ h1 {
 }
 
 
-/* Top left text */
-
-.top {
-    position: absolute;
-    top: 8px;
-    align-self: center;
-}
-
-
-/* Email button */
-
-.email-button {
-    position: absolute;
-}
-
 .page {
     height: 100vh;
     width: 100vw;
 }
 
-
-/* commenting out
-#email-page {
-    top: 50%;
-}
-*/
 
 #back-btn {
     position: absolute;
@@ -52,73 +31,131 @@ h1 {
     left: 5%;
 }
 
-#email-btn {
-    position: absolute;
-    top: 50%;
-    left: 35%;
-}
-
-#qr-btn {
-    position: absolute;
-    top: 50%;
-    left: 55%;
-}
-
-#qr-code-page .flex-container {
+#home-page {
     display: flex;
-    justify-content: center;
+    flex-flow: column nowrap;
+    justify-content: space-around;
+}
+
+.flex-container {
+    display: flex;
+    justify-content: space-between;
     flex-flow: column nowrap;
     align-items: center;
     height: 100%;
 }
 
-
-#qr-code-page .flex-filler {
+.flex-filler {
     position: relative;
     flex-grow: 1;
+}
+
+#home-page button {
+    text-align: center;
+    height: 100px;
+    width: 100px !important;
+    margin: 10px;
+    min-width: 0;
+
+    box-shadow: 0;
+}
+
+#qr-btn {
+    background-color: palevioletred;
+}
+
+#email-btn {
+    background-color: lightseagreen;
+}
+
+#qr-btn:hover {
+    background-color: #b45a78;
+}
+
+#email-btn:hover {
+    background-color: #188680;
+}
+
+#email-page input {
+    padding: 10px;
+    width: 100%;
+    border: 0;
+    border-bottom: 5px;
+}
+
+#email-page .content {
+    max-width: 100%;
+    width: 350px;
+    box-sizing: border-box;
+    padding: 0 25px;
+}
+
+#email-page p {
+    text-align: center;
+    font-style: italic;
+    color: grey;
+    margin: 10px 0;
+}
+
+#email-page button {
+    display: block;
+    font-size: 1em;
+    width: 100px;
+    min-width: 0;
+    height: 40px;
+    padding: 0;
+    margin: 40px auto;
 }
 
 /* For QR Code section */
 #qr-code-page .video-container video {
     width: 300px;
     height: 300px;
-    border: 5px solid lightblue;
+    border: 5px solid rgb(74, 140, 193);
     object-fit: cover;
 }
 
-#qr-code-page .centre-page {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    /* bring your own prefixes */
-    transform: translate(-50%, -50%);
-
-    text-align: center;
-    width: 600px;
-    padding: 25px;
-    border-radius: 25px;
+#qr-code-page .content {
+    position: relative;
 }
 
-@media screen and (max-width: 450px) {
-    #qr-code-page .centre-page {
-        position: absolute;
-        box-sizing: border-box;
-        -webkit-box-sizing: border-box;
-        -moz-box-sizing: border-box;
-        top: 0;
-        left: 0;
-        right: 0;
-
-        border-radius: 0;
-        width: 100%;
-        height: auto;
-
-        transform: translate(0, 0);
-    }
+#qr-code-page #log {
+    bottom: -40px;
+    position: absolute;
+    color: grey;
+    font-size: 1em;
+    font-style: italic;
 }
 
-@media screen and (max-width: 900px) {
-    #qr-code-page .centre-page {
-        position: absolute;
-    }
+#message-page-container {
+    box-sizing: border-box;
+    padding: 100px 25px;
+    width: 400px;
+    max-width: 100%;
+    margin: 0 auto;
+}
+
+#message-page h4 {
+    margin-bottom: 40px;
+}
+
+#message-page p {
+    background-color: #f5f5f5;
+    font-size: 1.4em;
+    line-height: 1.5em;
+    margin-bottom: 30px;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+#message-page .button {
+    font-size: 1em;
+}
+
+#message-page #member-identifier-span {
+    font-size: 0.8em;
+    padding: 5px 10px;
+    border-radius: 5px;
+    background-color: lightgrey;
+    vertical-align: bottom;
 }

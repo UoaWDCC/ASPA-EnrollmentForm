@@ -29,6 +29,8 @@
   <link href="assets/css/webflow.css" rel="stylesheet" type="text/css">
   <link href="assets/css/aspa.webflow.css" rel="stylesheet" type="text/css">
 
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" type="text/css">
+
   <link href="assets/css/admin.css" rel="stylesheet" type="text/css">
 
   <!-- QR Code Scanning Library -->
@@ -41,57 +43,95 @@
   <div class="div-back div-page-page3"><a id="btn-back-page3" onClick="switchPage(1)" class="btn-back w-button">← Back</a></div>
 
   <div class="page" id="home-page">
-    <!-- <img src="assets/images/ASPA-admin.jpg"/> -->
-    <center>
-      <button class="button" id="email-btn" onClick="switchPage(2)">Email/UPI</button>
-      <button class="button" id="qr-btn" onClick="switchPage(3)">QR Code</button>
-    </center>
+    <div class="flex-container">
+      <!-- <img src="assets/images/ASPA-admin.jpg"/> -->
+      <div class="flex-filler"></div>
+      <div>
+        <button class="button" id="email-btn" onClick="switchPage(2)"><i class="far fa-keyboard"></i></button>
+        <button class="button" id="qr-btn" onClick="switchPage(3)"><i class="fas fa-qrcode"></i></button>
+      </div>
+      <div class="flex-filler"></div>
+    </div>
   </div>
 
   <div class="page" id="email-page">
-    <center>
-      <p>UPI:*</p>
-      <input type="text" id="check-upi" name="login-upi">
-      <br>
-      <p>Email:*</p>
-      <input type="text" id="check-email" name="login-email">
-      <br><br><br>
-      <button class="button" onClick="checkMemberPaymentStatus()">Check Status</button>
-      <br>
-    </center>
+    <div class="flex-container">
+      <div class="flex-filler"></div>
+      <div class="content">
+        <input type="text" id="check-email" name="login-email" placeholder="email (priority)">
+        <p>OR ...</p>
+        <input type="text" id="check-upi" name="login-upi" placeholder="upi">
+
+        <button class="button" onClick="checkMemberPaymentStatus()">GO</button>
+      </div>
+      <div class="flex-filler"></div>
+    </div>
   </div>
 
 
   <div class="page" id="qr-code-page">
     <div class="flex-container">
-      <div class="flex-filler">
-      </div>
-      <center>
+      <div class="flex-filler"></div>
+      <div class='content'>
         <div class="video-container" id="reader">
           <video id="preview" width="100px" height="100px"></video>
         </div>
         <p class="p" id="log"></p>
-      </center>
+      </div>
       <div class="flex-filler"></div>
     </div>
   </div>
 
   <div class="page" id="message-page">
-    <div id="message1">
-      <p>Member has successfully paid!</p>
+    <div id="message-page-container">
+      <h4>ID: <span id="member-identifier-span">...</span></h4>
+
+      <div id="message1">
+        <p>Member registered and paid online.</p>
+      </div>
+      <div id="message2">
+        <p>Member registered but not paid.</p>
+        <button class="button" onClick="markUserAsPaid()">Manual Payment</button>
+      </div>
+      <div id="message3">
+        <p>Member has already checked in! (QR code scanned twice?)</p>
+      </div>
+      <div id="message4">
+        <p>Member has not registered for the event.</p>
+      </div>
     </div>
-    <div id="message2">
-      <p>Member has registered but hasn't paid yet.</p>
-      <button class="button" onClick="markUserAsPaid()">Manual Payment</button>
-    </div>
-    <div id="message3">
-      <p>QR Code or Input Email has already been used.</p>
-    </div>
-    <div id="message4">
-      <p>Member has not registered for the event.</p>
-    </div>
-    <!--<button class="button" onClick="window.location.reload();">Check New User</button> this button refreshes the page for new input-->
   </div>
+
+  <!-- This script block sets the qrscanner up -->
+  <script type="text/javascript">
+    QrScanner.WORKER_PATH = 'assets/lib/qr-scanner-worker.min.js';
+
+    function logTextError() {
+      logField.innerHTML = "Error: Wrong QR code format";
+      setTimeout(() => {logField.innerHTML = ""}, 8000);
+    }
+
+    function onScanResult(result) {
+      try {
+        const decoded = JSON.parse(result);
+
+        if (!decoded.email) {
+          logTextError();
+        }
+
+        // This check prevents multiple calls to our server from being made
+        if (memberEmail !== decoded.email) {
+          memberEmail = decoded.email;
+          checkMemberPaymentStatus(decoded.email);
+        }
+      } catch (e) {
+        logTextError();
+      }
+    }
+
+    const videoElem = document.getElementById("preview");
+    const qrScanner = new QrScanner(videoElem, onScanResult);
+  </script>
 
   <script type="text/javascript">
     const ADMIN_ENDPOINT = document.getElementById("base_url").innerHTML + "index.php/Admin";
@@ -119,6 +159,7 @@
 
     // Status text display for the QR code page
     const logField = document.getElementById("log");
+    const memberIdentifierElem = document.getElementById("member-identifier-span");
 
     let memberEmail = "";
     let memberUpi = "";
@@ -145,6 +186,17 @@
         memberUpi = "";
         emailInput.value = "";
         upiInput.value = "";
+
+        memberIdentifierElem.innerHTML = "-";
+
+        memberIdentifierElem.style.backgroundColor = '#d2d2d2';
+        memberIdentifierElem.style.color = 'inherit';
+      }
+
+      if (pageNumber === 1) {
+        qrScanner.start();
+      } else if (pageNumber !== 3) {
+        qrScanner.stop();
       }
     }
 
@@ -176,6 +228,25 @@
      * 4 - Not registered for the event yet
      */
     function showResponseMessage(messageIndex) {
+      switch (messageIndex) {
+        case 1:
+          memberIdentifierElem.style.backgroundColor = '#509350';
+          memberIdentifierElem.style.color = '#ffffff';
+          break;
+        case 2:
+          memberIdentifierElem.style.backgroundColor = '#eeb62c';
+          memberIdentifierElem.style.color = '#040403';
+          break;
+        case 3:
+          memberIdentifierElem.style.backgroundColor = '#a10c5d';
+          memberIdentifierElem.style.color = '#ffffff';
+          break;
+        default:
+          memberIdentifierElem.style.backgroundColor = '#d2d2d2';
+          memberIdentifierElem.style.color = 'inherit';
+          break;
+      }
+
       messages[messageIndex - 1].style.display = 'block';
     }
 
@@ -187,6 +258,16 @@
       // Set our global member fields (for use in the rest of the application)
       memberEmail = email || emailInput.value;
       memberUpi = upiInput.value;
+
+      // If neither input is set, do nothing
+      if (!memberEmail && !memberUpi) {
+        return;
+      }
+
+      // Set the identifier
+      memberIdentifierElem.innerHTML = memberEmail ? memberEmail : memberUpi;
+
+
 
       console.log(memberEmail, memberUpi);
 
@@ -226,32 +307,6 @@
     $(".page").css("height", `${window.innerHeight}px`);
     switchPage(1);
   </script>
-
-  <script type="text/javascript">
-    QrScanner.WORKER_PATH = 'assets/lib/qr-scanner-worker.min.js';
-
-    function onScanResult(result) {
-      try {
-        const decoded = JSON.parse(result);
-        logField.innerHTML = "Email: " + decoded.email;
-
-        // This check prevents multiple calls to our server from being made
-        if (memberEmail !== decoded.email) {
-          memberEmail = decoded.email;
-          checkMemberPaymentStatus(decoded.email);
-        }
-      } catch (e) {
-        console.log(e);
-        logField.innerHTML = "QR code not correct";
-      }
-    }
-
-    const videoElem = document.getElementById("preview");
-    const qrScanner = new QrScanner(videoElem, onScanResult);
-    qrScanner.start();
-  </script>
-
-
 </body>
 
 </html>
