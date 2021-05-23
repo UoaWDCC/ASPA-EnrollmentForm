@@ -176,13 +176,6 @@
      * 4 - Not registered for the event yet
      */
     function showResponseMessage(messageIndex) {
-      // Clear all messages
-      for (message of messages) {
-        message.style.display = 'none';
-      }
-
-      // Switch to messages page and show the correct response message
-      switchPage(4);
       messages[messageIndex - 1].style.display = 'block';
     }
 
@@ -197,10 +190,10 @@
 
       console.log(memberEmail, memberUpi);
 
+      // Hide all current messages and switch to 4 (messages page)
       for (const message of messages) {
         message.style.display = 'none';
       }
-
       switchPage(4);
 
       $.ajax({
