@@ -107,6 +107,7 @@ class Admin extends ASPA_Controller
         if ($hasUserPaid && $attendance != 'P') {
             $this->output->set_status_header(200)
                     ->set_output(json_encode(array('paymentMade' => true)));
+            $this->GoogleSheets_Model->markAsPresent($this->eventData["gsheet_name"], $email, $upi);
             return;
         }
 
