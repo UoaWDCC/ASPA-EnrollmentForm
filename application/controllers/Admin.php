@@ -57,7 +57,7 @@ class Admin extends ASPA_Controller
         if ($cellColour == '000000' || $cellColour == 'ffffff') {
             // Highlight this row since it is paid, placed inside this code block to prevent unnecessary calls
             $this->GoogleSheets_Model->highlightRow($row ,[0.968, 0.670, 0.886]);
-
+            $this->GoogleSheets_Model->markAsPresent($this->eventData["gsheet_name"], $email, $upi);
             // Return HTTP status code 200, to signify that it has successfully marked attendee as paid
             $this->output->set_status_header(200)->_display("200: Successfully, marked attendee as paid");
         }
