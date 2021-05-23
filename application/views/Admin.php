@@ -84,7 +84,7 @@
 
     <div id="HTTP-200-false">
       <p>Member has registered but hasn't paid yet.</p>
-      <button class="button">Manual Payment</button>
+      <button class="button" onClick="markUserAsPaid">Manual Payment</button>
     </div>
 
     <div id="HTTP-409">
@@ -103,14 +103,12 @@
     const qrCodePage = document.getElementById("qr-code-page");
     const messagePage = document.getElementById("message-page");
 
-    // 1 - home page, 2 - email page, 3 - qr code page
-    const pages = [homePage, emailPage, qrCodePage, messagePage];
+    const ADMIN_ENDPOINT = document.getElementById("base_url").innerHTML + "index.php/Admin";
 
-    function switchPage(pageNumber) {
-      for (const page of pages) {
-        page.style.display = 'none';
-      }
 
+  function switchPage(pageNumber) {
+    for (const page of pages) {
+      page.style.display = 'none';
       pages[pageNumber - 1].style.display = 'block';
     }
 
@@ -124,10 +122,41 @@
     // 1 = HTTP-200-true, 2 = HTTP-200-false, 3 = HTTP-409, 4 = HTTP-404
     const messages = [message1, message2, message3, message4];
 
-    function checkUser(customUpi, customEmail) {
+    // Marks the given user as paid
+    function markUserAsPaid() {
+      const email = document.getElementById("check-upi").value;
 
-      const upi = customUpi ?? document.getElementById('check-upi').value;
-      const email = customEmail ?? document.getElementById('check-email').value;
+      $.ajax({
+        cache: false,
+        url: ADMIN_ENDPOINT + "/markAsPaid",
+        method: "GET",
+        data: {
+          "upi": upi,
+          "email": email
+        },
+        success: {
+          // Reset all values and switch page
+          document.getElementById("check-upi").value = "";
+          document.getElementById("check-email").value = "";
+          switchPage(1);
+        }
+      });
+    }
+
+    function showResponseMessage(messageIndex) {
+      // Clear all messages
+      for (message of messages) {
+        message.style.display = 'none';
+      }
+
+      // Switch to messages page and show the correct response message
+      switchPage(4);
+      messages[messageIndex - 1].style.display = 'block';
+    }
+
+    function checkUser() {
+      const upi = document.getElementById('check-upi').value;
+      const email = document.getElementById('check-email').value;
 
       console.log(upi, email);
 
@@ -135,7 +164,7 @@
 
       $.ajax({
         cache: false,
-        url: document.getElementById("base_url").innerHTML + "index.php/Admin/paymentStatus",
+        url: ADMIN_ENDPOINT + "/paymentStatus",
         method: "GET",
         data: {
           "upi": upi,
@@ -167,10 +196,15 @@
 
     QrScanner.WORKER_PATH = 'assets/lib/qr-scanner-worker.min.js';
 
+<<<<<<< Updated upstream
     function checkScanResult(result) {
       try {
         const decoded = JSON.parse(result);
         logField.innerHTML = "Email: " + decoded.email;
+=======
+  }
+
+>>>>>>> Stashed changes
 
         if (lastEmail !== decoded.email) {
           checkUser(null, decoded.email);
