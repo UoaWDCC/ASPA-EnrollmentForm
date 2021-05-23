@@ -30,19 +30,18 @@
   <link href="assets/css/aspa.webflow.css" rel="stylesheet" type="text/css">
 
   <link href="assets/css/admin.css" rel="stylesheet" type="text/css">
+
+  <!-- QR Code Scanning Library -->
+  <script type="text/javascript" src="assets/lib/qr-scanner.umd.min.js"></script>
+  <script type="text/javascript" src="assets/lib/qr-scanner-worker.min.js"></script>
 </head>
 
 <body>
   <div id="base_url" style="display: none"><?php echo base_url(); ?></div>
-  <button class="button" id="back-btn" onClick="switchPage(1)">Back</button>
+  <div class="div-back div-page-page3"><a id="btn-back-page3" onClick="switchPage(1)" class="btn-back w-button">← Back</a></div>
 
   <div class="page" id="home-page">
-    <!-- <img src="assets/images/ASPA-admin.jpg"/>
-
-    <div class="top">
-      <h2>Sign In</h2>
-    </div>
-    <br> -->
+    <!-- <img src="assets/images/ASPA-admin.jpg"/> -->
     <center>
       <button class="button" id="email-btn" onClick="switchPage(2)">Email/UPI</button>
       <button class="button" id="qr-btn" onClick="switchPage(3)">QR Code</button>
@@ -64,10 +63,17 @@
 
 
   <div class="page" id="qr-code-page">
-    <center>
-      <p>Scan QR Code</p>
-    </center>
-    <br>
+    <div class="flex-container">
+      <div class="flex-filler">
+      </div>
+      <center>
+        <div class="video-container" id="reader">
+          <video id="preview" width="100px" height="100px"></video>
+        </div>
+        <p class="p" id="log"></p>
+      </center>
+      <div class="flex-filler"></div>
+    </div>
   </div>
 
   <div class="page" id="message-page">
@@ -87,76 +93,108 @@
     <!--<button class="button" onClick="window.location.reload();">Check New User</button> this button refreshes the page for new input--> 
   </div>
 
+  <script type="text/javascript">
+    const homePage = document.getElementById("home-page");
+    const emailPage = document.getElementById("email-page");
+    const qrCodePage = document.getElementById("qr-code-page");
+    const messagePage = document.getElementById("message-page");
+
+    // 1 - home page, 2 - email page, 3 - qr code page, 4 - message page
+    const pages = [homePage, emailPage, qrCodePage, messagePage];
+
+    function switchPage(pageNumber) {
+      for (const page of pages) {
+        page.style.display = 'none';
+      }
+
+      pages[pageNumber - 1].style.display = 'block';
+    }
+
+    switchPage(1);
+
+    // 1 - 200 true (registered and paid), 2 - 200 false (registered, not paid), 3 - 409 (duplicate entry), 4 - 404 (not registered)
+    const message1 = document.getElementById("message1");
+    const message2 = document.getElementById("message2");
+    const message3 = document.getElementById("message3");
+    const message4 = document.getElementById("message4");
+
+    const messages = [message1, message2, message3, message4];
+
+    function checkUser(customUpi, customEmail) {
+
+      const upi = customUpi ?? document.getElementById('check-upi').value;
+      const email = customEmail ?? document.getElementById('check-email').value;
+
+      //check if user has registered/paid using ASPA-14
+
+      for (const message of messages) {
+        message.style.display = 'none';
+      }
+
+      switchPage(4);
+
+      $.ajax({
+        cache: false,
+        url: document.getElementById("base_url").innerHTML + "index.php/Admin/paymentStatus",
+        method: "GET",
+        data: { 
+          "upi": upi, 
+          "email": email
+        },
+        statusCode: {
+          200: function (data) {
+            console.log("Successfully check user.")
+            paid = JSON.parse(data).paymentMade;
+            if (paid == true) {
+              message1.style.display = 'block';
+            } else {
+              message2.style.display = 'block';
+            }
+          },
+          404: function (data) {
+            console.log("Error, user not found!");
+            message3.style.display = 'block';
+          },
+          409: function (data) {
+            console.log("Error, conflicting user!");
+            message4.style.display = 'block';
+          }
+        }
+  	  });
+
+    }
+
+    // Set the page height by window for CSS
+    $(".page").css("height", `${window.innerHeight}px`);
+  </script>
 
   <script type="text/javascript">
+    const logField = document.getElementById("log");
+    let lastEmail = "";
 
-  const homePage = document.getElementById("home-page");
-  const emailPage = document.getElementById("email-page");
-  const qrCodePage = document.getElementById("qr-code-page");
-  const messagePage = document.getElementById("message-page");
+    QrScanner.WORKER_PATH = 'assets/lib/qr-scanner-worker.min.js';
 
-  // 1 - home page, 2 - email page, 3 - qr code page, 4 - message page
-  const pages = [homePage, emailPage, qrCodePage, messagePage];
+    function checkScanResult(result) {
+      try {
+        const decoded = JSON.parse(result);
+        logField.innerHTML = "Email: " + decoded.email;
 
-  function switchPage(pageNumber) {
-    for (const page of pages) {
-      page.style.display = 'none';
-    }
-
-    pages[pageNumber - 1].style.display = 'block';
-  }
-
-  switchPage(1);
-
-  // 1 - 200 true (registered and paid), 2 - 200 false (registered, not paid), 3 - 409 (duplicate entry), 4 - 404 (not registered)
-  const message1 = document.getElementById("message1");
-  const message2 = document.getElementById("message2");
-  const message3 = document.getElementById("message3");
-  const message4 = document.getElementById("message4");
-
-  const messages = [message1, message2, message3, message4];
-
-  function checkUser() {
-    
-    const upi = document.getElementById('check-upi').value;
-    const email = document.getElementById('check-email').value;
-
-    for (const message of messages) {
-      message.style.display = 'none';
-    }
-
-    switchPage(4);
-
-    //check if user has registered/paid
-    $.ajax({
-      cache: false,
-      url: document.getElementById("base_url").innerHTML + "index.php/Admin/paymentStatus",
-      method: "GET",
-      data: { 
-        "upi": upi, 
-        "email": email
-      },
-      statusCode: {
-        200: function (data) {
-          console.log("Successfully check user.")
-          paid = JSON.parse(data).paymentMade;
-          if (paid == true) {
-            message1.style.display = 'block';
-          } else {
-            message2.style.display = 'block';
-          }
-        },
-        404: function (data) {
-          console.log("Error, user not found!");
-          message3.style.display = 'block';
-        },
-        409: function (data) {
-          console.log("Error, conflicting user!");
-          message4.style.display = 'block';
+        if (lastEmail !== decoded.email) {
+          checkUser(null, decoded.email);
+          lastEmail = decoded.email;
         }
+      } catch (e) {
+        console.log(e);
+        logField.innerHTML = "QR code not correct";
       }
-	});
-  }
+    }
+
+    const videoElem = document.getElementById("preview");
+    const qrScanner = new QrScanner(videoElem, checkScanResult);
+    qrScanner.start();
   </script>
+
+
 </body>
+
 </html>
