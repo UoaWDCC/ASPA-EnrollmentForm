@@ -92,15 +92,14 @@ class Admin extends ASPA_Controller
             return;
         }
 
-        $this->load->model("Verification_Model");
+        $cellColour = $this->GoogleSheets_Model->getCellColour($cell);
 
-        $hasUserPaid = $this->Verification_Model->hasUserPaidEvent($email, $this->eventData["gsheet_name"]);
+        // User has paid if cell colour is not white or uncoloured
+        $hasUserPaid = $cellColour != "000000" && $cellColour != "ffffff";
 
-        //Get attendance cell value
-        $attendanceRowValue = $cell[1];
-        $attendanceCellId = 'G' . $attendanceRowValue;
+        // Get attendance cell value
+        $attendanceCellId = 'G' . $this->GoogleSheets_Model->convertCoordinateToArray($cell)[1];
         $attendance = $this->GoogleSheets_Model->getCellContents($attendanceCellId, $attendanceCellId)[0][0];
-
         /**
          * 200 – OK, paymentMade = true` if `green` and `attendance=false` from the registration sheet
          * (this means the attendee has paid)
