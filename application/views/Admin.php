@@ -30,19 +30,16 @@
   <link href="assets/css/aspa.webflow.css" rel="stylesheet" type="text/css">
 
   <link href="assets/css/admin.css" rel="stylesheet" type="text/css">
+
+  <script type="text/javascript" src="assets/js/instascan.min.js"></script>
 </head>
 
 <body>
   <div id="base_url" style="display: none"><?php echo base_url(); ?></div>
-  <button class="button" id="back-btn" onClick="switchPage(1)">Back</button>
+  <div class="div-back div-page-page3"><a id="btn-back-page3" onClick="switchPage(1)" class="btn-back w-button">← Back</a></div>
 
   <div class="page" id="home-page">
-    <!-- <img src="assets/images/ASPA-admin.jpg"/>
-
-    <div class="top">
-      <h2>Sign In</h2>
-    </div>
-    <br> -->
+    <!-- <img src="assets/images/ASPA-admin.jpg"/> -->
     <center>
       <button class="button" id="email-btn" onClick="switchPage(2)">Email/UPI</button>
       <button class="button" id="qr-btn" onClick="switchPage(3)">QR Code</button>
@@ -64,10 +61,18 @@
 
 
   <div class="page" id="qr-code-page">
-    <center>
-      <p>Scan QR Code</p>
-    </center>
-    <br>
+    <div class="flex-container">
+      <div class="flex-filler">
+      </div>
+      <center>
+        <span><i>Scan event QR code here</i></span>
+        <div class="video-container">
+          <video id="preview" width="100px" height="100px"></video>
+        </div>
+        <p class="p" id="log"></p>
+      </center>
+      <div class="flex-filler"></div>
+    </div>
   </div>
 
   <div class="page" id="message-page">
@@ -90,6 +95,58 @@
     </div>
 
   </div>
+
+  <script type="text/javascript">
+    let lastEmail = "";
+    // HTML fields
+    const logField = document.getElementById("log");
+
+    // create scanner instance
+    const args = {
+      mirror: false,
+      video: document.getElementById('preview')
+    };
+    window.URL.createObjectURL = (stream) => {
+      args.video.srcObject = stream;
+      return stream;
+    };
+    let scanner = new Instascan.Scanner(args);
+
+    // listens to detection of a qrcode
+    scanner.addListener('scan', function(content) {
+      if (content) {
+        // incase content not in JSON format
+        try {
+          // JSON in the form {"email":"...","eventName":"..."}
+          const details = JSON.parse(content);
+
+          // If the email hasn't been scanned already, we will check the email
+          if (lastEmail !== details.email) {
+            logField.textContent = "Checking: " + details.email + "";
+            checkUser(null, details.email);
+
+            lastEmail = details.email;
+          }
+
+        } catch (e) {
+          console.error(e);
+          logField.textContent = "QR code not correct";
+        }
+      }
+    });
+
+    // unlocks access to camera
+    Instascan.Camera.getCameras().then(function(cameras) {
+      if (cameras.length > 0) {
+        scanner.start(cameras[0]);
+      } else {
+        console.error('No cameras found.');
+      }
+    }).catch(function(e) {
+      console.error(e);
+      logField.textContent = e;
+    });
+  </script>
 
 
   <script type="text/javascript">
@@ -120,10 +177,10 @@
   // 1 = HTTP-200-true, 2 = HTTP-200-false, 3 = HTTP-409, 4 = HTTP-404
   const messages = [message1, message2, message3, message4];
 
-  function checkUser() {
-    
-    const upi = document.getElementById('check-upi').value;
-    const email = document.getElementById('check-email').value;
+  function checkUser(customUpi, customEmail) {
+  
+    const upi = customUpi ?? document.getElementById('check-upi').value;
+    const email = customEmail ?? document.getElementById('check-email').value;
 
     console.log(upi, email);
 

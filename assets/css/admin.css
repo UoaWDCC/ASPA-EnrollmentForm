@@ -2,6 +2,11 @@ body {
     background-color: #E5E5E5;
 }
 
+h1 {
+    margin: 0;
+    padding-top: 20px;
+}
+
 
 /* Button rounded corners */
 
@@ -57,4 +62,63 @@ body {
     position: absolute;
     top: 50%;
     left: 55%;
+}
+
+#qr-code-page .flex-container {
+    display: flex;
+    justify-content: center;
+    flex-flow: column nowrap;
+    align-items: center;
+    height: 100%;
+}
+
+
+#qr-code-page .flex-filler {
+    position: relative;
+    flex-grow: 1;
+}
+
+/* For QR Code section */
+#qr-code-page .video-container video {
+    width: 300px;
+    height: 300px;
+    border: 5px solid lightblue;
+    object-fit: cover;
+}
+
+#qr-code-page .centre-page {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    /* bring your own prefixes */
+    transform: translate(-50%, -50%);
+    
+    text-align: center;
+    width: 600px;
+    padding: 25px;
+    border-radius: 25px;
+}
+
+@media screen and (max-width: 450px) {
+    #qr-code-page .centre-page {
+        position: absolute;
+        box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        top: 0;
+        left: 0;
+        right: 0;
+        
+        border-radius: 0;
+        width: 100%;
+        height: auto;
+        
+        transform: translate(0, 0);
+    }
+}
+
+@media screen and (max-width: 900px) {
+    #qr-code-page .centre-page {
+        position: absolute;
+    }
 }
