@@ -97,6 +97,9 @@ if (!defined('MAIL_AUTH_EMAIL')) {
 
     define('MAIL_AUTH_EMAIL', $authProps["mail.email"]);
     define('MAIL_AUTH_PASSWORD', $authProps["mail.password"]);
+
+    define('ADMIN_AUTH_PASSKEY', $authProps["auth.passkey"]);
+    define('ADMIN_AUTH_JWTKEY', $authProps["auth.jwtkey"]);
 }
 
 // Feature Toggles
