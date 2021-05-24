@@ -108,6 +108,36 @@ class Verification_Model extends CI_Model {
     }
 
 
+
+    /**
+     * Get user's full name, UPI and UID on the membership spreadsheet.
+     *
+     * @param string $emailAddress The email of the user.
+     *
+     * @return array [member's full name, member's UPI]
+     */
+    public function getMemberInfo($emailAddress)
+    {
+        $this->load->model("GoogleSheets_Model");
+
+        if (!$this->isEmailOnSheet($emailAddress, MEMBERSHIP_SPREADSHEET_ID, MEMBERSHIP_SHEET_NAME)) {
+            log_message("error", "The member is was not found on the sheet when recording to sheet");
+        }
+
+         // Given that the email exists in the sheet, find its index
+        $emailKey = array_search($emailAddress, $this->addresses);
+
+        // Convert key to google coordinate
+        $nameIndex = 'C' . ($emailKey+2);
+        $upiIndex = 'H' . ($emailKey+2);
+
+        // Get member's full name and UPI – these are by default blank string ('') if they do not exist
+        $memberFullName = $this->GoogleSheets_Model->getCellContents($nameIndex, $nameIndex)[0][0] ?? '';
+        $memberUpi = $this->GoogleSheets_Model->getCellContents($upiIndex, $upiIndex)[0][0] ?? '';
+
+        return [$memberFullName, $memberUpi];
+    }
+
     /*
      * Private functions
      */

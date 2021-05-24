@@ -18,7 +18,6 @@ let proceedPayment = document.getElementById("div-proceedpayment"); // proceed p
 let back4 = document.getElementById("div-back-page4"); // back button from page 4
 
 // get name and email inputs on page 3
-let inputName = document.getElementById("field");
 let inputEmail = document.getElementById("field-2");
 
 // get email validation icons/messages on page 3
@@ -50,7 +49,7 @@ let payPoli = document.getElementById("btn-poliay");
 
 // Email Address
 let emailAddress = "";
-let name = "";
+// let name = "";
 let paymentMethod = "";
 
 // ==========================================
@@ -107,7 +106,8 @@ function nextPage() {
 			page2.style.display = "none";
 			page3.style.display = "flex";
 			page4.style.display = "none";
-			setTimeout(() => inputName.focus(), 1000); // autofocus to name field
+			
+			setTimeout(() => inputEmail.focus(), 1000); // autofocus to name field
 			break;
 		case 3:
 			page3.classList.remove("page3-appear");
@@ -145,6 +145,8 @@ function previousPage() {
 // Enter key (keycode 13) triggers the click event of the appropriate buttons to go to next page.
 window.addEventListener("keydown", function (e) {
 	if (e.keyCode === 13) {
+		// Prevent form submission from clicking the enter key
+		e.preventDefault();
 		switch (findActivePage()) {
 			case 1:
 				buttonReg.click(); //buttonReg does not need an onclick function declaration because it is handled by Webflow
@@ -190,25 +192,12 @@ ok3.onclick = function () {
 	
 	hideAllWarnings();
 	emailAddress = inputEmail.value.trim(); // collect email
-	name = inputName.value.trim(); // collect name
-
-	if (name.length === 0) {
-		inputName.style.border = "1px solid red";
-	}
-	else {
-		inputName.style.border = "1px solid #00A22C";
-	}
 	
 	if (emailAddress.length === 0) {
 		inputEmail.style.border = "1px solid red";
-	}
-	else {
-		inputEmail.style.border = "1px solid #00A22C";
-	}
-
-	if (name.length === 0 || emailAddress.length === 0) {
 		return;
 	}
+	inputEmail.style.border = "1px solid #00A22C";
 
 	// Disabling the ok button to prevent user from clicking on it multiple times
 	document.getElementById("ok3").classList.add("btn-disabled"); // stopping the ok button from increasing in size when hovered over
