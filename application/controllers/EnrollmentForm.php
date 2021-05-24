@@ -134,6 +134,11 @@ class EnrollmentForm extends ASPA_Controller
         $this->load->model("Verification_Model");
         $this->load->model('Email_Model');
         log_message('debug', "-- makeOfflinePayment function called");
+
+        $this->load->model("GoogleSheets_Model");
+        $this->load->model("Verification_Model");
+        $this->load->model('Email_Model');
+
         $data['has_paid'] = false;
         $data["email"] = $this->input->post("email");
         $data['paymentMethod'] = $this->input->post("paymentMethod");
