@@ -35,6 +35,3 @@ if (!defined('MAIL_AUTH_EMAIL')) {
  */
 const MEMBERSHIP_SPREADSHEET_ID = '10mwPhiOR_Vfsfw8WHereu4Y5KOsuSWkJFGhrf6Mfk9I';
 const MEMBERSHIP_SHEET_NAME = 'Sheet1';
-
-// Feature Toggles
-const CHECK_MEMBERSHIP_PAYMENT = FALSE;
