@@ -13,6 +13,8 @@ use \Firebase\JWT\JWT;
  */
 class Admin extends ASPA_Controller
 {
+    //constant for cookie name used in authenticate() and checkCookie()
+    const AUTH_COOKIE_NAME = "aspa_admin_authentication";
 
     /**
      * Marks the attendee as paid by highlighting their row. 
@@ -70,8 +72,6 @@ class Admin extends ASPA_Controller
             return false;
         }
 
-        $cookieName = 'admin_authentication';
-
         $payload = array(
             "key" => $urlKey,
             "iat" => microtime(),
@@ -79,7 +79,7 @@ class Admin extends ASPA_Controller
 
         $jwt = JWT::encode($payload, ADMIN_AUTH_JWTKEY);
 
-        setcookie($cookieName , $jwt); 
+        setcookie(self::AUTH_COOKIE_NAME, $jwt); 
         
         echo 'Cookie set';
         return true;
@@ -91,14 +91,12 @@ class Admin extends ASPA_Controller
      */
     public function checkCookie() {
 
-        $cookieName = 'admin_authentication';
-
-        if(!isset($_COOKIE[$cookieName])) {
+        if(!isset($_COOKIE[self::AUTH_COOKIE_NAME])) {
             echo 'Doesn\'t exist';
             return false;
         }
 
-        $jwt = $_COOKIE[$cookieName];
+        $jwt = $_COOKIE[self::AUTH_COOKIE_NAME];
 
         try {
             $decoded = JWT::decode($jwt, ADMIN_AUTH_JWTKEY, array('HS256'));
