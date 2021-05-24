@@ -18,6 +18,18 @@ class Admin extends ASPA_Controller
     const AUTH_COOKIE_NAME = "aspa_admin_authentication";
 
     /**
+     * Loads the main admin dashboard view.
+     */
+    public function index() {
+        if (self::checkCookie())
+            $this->load->view('Admin');
+        else
+            header("Location: http://aspa.wdcc.co.nz");
+    }
+
+
+
+    /**
      * Marks the attendee as paid by highlighting their row.
      * It checks if either the email or upi is found in the spreadsheet.
      * If either is found, it highlights the specified row.
@@ -53,7 +65,7 @@ class Admin extends ASPA_Controller
         if ($cellColour == '000000' || $cellColour == 'ffffff') {
             // Highlight this row since it is paid, placed inside this code block to prevent unnecessary calls
             $this->GoogleSheets_Model->highlightRow($row ,[0.968, 0.670, 0.886]);
-
+            $this->GoogleSheets_Model->markAsPresent($this->eventData["gsheet_name"], $email, $upi);
             // Return HTTP status code 200, to signify that it has successfully marked attendee as paid
             $this->output->set_status_header(200)->_display("200: Successfully, marked attendee as paid");
         }
@@ -93,7 +105,6 @@ class Admin extends ASPA_Controller
     public function checkCookie() {
 
         if(!isset($_COOKIE[self::AUTH_COOKIE_NAME])) {
-            echo 'Doesn\'t exist';
             return false;
         }
 
@@ -102,17 +113,14 @@ class Admin extends ASPA_Controller
         try {
             $decoded = JWT::decode($jwt, ADMIN_AUTH_JWTKEY, array('HS256'));
         } catch (Exception $e) {
-            echo 'Caught exception: ',  $e->getMessage(), "\n";
             return false;
         }
 
         if ($decoded->key == ADMIN_AUTH_PASSKEY) {
-            echo 'Exists, and matches';
             return true;
         }
         else
         {
-            echo 'Exists, but doesn\'t match';
             return false;
         }
     }

@@ -60,7 +60,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
           </div>
           <div id="div-page3" class="div-block page3">
             <div class="div-name-email">
-              <div class="div div-name">
+              <div class="div div-name" style="display: none">
                 <p class="p p-firstname">Your first and last name: <span class="asterisk">*</span></p><input type="text" class="entry w-input" maxlength="256" name="name" data-name="Field" placeholder="Enter your first name" id="field" required="">
               </div>
               <div class="div div-email">
