@@ -1,6 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 require ('vendor/autoload.php');
+use \Firebase\JWT\JWT;
 
 /**
  * Handles all admin-checkup app related endpoints and views.
@@ -14,11 +15,18 @@ require ('vendor/autoload.php');
 class Admin extends ASPA_Controller
 {
 
+    // constant for cookie name used in authenticate() and checkCookie()
+    const AUTH_COOKIE_NAME = "aspa_admin_authentication";
+
     /**
      * Loads the main admin dashboard view.
      */
     public function index() {
-        $this->load->view('Admin');
+        if (self::checkCookie()) {
+            $this->load->view('Admin');
+        } else {
+            $this->authenticate();
+        }
     }
 
     /**
@@ -64,6 +72,60 @@ class Admin extends ASPA_Controller
     }
 
     /**
+     * Checks an input key against a key stored in a file. If it matches, store a cookie on the users browser.
+     */
+    public function authenticate() {
+
+        // Gets a key from the URL from the form admin/authenticate?key=xyz
+        $urlKey = $this->input->get('key');
+
+        // Check if it matches a key we have stored in auth_props.json
+        if ($urlKey != ADMIN_AUTH_PASSKEY) {
+            echo("Key is incorrect");
+            return false;
+        }
+
+        $payload = array(
+            "key" => $urlKey,
+            "iat" => microtime(),
+        );
+
+        $jwt = JWT::encode($payload, ADMIN_AUTH_JWTKEY);
+
+        setcookie(self::AUTH_COOKIE_NAME, $jwt);
+
+        echo 'Cookie set';
+        return true;
+    }
+
+
+    /**
+     * Check if a user has a specific cookie, and if they do, allow them to do something
+     */
+    public function checkCookie() {
+
+        if(!isset($_COOKIE[self::AUTH_COOKIE_NAME])) {
+            return false;
+        }
+
+        $jwt = $_COOKIE[self::AUTH_COOKIE_NAME];
+
+        try {
+            $decoded = JWT::decode($jwt, ADMIN_AUTH_JWTKEY, array('HS256'));
+        } catch (Exception $e) {
+            return false;
+        }
+
+        if ($decoded->key == ADMIN_AUTH_PASSKEY) {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+     /**
      * Checks the current payment status of the user with
      * their email or UPI through [GET].
      */
