@@ -1,28 +1,24 @@
+body {
+    font-family: 'Droid Sans', sans-serif;
+}
 
-
-h1 {font-family: 'Droid Sans';
+h1 {
     font-size: 3em;
 }
 
 p {
-    font-family: 'Droid Sans', sans-serif;
     text-align: left;
-    font-size:0.9em
-
-
+    font-size: 0.9em;
 }
 
 .centre-page {
-
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    /* bring your own prefixes */
-    transform: translate(-50%, -50%);
-
+    display: block;
+    margin: 20px auto;
+    height: auto;
     text-align: center;
+
+    background-color: rgb(246, 246, 246);
     width: 400px;
-    background-color: rgb(246,246,246);
     padding: 25px;
     border-radius: 25px;
 }
@@ -35,6 +31,7 @@ p {
     body {
         background-color: rgb(246, 246, 246);
     }
+
     .centre-page {
         position: absolute;
         box-sizing: border-box;

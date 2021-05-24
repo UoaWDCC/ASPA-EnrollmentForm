@@ -131,6 +131,11 @@ class EnrollmentForm extends ASPA_Controller
     public function makeOfflinePayment()
     {
         log_message('debug', "-- makeOfflinePayment function called");
+
+        $this->load->model("GoogleSheets_Model");
+        $this->load->model("Verification_Model");
+        $this->load->model('Email_Model');
+
         $data['has_paid'] = false;
         $data['name'] = $this->input->post("name");
         $data["email"] = $this->input->post("email");
@@ -140,9 +145,6 @@ class EnrollmentForm extends ASPA_Controller
             show_error("Something went wrong. Please contact uoa.wdcc@gmail.com. Error Code: 001", "500");
         }
 
-        $this->load->model("GoogleSheets_Model");
-        $this->load->model("Verification_Model");
-        $this->load->model('Email_Model');
 
         // Only record if the email is not found
         if (!($this->Verification_Model->isEmailOnSheet($data['email'], REGISTRATION_SPREADSHEET_ID, $this->eventData['gsheet_name']))) {
