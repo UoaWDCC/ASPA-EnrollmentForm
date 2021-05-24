@@ -32,7 +32,7 @@ class Email_Model extends CI_Model {
         $EVENT_DATETIME = explode(" ", $eventData["date"])[1] . ' ' . explode(" ", $eventData["date"])[2] . "<br />" . $eventData["time"];
         $EVENT_LOCATION = $eventData["location"];
         $EVENT_IMAGE = "https://user-images.githubusercontent.com/19633284/115980245-417e0500-a5df-11eb-9741-3b7a10499ef5.png";
-        
+
         // transfer details
         $TRANSFER_AMOUNT = "$" . (string) number_format((float) $eventData["price"], 2, '.', '');
         $TRANSFER_ACCOUNT = $eventData["acc_num"];
@@ -41,21 +41,18 @@ class Email_Model extends CI_Model {
         $MSG_COLOUR = "#ff0000";
 
         // change email details based on different payment method
-        if ($paymentMethod == "online")
-        {
+        if ($paymentMethod == "online") {
             $EMAIL_SUBJECT = "Payment Confirmation - " . $eventData["title"];
             $TICK_IMAGE = "assets/images/Green_Tick.png";
             $PAYMENT_DETAIL = "ONLINE PAYMENT";
             $MSG_COLOUR = "#00ff00";
-		$TRANSFER_DETAIL = "";
-        }
-        elseif ($paymentMethod == "cash") {
+            $TRANSFER_DETAIL = "";
+        } elseif ($paymentMethod == "cash") {
             $EMAIL_SUBJECT = "Event Registration - " . $eventData["title"];
             $TICK_IMAGE = "assets/images/Grey_Tick.jpg";
             $PAYMENT_DETAIL = "CASH";
             $TRANSFER_DETAIL = "";
-        }
-        else {
+        } else {
             $EMAIL_SUBJECT = "Event Registration - " . $eventData["title"];
             $TICK_IMAGE = "assets/images/Grey_tick.png";
             $PAYMENT_DETAIL = "TRANSFER";
@@ -279,7 +276,7 @@ class Email_Model extends CI_Model {
                 self::sanitize($recipientEmail),
                 self::sanitize($recipientName),
                 self::sanitize($EMAIL_SUBJECT),
-                self::sanitize($message)
+                self::sanitize(self::cleanString($message))
         ];
 
         // Build the command that will be executed
@@ -289,6 +286,19 @@ class Email_Model extends CI_Model {
         exec($command . '  > /dev/null 2> /dev/null &');
     }
 
+    /**
+     * Escapes single quote so that when an email is sent to the user, 
+     * the email body won't get cut off.
+     * 
+     * @param $stringCheck
+     * 
+     * @return string
+     */
+    private static function cleanString($stringCheck)
+    {
+        // escape apostrophe
+        return str_replace("'", "&apos;", $stringCheck);
+    }
 
     /**
      * Adds single quotes in front of every string.
@@ -299,7 +309,7 @@ class Email_Model extends CI_Model {
      */
     private static function sanitize(string $str): string
     {
-        return "'" . $str . "'";
+        return "'" . str_replace("'", "", $str) . "'";
     }
 
 }
