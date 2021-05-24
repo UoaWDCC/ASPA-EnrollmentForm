@@ -22,10 +22,11 @@ class Admin extends ASPA_Controller
      * Loads the main admin dashboard view.
      */
     public function index() {
-        if (self::checkCookie())
+        if (self::checkCookie()) {
             $this->load->view('Admin');
-        else
-            header("Location: http://aspa.wdcc.co.nz");
+        } else {
+            $this->authenticate();
+        }
     }
 
     /**
