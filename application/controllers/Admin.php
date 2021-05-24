@@ -17,6 +17,7 @@ class Admin extends ASPA_Controller
     //constant for cookie name used in authenticate() and checkCookie()
     const AUTH_COOKIE_NAME = "aspa_admin_authentication";
 
+    
     /**
      * Loads the main admin dashboard view.
      */
@@ -26,7 +27,6 @@ class Admin extends ASPA_Controller
         else
             header("Location: http://aspa.wdcc.co.nz");
     }
-
 
 
     /**
