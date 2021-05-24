@@ -7,7 +7,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  * @property GoogleSheets_Model $GoogleSheets_Model
  */
 class Verification_Model extends CI_Model {
-    
+
     private $addresses = array();
 
     /**
@@ -61,7 +61,7 @@ class Verification_Model extends CI_Model {
 
         // Check the cell colour of the email cell
         $colourIs = $this->GoogleSheets_Model->getCellColour($emailIndex);
-        
+
         // Uncoloured cells return as 000000 (or sometimes ffffff because google sheets is extra like that)
         // Members who have paid their membership fee are highlighted in a different colour from the default white
         // TODO: Correct this assumption and make this more reliable
@@ -114,14 +114,14 @@ class Verification_Model extends CI_Model {
      *
      * @param string $emailAddress The email of the user.
      *
-     * @return array [full_name, UPI, UID]
+     * @return array [member's full name, member's UPI]
      */
-    public function getUserInfo($emailAddress)
+    public function getMemberInfo($emailAddress)
     {
         $this->load->model("GoogleSheets_Model");
 
         if (!$this->isEmailOnSheet($emailAddress, MEMBERSHIP_SPREADSHEET_ID, MEMBERSHIP_SHEET_NAME)) {
-            return false;
+            log_message("error", "The member is was not found on the sheet when recording to sheet");
         }
 
          // Given that the email exists in the sheet, find its index
@@ -130,20 +130,12 @@ class Verification_Model extends CI_Model {
         // Convert key to google coordinate
         $nameIndex = 'C' . ($emailKey+2);
         $upiIndex = 'H' . ($emailKey+2);
-        $uidIndex = 'G' . ($emailKey+2);
 
+        // Get member's full name and UPI – these are by default blank string ('') if they do not exist
+        $memberFullName = $this->GoogleSheets_Model->getCellContents($nameIndex, $nameIndex)[0][0] ?? '';
+        $memberUpi = $this->GoogleSheets_Model->getCellContents($upiIndex, $upiIndex)[0][0] ?? '';
 
-        // Get user's full name
-        $userFullName = $this->GoogleSheets_Model->getCellContents($nameIndex, $nameIndex)[0][0];
-
-        // Get user's UPI
-        $userUpi = $this->GoogleSheets_Model->getCellContents($upiIndex, $upiIndex)[0][0] == null ? 'N/A' : $this->GoogleSheets_Model->getCellContents($upiIndex, $upiIndex)[0][0];
-
-        // Get user's UID
-        $userUid = $this->GoogleSheets_Model->getCellContents($uidIndex, $uidIndex)[0][0] == null ? 'N/A' : $this->GoogleSheets_Model->getCellContents($uidIndex, $uidIndex)[0][0];
-
-        return [$userFullName, $userUpi, $userUid];
-
+        return [$memberFullName, $memberUpi];
     }
 
     /*
