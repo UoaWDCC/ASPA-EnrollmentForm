@@ -364,10 +364,6 @@
   width: 100%;
 }
 
-.div.div-name {
-  width: 100%;
-}
-
 .div.div-payment {
   display: -webkit-box;
   display: -webkit-flex;
@@ -396,7 +392,7 @@
 .div-block-4 {
   position: absolute;
   left: auto;
-  top: 54%;
+  top: 40%;
   right: -10%;
   bottom: 0%;
   display: block;
