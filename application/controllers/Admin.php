@@ -14,10 +14,10 @@ use \Firebase\JWT\JWT;
  */
 class Admin extends ASPA_Controller
 {
-    //constant for cookie name used in authenticate() and checkCookie()
+
+    // constant for cookie name used in authenticate() and checkCookie()
     const AUTH_COOKIE_NAME = "aspa_admin_authentication";
 
-    
     /**
      * Loads the main admin dashboard view.
      */
@@ -26,14 +26,6 @@ class Admin extends ASPA_Controller
             $this->load->view('Admin');
         else
             header("Location: http://aspa.wdcc.co.nz");
-    }
-
-
-    /**
-     * Loads the main admin dashboard view.
-     */
-    public function index() {
-        $this->load->view('Admin');
     }
 
     /**
@@ -85,7 +77,7 @@ class Admin extends ASPA_Controller
 
         // Gets a key from the URL from the form admin/authenticate?key=xyz
         $urlKey = $this->input->get('key');
-        
+
         // Check if it matches a key we have stored in auth_props.json
         if ($urlKey != ADMIN_AUTH_PASSKEY) {
             echo("Key is incorrect");
@@ -99,8 +91,8 @@ class Admin extends ASPA_Controller
 
         $jwt = JWT::encode($payload, ADMIN_AUTH_JWTKEY);
 
-        setcookie(self::AUTH_COOKIE_NAME, $jwt); 
-        
+        setcookie(self::AUTH_COOKIE_NAME, $jwt);
+
         echo 'Cookie set';
         return true;
     }
