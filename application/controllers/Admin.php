@@ -15,6 +15,13 @@ class Admin extends ASPA_Controller
 {
 
     /**
+     * Loads the main admin dashboard view.
+     */
+    public function index() {
+        $this->load->view('Admin');
+    }
+
+    /**
      * Marks the attendee as paid by highlighting their row.
      * It checks if either the email or upi is found in the spreadsheet.
      * If either is found, it highlights the specified row.
@@ -50,7 +57,7 @@ class Admin extends ASPA_Controller
         if ($cellColour == '000000' || $cellColour == 'ffffff') {
             // Highlight this row since it is paid, placed inside this code block to prevent unnecessary calls
             $this->GoogleSheets_Model->highlightRow($row ,[0.968, 0.670, 0.886]);
-
+            $this->GoogleSheets_Model->markAsPresent($this->eventData["gsheet_name"], $email, $upi);
             // Return HTTP status code 200, to signify that it has successfully marked attendee as paid
             $this->output->set_status_header(200)->_display("200: Successfully, marked attendee as paid");
         }
@@ -85,14 +92,15 @@ class Admin extends ASPA_Controller
             return;
         }
 
-        $this->load->model("Verification_Model");
+        $cellColour = $this->GoogleSheets_Model->getCellColour($cell);
 
-        $hasUserPaid = $this->Verification_Model->hasUserPaidEvent($email, $this->eventData["gsheet_name"]);
+        // User has paid if cell colour is not white or uncoloured
+        $hasUserPaid = $cellColour != "000000" && $cellColour != "ffffff";
 
-        //Get attendance cell value
-        $attendanceRowValue = $cell[1];
-        $attendanceCellId = 'G' . $attendanceRowValue;
-        $attendance = $this->GoogleSheets_Model->getCellContents($attendanceCellId, $attendanceCellId)[0][0];
+        // Get attendance cell value
+        $attendanceCellId = 'G' . $this->GoogleSheets_Model->convertCoordinateToArray($cell)[1];
+        $attendanceCell = $this->GoogleSheets_Model->getCellContents($attendanceCellId, $attendanceCellId);
+        $attendance = $attendanceCell ? $attendanceCell[0][0] : null;
 
         /**
          * 200 – OK, paymentMade = true` if `green` and `attendance=false` from the registration sheet
@@ -101,6 +109,7 @@ class Admin extends ASPA_Controller
         if ($hasUserPaid && $attendance != 'P') {
             $this->output->set_status_header(200)
                     ->set_output(json_encode(array('paymentMade' => true)));
+            $this->GoogleSheets_Model->markAsPresent($this->eventData["gsheet_name"], $email, $upi);
             return;
         }
 

@@ -1,0 +1,161 @@
+body {
+    background-color: #E5E5E5;
+}
+
+h1 {
+    margin: 0;
+    padding-top: 20px;
+}
+
+
+/* Button rounded corners */
+
+.button {
+    border-radius: 5px;
+    color: white;
+    background-color: #4B8CC3;
+    padding: 10px;
+    border-color: #4B8CC3;
+}
+
+
+.page {
+    height: 100vh;
+    width: 100vw;
+}
+
+
+#back-btn {
+    position: absolute;
+    top: 85%;
+    left: 5%;
+}
+
+#home-page {
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: space-around;
+}
+
+.flex-container {
+    display: flex;
+    justify-content: space-between;
+    flex-flow: column nowrap;
+    align-items: center;
+    height: 100%;
+}
+
+.flex-filler {
+    position: relative;
+    flex-grow: 1;
+}
+
+#home-page button {
+    text-align: center;
+    height: 100px;
+    width: 100px !important;
+    margin: 10px;
+    min-width: 0;
+
+    box-shadow: 0;
+}
+
+#qr-btn {
+    background-color: palevioletred;
+}
+
+#email-btn {
+    background-color: lightseagreen;
+}
+
+#qr-btn:hover {
+    background-color: #b45a78;
+}
+
+#email-btn:hover {
+    background-color: #188680;
+}
+
+#email-page input {
+    padding: 10px;
+    width: 100%;
+    border: 0;
+    border-bottom: 5px;
+}
+
+#email-page .content {
+    max-width: 100%;
+    width: 350px;
+    box-sizing: border-box;
+    padding: 0 25px;
+}
+
+#email-page p {
+    text-align: center;
+    font-style: italic;
+    color: grey;
+    margin: 10px 0;
+}
+
+#email-page button {
+    display: block;
+    font-size: 1em;
+    width: 100px;
+    min-width: 0;
+    height: 40px;
+    padding: 0;
+    margin: 40px auto;
+}
+
+/* For QR Code section */
+#qr-code-page .video-container video {
+    width: 300px;
+    height: 300px;
+    border: 5px solid rgb(74, 140, 193);
+    object-fit: cover;
+}
+
+#qr-code-page .content {
+    position: relative;
+}
+
+#qr-code-page #log {
+    bottom: -40px;
+    position: absolute;
+    color: grey;
+    font-size: 1em;
+    font-style: italic;
+}
+
+#message-page-container {
+    box-sizing: border-box;
+    padding: 100px 25px;
+    width: 400px;
+    max-width: 100%;
+    margin: 0 auto;
+}
+
+#message-page h4 {
+    margin-bottom: 40px;
+}
+
+#message-page p {
+    background-color: #f5f5f5;
+    font-size: 1.4em;
+    line-height: 1.5em;
+    margin-bottom: 30px;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+#message-page .button {
+    font-size: 1em;
+}
+
+#message-page #member-identifier-span {
+    font-size: 0.8em;
+    padding: 5px 10px;
+    border-radius: 5px;
+    background-color: lightgrey;
+    vertical-align: bottom;
+}

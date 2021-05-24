@@ -88,7 +88,7 @@ class GoogleSheets_Model extends CI_Model {
      *
      * @param string $email The email of the user to record.
      * @param string $fullName The full name of the user.
-     * @param string $upi The UPI of the user. 
+     * @param string $upi The UPI of the user.
      * @param string $paymentMethod The type of payment the user is selecting.
      */
     public function addNewRecord($email, $fullName, $upi, $paymentMethod)
@@ -122,7 +122,7 @@ class GoogleSheets_Model extends CI_Model {
         if (!$email && !$upi) {
             throw new Exception("You need to enter an email or UPI.");
         }
-        
+
         //  Navigate to the correct spreadsheet
         $this->setCurrentSheetName($eventName);
 

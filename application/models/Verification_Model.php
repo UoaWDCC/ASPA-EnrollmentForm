@@ -7,7 +7,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  * @property GoogleSheets_Model $GoogleSheets_Model
  */
 class Verification_Model extends CI_Model {
-    
+
     private $addresses = array();
 
     /**
@@ -61,7 +61,7 @@ class Verification_Model extends CI_Model {
 
         // Check the cell colour of the email cell
         $colourIs = $this->GoogleSheets_Model->getCellColour($emailIndex);
-        
+
         // Uncoloured cells return as 000000 (or sometimes ffffff because google sheets is extra like that)
         // Members who have paid their membership fee are highlighted in a different colour from the default white
         // TODO: Correct this assumption and make this more reliable
