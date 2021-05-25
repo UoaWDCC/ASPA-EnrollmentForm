@@ -1,6 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 require ('vendor/autoload.php');
+use \Firebase\JWT\JWT;
 
 /**
  * Handles all admin-checkup app related endpoints and views.
@@ -13,6 +14,20 @@ require ('vendor/autoload.php');
  */
 class Admin extends ASPA_Controller
 {
+
+    // constant for cookie name used in authenticate() and checkCookie()
+    const AUTH_COOKIE_NAME = "aspa_admin_authentication";
+
+    /**
+     * Loads the main admin dashboard view.
+     */
+    public function index() {
+        if (self::checkCookie()) {
+            $this->load->view('Admin');
+        } else {
+            $this->authenticate();
+        }
+    }
 
     /**
      * Marks the attendee as paid by highlighting their row.
@@ -50,13 +65,67 @@ class Admin extends ASPA_Controller
         if ($cellColour == '000000' || $cellColour == 'ffffff') {
             // Highlight this row since it is paid, placed inside this code block to prevent unnecessary calls
             $this->GoogleSheets_Model->highlightRow($row ,[0.968, 0.670, 0.886]);
-
+            $this->GoogleSheets_Model->markAsPresent($this->eventData["gsheet_name"], $email, $upi);
             // Return HTTP status code 200, to signify that it has successfully marked attendee as paid
             $this->output->set_status_header(200)->_display("200: Successfully, marked attendee as paid");
         }
     }
 
     /**
+     * Checks an input key against a key stored in a file. If it matches, store a cookie on the users browser.
+     */
+    public function authenticate() {
+
+        // Gets a key from the URL from the form admin/authenticate?key=xyz
+        $urlKey = $this->input->get('key');
+
+        // Check if it matches a key we have stored in auth_props.json
+        if ($urlKey != ADMIN_AUTH_PASSKEY) {
+            echo("Key is incorrect");
+            return false;
+        }
+
+        $payload = array(
+            "key" => $urlKey,
+            "iat" => microtime(),
+        );
+
+        $jwt = JWT::encode($payload, ADMIN_AUTH_JWTKEY);
+
+        setcookie(self::AUTH_COOKIE_NAME, $jwt);
+
+        echo 'Cookie set';
+        return true;
+    }
+
+
+    /**
+     * Check if a user has a specific cookie, and if they do, allow them to do something
+     */
+    public function checkCookie() {
+
+        if(!isset($_COOKIE[self::AUTH_COOKIE_NAME])) {
+            return false;
+        }
+
+        $jwt = $_COOKIE[self::AUTH_COOKIE_NAME];
+
+        try {
+            $decoded = JWT::decode($jwt, ADMIN_AUTH_JWTKEY, array('HS256'));
+        } catch (Exception $e) {
+            return false;
+        }
+
+        if ($decoded->key == ADMIN_AUTH_PASSKEY) {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+     /**
      * Checks the current payment status of the user with
      * their email or UPI through [GET].
      */
@@ -85,14 +154,15 @@ class Admin extends ASPA_Controller
             return;
         }
 
-        $this->load->model("Verification_Model");
+        $cellColour = $this->GoogleSheets_Model->getCellColour($cell);
 
-        $hasUserPaid = $this->Verification_Model->hasUserPaidEvent($email, $this->eventData["gsheet_name"]);
+        // User has paid if cell colour is not white or uncoloured
+        $hasUserPaid = $cellColour != "000000" && $cellColour != "ffffff";
 
-        //Get attendance cell value
-        $attendanceRowValue = $cell[1];
-        $attendanceCellId = 'G' . $attendanceRowValue;
-        $attendance = $this->GoogleSheets_Model->getCellContents($attendanceCellId, $attendanceCellId)[0][0];
+        // Get attendance cell value
+        $attendanceCellId = 'G' . $this->GoogleSheets_Model->convertCoordinateToArray($cell)[1];
+        $attendanceCell = $this->GoogleSheets_Model->getCellContents($attendanceCellId, $attendanceCellId);
+        $attendance = $attendanceCell ? $attendanceCell[0][0] : null;
 
         /**
          * 200 – OK, paymentMade = true` if `green` and `attendance=false` from the registration sheet
@@ -101,6 +171,7 @@ class Admin extends ASPA_Controller
         if ($hasUserPaid && $attendance != 'P') {
             $this->output->set_status_header(200)
                     ->set_output(json_encode(array('paymentMade' => true)));
+            $this->GoogleSheets_Model->markAsPresent($this->eventData["gsheet_name"], $email, $upi);
             return;
         }
 
