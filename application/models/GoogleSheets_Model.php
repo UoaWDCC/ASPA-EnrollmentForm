@@ -154,6 +154,44 @@ class GoogleSheets_Model extends CI_Model {
     }
 
     /**
+     * Mark an attendees attendance in the google sheets
+     *
+     * @param string $eventName The name of the event
+     * @param string $email The email of the user.
+     */
+    public function getFirstName($eventName, $email = null)
+    {
+        if (!$email) {
+            throw new Exception("You need to enter an email or UPI.");
+        }
+
+        //  Navigate to the correct spreadsheet
+        $this->setCurrentSheetName($eventName);
+
+        //  If they do exist, find the cell coordinates where you want to place a 'P'
+        $emailCell = $this->getCellCoordinate($email, 'B');
+
+        // If either $emailCell or $upiCell is defined, then get the row number with priority on email. Otherwise, set $row to null
+        list(, $row) = ($emailCell) ? $this->convertCoordinateToArray($emailCell) : null;
+
+        // If row is not defined (i.e. no user row was found), return false
+        if (!$row) {
+            return false;
+        }
+
+        $range = $this->sheetName . "!G" . $row;
+
+        $requestBody = new Google_Service_Sheets_ValueRange(['values' => $values]);
+
+        // Setting input option to RAW text format (i.e no format parsing)
+        // NB: Risk level = MED, may need some parsing for harmful injections into gsheet document
+        $params = ['valueInputOption' => 'USER_ENTERED'];
+
+        // Return user name
+        return true;
+    }
+
+    /**
      * Returns the number of records in the registration sheet.
      *
      * @return int Number of records.
