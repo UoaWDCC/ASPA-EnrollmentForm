@@ -60,17 +60,17 @@ class EnrollmentForm extends ASPA_Controller
 
         // If the user has already paid for the event, return false
         if ($this->Verification_Model->hasUserPaidEvent($emailAddress, $this->eventData['gsheet_name'])) {
-            $this->create_json('False', '', 'Error: already paid for event');
+            $this->create_json('False', '', 'Error: already paid for event', 409);
             return;
         }
 
         // If membership payment status is checked, and user's membership fee has not been paid, return false
         if (CHECK_MEMBERSHIP_PAYMENT && !$this->Verification_Model->hasUserPaidMembership($emailAddress)) {
-            $this->create_json("False", "Error: signed up but not paid");
+            $this->create_json("False", "Error: signed up but not paid","", 403);
             return;
         }
 
-        $this->create_json('True', '', 'Success');
+        $this->create_json('True', '', 'Success', 200);
     }
 
     /**
