@@ -32,7 +32,7 @@ class ASPA_Controller extends CI_Controller
 	* @param string 	$message 	A brief description of the output
 	* @param string 	$extra 		Any extra information
 	*/
-    protected function create_json($flag = '', $message = '', $extra = [])
+    protected function create_json($flag = '', $message = '', $extra = [], $statusCode)
     {
         $array = array(
             'is_success' => $flag,
@@ -40,7 +40,7 @@ class ASPA_Controller extends CI_Controller
             'extra' => $extra
         );
         $this->output
-            ->set_status_header(200)
+            ->set_status_header($statusCode)
             ->set_content_type('application/json')
             ->set_output(json_encode($array, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES))
             ->_display();
