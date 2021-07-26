@@ -38,6 +38,10 @@ const alreadyPaidEventErr = [
     "Oops! This email has already paid for this event.",
     "Please use a different account or email.",
 ];
+const invalidEmailFormatErr = [
+    "Oops! Email format is incorrect",
+    "Please retype your email",
+];
 
 // get the payment button types on page 4
 let payCash = document.getElementById("btn-cash");
@@ -220,7 +224,7 @@ ok3.onclick = function () {
 			// extra: any further information
 			const signedUpUnpaid = "Error: signed up but not paid"; // edit these if the 'extra' message is modified
 			const alreadyPaidForEvent = "Error: already paid for event";
-			if (data.is_success === "True") {
+			if (data.status_code === 200) {
 				showSuccess();
 				setTimeout(() =>{
 					nextPage();
@@ -228,8 +232,7 @@ ok3.onclick = function () {
 				}, 1000);
 
 			} else if (
-				data.is_success === "False" &&
-				data.extra === signedUpUnpaid
+                data.status_code === 403
 			) {
 				showWarning();
 				// change the error message to be "signed up but unpaid" warning
@@ -238,8 +241,7 @@ ok3.onclick = function () {
 				enableOkButton();
 				return;
 			} else if (
-				data.is_success === "False" &&
-				data.extra === alreadyPaidForEvent
+                data.status_code === 409
 			) {
 				showWarning();
 				// change the error message to be "already paid" warning
@@ -247,14 +249,27 @@ ok3.onclick = function () {
 				errorMsgArray[1].innerHTML = alreadyPaidEventErr[1];
 				enableOkButton();
 				return;
-			} else {
+			} else if (
+                data.status_code === 404
+            )
+            {
 				showWarning();
 				// change the error message to be "unrecognized email, please sign up" warning
 				errorMsgArray[0].innerHTML = notSignedUpUnpaidErr[0];
 				errorMsgArray[1].innerHTML = notSignedUpUnpaidErr[1];
 				enableOkButton();
 				return;
-			}
+			} else if (
+                data.status_code === 412
+            )
+            {
+				showWarning();
+				// change the error message to be "unrecognized email, please sign up" warning
+				errorMsgArray[0].innerHTML = invalidEmailFormatErr[0];
+				errorMsgArray[1].innerHTML = invalidEmailFormatErr[1];
+				enableOkButton();
+				return;
+			} 
 		},
 	});
 };

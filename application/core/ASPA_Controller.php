@@ -32,12 +32,11 @@ class ASPA_Controller extends CI_Controller
 	* @param string 	$message 	A brief description of the output
 	* @param string 	$extra 		Any extra information
 	*/
-    protected function create_json($flag = '', $message = '', $extra = [], $statusCode)
-    {
+    public function createResponse($statusCode, $message, $payload) {
         $array = array(
-            'is_success' => $flag,
+            'status_code' => $statusCode,
             'message' => $message,
-            'extra' => $extra
+            'payload' => $payload
         );
         $this->output
             ->set_status_header($statusCode)
