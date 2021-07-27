@@ -230,38 +230,32 @@ ok3.onclick = function () {
 					nextPage();
 					enableOkButton();
 				}, 1000);
-
-			} else if (
-                data.status_code === 403
-			) {
+			} 
+            else if (data.status_code === 403) {
 				showWarning();
 				// change the error message to be "signed up but unpaid" warning
 				errorMsgArray[0].innerHTML = signedUpUnpaidErr[0];
 				errorMsgArray[1].innerHTML = signedUpUnpaidErr[1];
 				enableOkButton();
 				return;
-			} else if (
-                data.status_code === 409
-			) {
+			} 
+            else if (data.status_code === 409) {
 				showWarning();
 				// change the error message to be "already paid" warning
 				errorMsgArray[0].innerHTML = alreadyPaidEventErr[0];
 				errorMsgArray[1].innerHTML = alreadyPaidEventErr[1];
 				enableOkButton();
 				return;
-			} else if (
-                data.status_code === 404
-            )
-            {
+			} 
+            else if (data.status_code === 404) {
 				showWarning();
 				// change the error message to be "unrecognized email, please sign up" warning
 				errorMsgArray[0].innerHTML = notSignedUpUnpaidErr[0];
 				errorMsgArray[1].innerHTML = notSignedUpUnpaidErr[1];
 				enableOkButton();
 				return;
-			} else if (
-                data.status_code === 412
-            )
+			} 
+            else if (data.status_code === 412)
             {
 				showWarning();
 				// change the error message to be "unrecognized email, please sign up" warning
