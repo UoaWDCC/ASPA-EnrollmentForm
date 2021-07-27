@@ -42,6 +42,10 @@ const invalidEmailFormatErr = [
     "Oops! Email format is incorrect",
     "Please retype your email",
 ];
+const otherErr = [
+    "Oops! Unidentified error",
+    "Please retype your email",
+];
 
 // get the payment button types on page 4
 let payCash = document.getElementById("btn-cash");
@@ -225,45 +229,50 @@ ok3.onclick = function () {
 			const signedUpUnpaid = "Error: signed up but not paid"; // edit these if the 'extra' message is modified
 			const alreadyPaidForEvent = "Error: already paid for event";
 			if (data.status_code === 200) {
+                console.log("200 success");
 				showSuccess();
 				setTimeout(() =>{
 					nextPage();
 					enableOkButton();
 				}, 1000);
-			} 
-            else if (data.status_code === 403) {
+			} else if (data.status_code == 403) {
 				showWarning();
 				// change the error message to be "signed up but unpaid" warning
 				errorMsgArray[0].innerHTML = signedUpUnpaidErr[0];
 				errorMsgArray[1].innerHTML = signedUpUnpaidErr[1];
 				enableOkButton();
 				return;
-			} 
-            else if (data.status_code === 409) {
+			} else if (data.status_code == 409) {
 				showWarning();
 				// change the error message to be "already paid" warning
 				errorMsgArray[0].innerHTML = alreadyPaidEventErr[0];
 				errorMsgArray[1].innerHTML = alreadyPaidEventErr[1];
 				enableOkButton();
 				return;
-			} 
-            else if (data.status_code === 404) {
+			} else if (data.status_code == 404) {
 				showWarning();
 				// change the error message to be "unrecognized email, please sign up" warning
 				errorMsgArray[0].innerHTML = notSignedUpUnpaidErr[0];
 				errorMsgArray[1].innerHTML = notSignedUpUnpaidErr[1];
 				enableOkButton();
 				return;
-			} 
-            else if (data.status_code === 412)
-            {
+			} else if (data.status_code == 412) {
+                console.log("else if 412");
 				showWarning();
 				// change the error message to be "unrecognized email, please sign up" warning
 				errorMsgArray[0].innerHTML = invalidEmailFormatErr[0];
 				errorMsgArray[1].innerHTML = invalidEmailFormatErr[1];
 				enableOkButton();
 				return;
-			} 
+			} else {
+				showWarning();
+                console.log("else");
+				// change the error message to be "unrecognized email, please sign up" warning
+				errorMsgArray[0].innerHTML = otherErr[0];
+				errorMsgArray[1].innerHTML = otherErr[1];
+				enableOkButton();
+				return;
+			}
 		},
 	});
 };
