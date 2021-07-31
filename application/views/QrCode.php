@@ -48,7 +48,7 @@
 
     // add new entry if you need another param
     const email = urlParams.get('email');
-    const eventName = urlParams.get('eventName');
+    const eventName = urlParams.get('event');
 
     const qrData = {
       email: email,
