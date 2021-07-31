@@ -59,6 +59,8 @@ class Email_Model extends CI_Model {
             $TRANSFER_DETAIL = "Please transfer " . $TRANSFER_AMOUNT . " to our bank account - " . $TRANSFER_ACCOUNT . "\r\n";
         }
 
+        # QR code url link
+        $QR_CODE_URL = $_SERVER['HTTP_HOST'] . "/qrCode?email=" . $EMAIL_RECEIVER . "&event=" . $EVENT_NAME;
 
         // Body of email in HTML format (Extracted from mailchimp template)
         // NOTE: It is important all quote marks used inside this email body are double quotes "
@@ -171,6 +173,10 @@ class Email_Model extends CI_Model {
         ' . $TRANSFER_DETAIL . '
         <br>
         &nbsp;
+        </p>
+        <p
+        style="text-align:center;margin:10px 0;padding:0;color:' . $MSG_COLOUR . ';font-family:Helvetica;font-size:20px;line-height:150%">
+        Check-in with your own <a href="' . $QR_CODE_URL . '">QR code</a>
         </p>
         </div>
         </div>
