@@ -221,7 +221,9 @@ ok3.onclick = function () {
             if (data.is_success === "True") {
                 showSuccess();
                 document.getElementById("name-hello").innerHTML =
-                    "Hello " + data.message + ",";
+                    data.message == ""
+                        ? "Hello,"
+                        : "Hello " + data.message + ",";
                 setTimeout(() => {
                     nextPage();
                     enableOkButton();
