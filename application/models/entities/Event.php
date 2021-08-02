@@ -9,11 +9,11 @@ class Event
     public String $tagline;
     public String $description;
     public String $location;
-    public String $email_banner_img;
+    public String $emailBannerImg;
     public int $datetime;
-    public int $duration_mins;
-    public float $price_nzd;
-    public boolean $sign_ups_open;
+    public int $durationMins;
+    public float $priceNZD;
+    public boolean $signUpsOpen;
 
     /**
      * Event constructor.
@@ -22,24 +22,24 @@ class Event
      * @param String $tagline
      * @param String $description
      * @param String $location
-     * @param String $email_banner_img
+     * @param String $emailBannerImg
      * @param int $datetime
-     * @param int $duration_mins
-     * @param float $price_nzd
-     * @param bool $sign_ups_open
+     * @param int $durationMins
+     * @param float $priceNZD
+     * @param bool $signUpsOpen
      */
-    public function __construct(string $id, string $name, string $tagline, string $description, string $location, string $email_banner_img, int $datetime, int $duration_mins, float $price_nzd, bool $sign_ups_open)
+    public function __construct(string $id, string $name, string $tagline, string $description, string $location, string $emailBannerImg, int $datetime, int $durationMins, float $priceNZD, bool $signUpsOpen)
     {
         $this->id = $id;
         $this->name = $name;
         $this->tagline = $tagline;
         $this->description = $description;
         $this->location = $location;
-        $this->email_banner_img = $email_banner_img;
+        $this->emailBannerImg = $emailBannerImg;
         $this->datetime = $datetime;
-        $this->duration_mins = $duration_mins;
-        $this->price_nzd = $price_nzd;
-        $this->sign_ups_open = $sign_ups_open;
+        $this->durationMins = $durationMins;
+        $this->priceNZD = $priceNZD;
+        $this->signUpsOpen = $signUpsOpen;
     }
 
 

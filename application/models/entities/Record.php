@@ -5,36 +5,36 @@ class Record
 {
     //Properties
     public String $email;
-    public String $event_id;
+    public String $eventID;
     public String $timestamp;
-    public String $full_name;
+    public String $fullName;
     public String $upi;
-    public String $payment_method; //str.enum
-    public String $payment_date; //Date
-    public boolean $payment_made;
+    public String $paymentMethod; //str.enum
+    public String $paymentDate; //Date
+    public boolean $paymentMade;
     public boolean $attendance;
 
     /**
  * Record constructor.
  * @param String $email
- * @param String $event_id
+ * @param String $eventID
  * @param String $timestamp
- * @param String $full_name
+ * @param String $fullName
  * @param String $upi
- * @param String $payment_method
- * @param String $payment_date
- * @param bool $payment_made
+ * @param String $paymentMethod
+ * @param String $paymentDate
+ * @param bool $paymentMade
  * @param bool $attendance
- */public function __construct(string $email, string $event_id, string $timestamp, string $full_name, string $upi, string $payment_method, string $payment_date, bool $payment_made, bool $attendance)
+ */public function __construct(string $email, string $eventID, string $timestamp, string $fullName, string $upi, string $paymentMethod, string $paymentDate, bool $paymentMade, bool $attendance)
 {
     $this->email = $email;
-    $this->event_id = $event_id;
+    $this->eventID = $eventID;
     $this->timestamp = $timestamp;
-    $this->full_name = $full_name;
+    $this->fullName = $fullName;
     $this->upi = $upi;
-    $this->payment_method = $payment_method;
-    $this->payment_date = $payment_date;
-    $this->payment_made = $payment_made;
+    $this->paymentMethod = $paymentMethod;
+    $this->paymentDate = $paymentDate;
+    $this->paymentMade = $paymentMade;
     $this->attendance = $attendance;
 }
 
