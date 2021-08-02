@@ -4,30 +4,30 @@ defined('BASEPATH') or exit('No direct script access allowed');
 class Organisation_Model extends CI_Model
 {
 
-    public String $bank_account_number;
+    public String $bankAccountNumber;
     public String $id;
-    public String $bank_ref_format;
-    public String $logo_img;
+    public String $bankRefFormat;
+    public String $logoImg;
     public String $tagline;
-    public String $support_email;
+    public String $supportEmail;
 
     /**
      * Constructor for organisation model
      *
-     * @param String $bank_account_number
+     * @param String $bankAccountNumber
      * @param String $id
-     * @param String $bank_ref_format
-     * @param String $logo_img
+     * @param String $bankRefFormat
+     * @param String $logoImg
      * @param String $tagline
-     * @param String $support_email
+     * @param String $supportEmail
      */
-    function __construct($bank_account_number, $id, $bank_ref_format, $logo_img, $tagline, $support_email)
+    function __construct($bankAccountNumber, $id, $bankRefFormat, $logoImg, $tagline, $supportEmail)
     {
-        $this->bank_account_number = $bank_account_number;
+        $this->bankAccountNumber = $bankAccountNumber;
         $this->id = $id;
-        $this->bank_ref_format = $bank_ref_format;
-        $this->logo_img = $logo_img;
+        $this->bankRefFormat = $bankRefFormat;
+        $this->logoImg = $logoImg;
         $this->tagline = $tagline;
-        $this->support_email = $support_email;
+        $this->supportEmail = $supportEmail;
     }
 }
