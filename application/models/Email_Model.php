@@ -61,13 +61,16 @@ class Email_Model extends CI_Model {
 
 
         // Body of email in HTML format (Extracted from mailchimp template)
-        // NOTE: It is important all quote marks used inside this email body are double quotes "
+        // UPDATED NOTE: The new email template is in views/ParseTemplate.php
+        
+        // NOTE: (OUTDATED)It is important all quote marks used inside this email body are double quotes" 
         $this->load->library('parser');
-        $htmlTemplate = $this->load->view('parseTemplate', NULL, TRUE);
+        $htmlTemplate = $this->load->view('EmailTemplate', NULL, TRUE);
 
+        // Change the varibales here and make sure it matches with the {Var} in the template
         $data = array('$EVENT_NAME' => $EVENT_NAME, '$EVENT_IMAGE' => $EVENT_IMAGE, '$MSG_COLOUR' => $MSG_COLOUR, '$RECIPIENT_NAME' => $RECIPIENT_NAME, '$EVENT_TIME' => $EVENT_TIME, '$EVENT_LOCATION' => $EVENT_LOCATION, '$PAYMENT_DETAIL' => $PAYMENT_DETAIL, '$TRANSFER_DETAIL' => $TRANSFER_DETAIL, '$EVENT_MONTH' => $EVENT_MONTH, '$EVENT_DAY' => $EVENT_DAY, '$EVENT_DATETIME' => $EVENT_DATETIME, '$EVENT_LOCATION' => $EVENT_LOCATION);
 
-        $message = $this->parser->parse('parseTemplate', $data, true);
+        $message = $this->parser->parse('EmailTemplate', $data, true);
         // $message = '
         // <html>
         // <head>
