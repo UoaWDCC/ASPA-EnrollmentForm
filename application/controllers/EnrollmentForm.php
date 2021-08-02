@@ -1,6 +1,8 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 require('vendor/autoload.php');
+require('./application/models/entities/Organisation_Model.php');
+
 
 /**
  * Class EnrollmentForm
@@ -23,6 +25,11 @@ class EnrollmentForm extends ASPA_Controller
 
         log_message('debug', "=====New Controller Function Initialized====");
         log_message('debug', "-- from IP address: " . $this->input->ip_address());
+    }
+
+    public function test(){
+        $this->org = new Organisation_Model("John", "0", "0", "0", "0", "-", "-", "esang037@gmail.com");
+        echo $this->org;
     }
 
     /**
@@ -228,3 +235,4 @@ class EnrollmentForm extends ASPA_Controller
         }
     }
 }
+?>

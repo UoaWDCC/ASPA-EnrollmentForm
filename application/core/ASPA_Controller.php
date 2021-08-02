@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-// Modified base CI controller 
+// Modified base CI controller
 // So that all controllers can inherit common controller functions
 
 /**
@@ -49,11 +49,12 @@ class ASPA_Controller extends CI_Controller
 
     /**
      * This function handles the loading of event data from google sheets.
-     * 
+     *
      * @return array
      */
     private function loadEventData() {
         $this->load->model("GoogleSheets_Model");
+
 
         $eventTemp = [];
 
