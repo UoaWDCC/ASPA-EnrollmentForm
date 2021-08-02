@@ -224,8 +224,6 @@ ok3.onclick = function () {
 			console.log(data);
 			// data is a JSON object with the following properties:
             if (data.status === 200) {
-                console.log(data.status_code);
-                console.log(data.message);
 				showSuccess();
 				setTimeout(() =>{
 					nextPage();
@@ -253,7 +251,6 @@ ok3.onclick = function () {
 				enableOkButton();
 				return;
 			} else if (data.status === 412) {
-                console.log("else if 412");
 				showWarning();
 				// change the error message to be "unrecognized email, please sign up" warning
 				errorMsgArray[0].innerHTML = invalidEmailFormatErr[0];
@@ -262,9 +259,6 @@ ok3.onclick = function () {
 				return;
 			} else {
 				showWarning();
-                console.log("1");
-                console.log(data.message);
-                console.log("2");
 				// change the error message to be "unrecognized email, please sign up" warning
 				errorMsgArray[0].innerHTML = otherErr[0];
 				errorMsgArray[1].innerHTML = otherErr[1];
