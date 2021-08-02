@@ -11,6 +11,16 @@ class Organisation_Model extends CI_Model
     public String $tagline;
     public String $support_email;
 
+    /**
+     * Constructor for organisation model
+     *
+     * @param String $bank_account_number
+     * @param String $id
+     * @param String $bank_ref_format
+     * @param String $logo_img
+     * @param String $tagline
+     * @param String $support_email
+     */
     function __construct($bank_account_number, $id, $bank_ref_format, $logo_img, $tagline, $support_email)
     {
         $this->bank_account_number = $bank_account_number;
