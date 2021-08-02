@@ -59,6 +59,8 @@ class Email_Model extends CI_Model {
             $TRANSFER_DETAIL = "Please transfer " . $TRANSFER_AMOUNT . " to our bank account - " . $TRANSFER_ACCOUNT . "\r\n";
         }
 
+        # QR code url link
+        $QR_CODE_URL = $_SERVER['HTTP_HOST'] . "/qrCode?email=" . $EMAIL_RECEIVER . "&event=" . $EVENT_NAME;
 
         // Body of email in HTML format (Extracted from mailchimp template)
         // UPDATED NOTE: The new email template is in views/ParseTemplate.php
@@ -69,6 +71,7 @@ class Email_Model extends CI_Model {
 
         // Change the varibales here and make sure it matches with the {Var} in the template
         $data = array('$EVENT_NAME' => $EVENT_NAME, '$EVENT_IMAGE' => $EVENT_IMAGE, '$MSG_COLOUR' => $MSG_COLOUR, '$RECIPIENT_NAME' => $RECIPIENT_NAME, '$EVENT_TIME' => $EVENT_TIME, '$EVENT_LOCATION' => $EVENT_LOCATION, '$PAYMENT_DETAIL' => $PAYMENT_DETAIL, '$TRANSFER_DETAIL' => $TRANSFER_DETAIL, '$EVENT_MONTH' => $EVENT_MONTH, '$EVENT_DAY' => $EVENT_DAY, '$EVENT_DATETIME' => $EVENT_DATETIME, '$EVENT_LOCATION' => $EVENT_LOCATION);
+
 
         $message = $this->parser->parse('EmailTemplate', $data, true);
         
