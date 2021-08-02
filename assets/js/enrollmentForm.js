@@ -219,39 +219,10 @@ ok3.onclick = function () {
 		url: base_url + "index.php/EnrollmentForm/validate",
 		method: "POST",
 		data: { emailAddress: emailAddress },
-        complete: function (res) {
-            console.log("Test 1-234", res);
-            const data = res.status;
 
-            console.log(data);
-        },
-		// if the validate() url functions correctly (even if it returns True/False), then success function executes.
-		success: function (data) {
-    
-			// data is a JSON object with the following properties:
-			// is_success: True/False (if the email validation succeeeded)
-			// message: any message
-			// extra: any further information
-			const signedUpUnpaid = "Error: signed up but not paid"; // edit these if the 'extra' message is modified
-			const alreadyPaidForEvent = "Error: already paid for event";
-			if (data.status_code === 200) {
-                console.log(data.status_code);
-                console.log(data.message);
-				showSuccess();
-				setTimeout(() =>{
-					nextPage();
-					enableOkButton();
-				}, 1000);
-			} 
-		},
         complete: function (data) {
 			console.log(data);
 			// data is a JSON object with the following properties:
-			// is_success: True/False (if the email validation succeeeded)
-			// message: any message
-			// extra: any further information
-			const signedUpUnpaid = "Error: signed up but not paid"; // edit these if the 'extra' message is modified
-			const alreadyPaidForEvent = "Error: already paid for event";
             if (data.status === 200) {
                 console.log(data.status_code);
                 console.log(data.message);

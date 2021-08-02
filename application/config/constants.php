@@ -103,4 +103,4 @@ if (!defined('MAIL_AUTH_EMAIL')) {
 }
 
 // Feature Toggles
-const CHECK_MEMBERSHIP_PAYMENT = TRUE;
+const CHECK_MEMBERSHIP_PAYMENT = FALSE;

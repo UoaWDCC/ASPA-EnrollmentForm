@@ -34,7 +34,6 @@ class ASPA_Controller extends CI_Controller
 	*/
     public function createResponse($statusCode, $message, $payload) {
         $array = array(
-            'status_code' => $statusCode,
             'message' => $message,
             'payload' => $payload
         );
