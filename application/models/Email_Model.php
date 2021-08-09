@@ -1,10 +1,11 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
 /**
  * Handles email sending and formatting.
  */
-class Email_Model extends CI_Model {
+class Email_Model extends CI_Model
+{
 
     /**
      * Sends the confirmation email to the `emailAddress` with specified
@@ -14,14 +15,18 @@ class Email_Model extends CI_Model {
      * @param string $paymentMethod The payment method used.
      * @param array $eventData Any event information.
      */
-    public function sendConfirmationEmail(string $recipientName, string $recipientEmail, string $paymentMethod, array $eventData)
+    public function sendConfirmationEmail(string $recipientName,
+                                          string $recipientEmail,
+                                          string $paymentMethod,
+                                          array $eventData)
     {
         // Email details
         $EMAIL_RECEIVER = $recipientEmail;
-        $EMAIL_SENDER = "uoawdcc@gmail.com";
-        //receiver's full name
+
+        // Receiver's full name
         $RECIPIENT_NAME = $recipientName;
-        // event details on body
+
+        // Event details on body
         $EVENT_NAME = $eventData["title"];
         $EVENT_TIME = $eventData["date"] . ', ' . $eventData["time"];
 
@@ -32,12 +37,9 @@ class Email_Model extends CI_Model {
         $EVENT_DATETIME = explode(" ", $eventData["date"])[1] . ' ' . explode(" ", $eventData["date"])[2] . "<br />" . $eventData["time"];
         $EVENT_LOCATION = $eventData["location"];
         $EVENT_IMAGE = "https://user-images.githubusercontent.com/19633284/115980245-417e0500-a5df-11eb-9741-3b7a10499ef5.png";
-        
-        // QR code url link
-        $QR_CODE_URL = $_SERVER['HTTP_HOST'] . "/qrCode?email=" . $EMAIL_RECEIVER . "&event=" . $EVENT_NAME;
-        
+
         // transfer details
-        $TRANSFER_AMOUNT = "$" . (string) number_format((float) $eventData["price"], 2, '.', '');
+        $TRANSFER_AMOUNT = "$" . (string)number_format((float)$eventData["price"], 2, '.', '');
         $TRANSFER_ACCOUNT = $eventData["acc_num"];
 
         // default colour of the payment method shown on email (red)
@@ -46,38 +48,46 @@ class Email_Model extends CI_Model {
         // change email details based on different payment method
         if ($paymentMethod == "online") {
             $EMAIL_SUBJECT = "Payment Confirmation - " . $eventData["title"];
-            $TICK_IMAGE = "assets/images/Green_Tick.png";
             $PAYMENT_DETAIL = "ONLINE PAYMENT";
             $MSG_COLOUR = "#00ff00";
             $TRANSFER_DETAIL = "";
         } elseif ($paymentMethod == "cash") {
             $EMAIL_SUBJECT = "Event Registration - " . $eventData["title"];
-            $TICK_IMAGE = "assets/images/Grey_Tick.jpg";
             $PAYMENT_DETAIL = "CASH";
             $TRANSFER_DETAIL = "";
         } else {
             $EMAIL_SUBJECT = "Event Registration - " . $eventData["title"];
-            $TICK_IMAGE = "assets/images/Grey_tick.png";
             $PAYMENT_DETAIL = "TRANSFER";
             $TRANSFER_DETAIL = "Please transfer " . $TRANSFER_AMOUNT . " to our bank account - " . $TRANSFER_ACCOUNT . "\r\n";
         }
 
-        # QR code url link
+        // QR code url link
         $QR_CODE_URL = $_SERVER['HTTP_HOST'] . "/qrCode?email=" . $EMAIL_RECEIVER . "&event=" . $EVENT_NAME;
 
         // Body of email in HTML format (Extracted from mailchimp template)
-        // UPDATED NOTE: The new email template is in views/ParseTemplate.php
-        
-        // NOTE: (OUTDATED)It is important all quote marks used inside this email body are double quotes" 
+        // UPDATED NOTE: The new email template is in views/EmailTemplate.php
+
         $this->load->library('parser');
-        $htmlTemplate = $this->load->view('EmailTemplate', NULL, TRUE);
 
-        // Change the varibales here and make sure it matches with the {Var} in the template
-        $data = array('$EVENT_NAME' => $EVENT_NAME, '$EVENT_IMAGE' => $EVENT_IMAGE, '$MSG_COLOUR' => $MSG_COLOUR, '$RECIPIENT_NAME' => $RECIPIENT_NAME, '$EVENT_TIME' => $EVENT_TIME, '$EVENT_LOCATION' => $EVENT_LOCATION, '$PAYMENT_DETAIL' => $PAYMENT_DETAIL, '$TRANSFER_DETAIL' => $TRANSFER_DETAIL, '$EVENT_MONTH' => $EVENT_MONTH, '$EVENT_DAY' => $EVENT_DAY, '$EVENT_DATETIME' => $EVENT_DATETIME, '$EVENT_LOCATION' => $EVENT_LOCATION, '$QR_CODE_URL' => $QR_CODE_URL);
+        // Change the variables here and make sure it matches with the {Var} in the template
+        $data = array(
+                '$EVENT_NAME' => $EVENT_NAME,
+                '$EVENT_IMAGE' => $EVENT_IMAGE,
+                '$MSG_COLOUR' => $MSG_COLOUR,
+                '$RECIPIENT_NAME' => $RECIPIENT_NAME,
+                '$EVENT_TIME' => $EVENT_TIME,
+                '$PAYMENT_DETAIL' => $PAYMENT_DETAIL,
+                '$TRANSFER_DETAIL' => $TRANSFER_DETAIL,
+                '$EVENT_MONTH' => $EVENT_MONTH,
+                '$EVENT_DAY' => $EVENT_DAY,
+                '$EVENT_DATETIME' => $EVENT_DATETIME,
+                '$EVENT_LOCATION' => $EVENT_LOCATION,
+                '$QR_CODE_URL' => $QR_CODE_URL,
+        );
 
+        // The third parameter `true` stops CI3 from sending the parsed template to the output
+        $message = $this->parser->parse('templates/EmailTemplate', $data, true);
 
-        $message = $this->parser->parse('EmailTemplate', $data, true);
-        
         $cmdlineArgs = [
                 self::sanitize(MAIL_AUTH_EMAIL),
                 self::sanitize(MAIL_AUTH_PASSWORD),
@@ -95,11 +105,11 @@ class Email_Model extends CI_Model {
     }
 
     /**
-     * Escapes single quote so that when an email is sent to the user, 
+     * Escapes single quote so that when an email is sent to the user,
      * the email body won't get cut off.
-     * 
+     *
      * @param $stringCheck
-     * 
+     *
      * @return string
      */
     private static function cleanString($stringCheck)
