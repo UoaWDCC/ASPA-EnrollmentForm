@@ -32,7 +32,10 @@ class Email_Model extends CI_Model {
         $EVENT_DATETIME = explode(" ", $eventData["date"])[1] . ' ' . explode(" ", $eventData["date"])[2] . "<br />" . $eventData["time"];
         $EVENT_LOCATION = $eventData["location"];
         $EVENT_IMAGE = "https://user-images.githubusercontent.com/19633284/115980245-417e0500-a5df-11eb-9741-3b7a10499ef5.png";
-
+        
+        // QR code url link
+        $QR_CODE_URL = $_SERVER['HTTP_HOST'] . "/qrCode?email=" . $EMAIL_RECEIVER . "&event=" . $EVENT_NAME;
+        
         // transfer details
         $TRANSFER_AMOUNT = "$" . (string) number_format((float) $eventData["price"], 2, '.', '');
         $TRANSFER_ACCOUNT = $eventData["acc_num"];
@@ -70,7 +73,7 @@ class Email_Model extends CI_Model {
         $htmlTemplate = $this->load->view('EmailTemplate', NULL, TRUE);
 
         // Change the varibales here and make sure it matches with the {Var} in the template
-        $data = array('$EVENT_NAME' => $EVENT_NAME, '$EVENT_IMAGE' => $EVENT_IMAGE, '$MSG_COLOUR' => $MSG_COLOUR, '$RECIPIENT_NAME' => $RECIPIENT_NAME, '$EVENT_TIME' => $EVENT_TIME, '$EVENT_LOCATION' => $EVENT_LOCATION, '$PAYMENT_DETAIL' => $PAYMENT_DETAIL, '$TRANSFER_DETAIL' => $TRANSFER_DETAIL, '$EVENT_MONTH' => $EVENT_MONTH, '$EVENT_DAY' => $EVENT_DAY, '$EVENT_DATETIME' => $EVENT_DATETIME, '$EVENT_LOCATION' => $EVENT_LOCATION);
+        $data = array('$EVENT_NAME' => $EVENT_NAME, '$EVENT_IMAGE' => $EVENT_IMAGE, '$MSG_COLOUR' => $MSG_COLOUR, '$RECIPIENT_NAME' => $RECIPIENT_NAME, '$EVENT_TIME' => $EVENT_TIME, '$EVENT_LOCATION' => $EVENT_LOCATION, '$PAYMENT_DETAIL' => $PAYMENT_DETAIL, '$TRANSFER_DETAIL' => $TRANSFER_DETAIL, '$EVENT_MONTH' => $EVENT_MONTH, '$EVENT_DAY' => $EVENT_DAY, '$EVENT_DATETIME' => $EVENT_DATETIME, '$EVENT_LOCATION' => $EVENT_LOCATION, '$QR_CODE_URL' => $QR_CODE_URL);
 
 
         $message = $this->parser->parse('EmailTemplate', $data, true);

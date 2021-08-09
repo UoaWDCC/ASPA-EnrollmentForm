@@ -107,6 +107,10 @@
                 <br>
                 &nbsp;
                 </p>
+                <p
+                style="text-align:center;margin:10px 0;padding:0;color:' . $MSG_COLOUR . ';font-family:Helvetica;font-size:20px;line-height:150%">
+                Check-in with your own <a href={$QR_CODE_URL}>QR code</a>
+                </p>
                 </div>
                 </div>
                 </td>
