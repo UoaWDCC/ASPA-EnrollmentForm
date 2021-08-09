@@ -11,7 +11,7 @@
 		"source": "https://github.com/bcit-ci/CodeIgniter"
 	},
 	"require": {
-		"php": "7.4",
+		"php": "^7.4",
 		"google/apiclient": "^2.0",
 		"guzzlehttp/guzzle": "~5.3.3",
 		"stripe/stripe-php": "7.",
