@@ -14,8 +14,8 @@
     	<meta name="author" content="UoA Web Development & Consulting Club members">
 
         <base href="<?php echo base_url(); ?>" >
-        <link type='text/css' rel='stylesheet' href='assets/css/ConfirmationStyle.css' />
-        <link href="assets/images/favicon.png" rel="icon" type="image/png">
+        <link type='text/css' rel='stylesheet' href='assets/css/ConfirmationStyle.css?random=<?php echo uniqid(); ?>' />
+        <link href="assets/images/favicon.png?random=<?php echo uniqid(); ?>" rel="icon" type="image/png">
     </head>
 
     <body>
