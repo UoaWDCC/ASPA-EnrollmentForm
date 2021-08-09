@@ -9,7 +9,7 @@ class Member
     public string $fullName;
     public string $upi;
     public int $signUpDate; //PHP int holds 32 bits. Current epoch time is just under 32 bits I beleive
-    public bool $feePain;
+    public bool $feePaid;
 
     /**
      * Member constructor.
@@ -26,7 +26,7 @@ class Member
         $this->fullName = $fullName;
         $this->upi = $upi;
         $this->signUpDate = $signUpDate;
-        $this->feePain = $feePaid;
+        $this->feePaid = $feePaid;
     }
 
 }
