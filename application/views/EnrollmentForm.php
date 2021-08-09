@@ -85,7 +85,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
           </div>
           <div id="div-page4" class="div-block page4">
             <div class="div">
-              <p class="p p-payment">Choose your method of payment: </p>
+              <p class="p p-name-hello" id="name-hello">Hello,</p>
+              <p class="p p-payment">Please choose your method of payment: </p>
             </div>
             <div class="div-grid-wrapper">
               <div class="w-layout-grid grid grid-offline">

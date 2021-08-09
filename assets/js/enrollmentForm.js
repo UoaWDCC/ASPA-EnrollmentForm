@@ -92,34 +92,33 @@ proceedPayment.style.display = "none";
  * go to the next page of the membership system
  */
 function nextPage() {
-	switch (findActivePage()) {
-		case 1:
-			page1.style.display = "none";
-			page2.style.display = "flex";
-			page3.style.display = "none";
-			page4.style.display = "none";
-			break;
-		case 2:
-			page2.classList.remove("page2-appear");
-			page3.classList.add("page3-appear-only-fade");
-			page1.style.display = "none";
-			page2.style.display = "none";
-			page3.style.display = "flex";
-			page4.style.display = "none";
+    switch (findActivePage()) {
+        case 1:
+            page1.style.display = "none";
+            page2.style.display = "flex";
+            page3.style.display = "none";
+            page4.style.display = "none";
+            break;
+        case 2:
+            page2.classList.remove("page2-appear");
+            page3.classList.add("page3-appear-only-fade");
+            page1.style.display = "none";
+            page2.style.display = "none";
+            page3.style.display = "flex";
+            page4.style.display = "none";
 
-			setTimeout(() => inputEmail.focus(), 1000); // autofocus to name field
-			break;
-		case 3:
-			page3.classList.remove("page3-appear");
-			page4.classList.add("page4-appear-only-fade");
-			page1.style.display = "none";
-			page2.style.display = "none";
-			page3.style.display = "none";
-			page4.style.display = "flex";
-			break;
-	}
+            setTimeout(() => inputEmail.focus(), 1000); // autofocus to name field
+            break;
+        case 3:
+            page3.classList.remove("page3-appear");
+            page4.classList.add("page4-appear-only-fade");
+            page1.style.display = "none";
+            page2.style.display = "none";
+            page3.style.display = "none";
+            page4.style.display = "flex";
+            break;
+    }
 }
-
 
 /**
  * go to the previous page of the membership system
@@ -145,42 +144,42 @@ function previousPage() {
 
 // Enter key (keycode 13) triggers the click event of the appropriate buttons to go to next page.
 window.addEventListener("keydown", function (e) {
-	if (e.keyCode === 13) {
-		// Prevent form submission from clicking the enter key
-		e.preventDefault();
-		switch (findActivePage()) {
-			case 1:
-				buttonReg.click(); //buttonReg does not need an onclick function declaration because it is handled by Webflow
-				break;
-			case 2:
-				ok2.click(); //ok2 does not need an onclick function declaration because it is handled by Webflow
-				break;
-			case 3:
-				// Checking to see if the ok button is disabled. The enter key will only work if it is not disabled
-				if ($("#div-ok3").css('pointer-events') != 'none') {
-					ok3.click();
-				}
-				break;
-			case 4:
-				if (isActive(submit)) {
-					submit.click();
-				} else if (isActive(proceedPayment)) {
-					proceedPayment.click();
-				}
-				break;
-		}
-	}
+    if (e.keyCode === 13) {
+        // Prevent form submission from clicking the enter key
+        e.preventDefault();
+        switch (findActivePage()) {
+            case 1:
+                buttonReg.click(); //buttonReg does not need an onclick function declaration because it is handled by Webflow
+                break;
+            case 2:
+                ok2.click(); //ok2 does not need an onclick function declaration because it is handled by Webflow
+                break;
+            case 3:
+                // Checking to see if the ok button is disabled. The enter key will only work if it is not disabled
+                if ($("#div-ok3").css("pointer-events") != "none") {
+                    ok3.click();
+                }
+                break;
+            case 4:
+                if (isActive(submit)) {
+                    submit.click();
+                } else if (isActive(proceedPayment)) {
+                    proceedPayment.click();
+                }
+                break;
+        }
+    }
 });
 
-ok2.onclick = function() {
+ok2.onclick = function () {
     nextPage();
 };
 
 // back buttons onclick function goes to the previous page
-back3.onclick = function() {
+back3.onclick = function () {
     previousPage();
 };
-back4.onclick = function() {
+back4.onclick = function () {
     previousPage();
 };
 
@@ -190,73 +189,75 @@ back4.onclick = function() {
 
 // name/email page (page 3) OK button onclick name and email validation
 ok3.onclick = function () {
+    hideAllWarnings();
+    emailAddress = inputEmail.value.trim(); // collect email
 
-	hideAllWarnings();
-	emailAddress = inputEmail.value.trim(); // collect email
+    if (emailAddress.length === 0) {
+        inputEmail.style.border = "1px solid red";
+        return;
+    }
+    inputEmail.style.border = "1px solid #00A22C";
 
-	if (emailAddress.length === 0) {
-		inputEmail.style.border = "1px solid red";
-		return;
-	}
-	inputEmail.style.border = "1px solid #00A22C";
+    // Disabling the ok button to prevent user from clicking on it multiple times
+    document.getElementById("ok3").classList.add("btn-disabled"); // stopping the ok button from increasing in size when hovered over
+    $("#div-ok3").css("opacity", "0.2"); // reducing the opacity
+    $("#div-ok3").css("pointer-events", "none"); // making the ok div unclickable
 
-	// Disabling the ok button to prevent user from clicking on it multiple times
-	document.getElementById("ok3").classList.add("btn-disabled"); // stopping the ok button from increasing in size when hovered over
-	$("#div-ok3").css("opacity", "0.2"); // reducing the opacity
-	$("#div-ok3").css("pointer-events", "none"); // making the ok div unclickable
-
-	showLoading();
-	$.ajax({
-		cache: false,
-		url: base_url + "index.php/EnrollmentForm/validate",
-		method: "POST",
-		data: { emailAddress: emailAddress },
-		// if the validate() url functions correctly (even if it returns True/False), then success function executes.
-		success: function (data) {
-			console.log(data);
-			// data is a JSON object with the following properties:
-			// is_success: True/False (if the email validation succeeeded)
-			// message: any message
-			// extra: any further information
-			const signedUpUnpaid = "Error: signed up but not paid"; // edit these if the 'extra' message is modified
-			const alreadyPaidForEvent = "Error: already paid for event";
-			if (data.is_success === "True") {
-				showSuccess();
-				setTimeout(() =>{
-					nextPage();
-					enableOkButton();
-				}, 1000);
-
-			} else if (
-				data.is_success === "False" &&
-				data.extra === signedUpUnpaid
-			) {
-				showWarning();
-				// change the error message to be "signed up but unpaid" warning
-				errorMsgArray[0].innerHTML = signedUpUnpaidErr[0];
-				errorMsgArray[1].innerHTML = signedUpUnpaidErr[1];
-				enableOkButton();
-				return;
-			} else if (
-				data.is_success === "False" &&
-				data.extra === alreadyPaidForEvent
-			) {
-				showWarning();
-				// change the error message to be "already paid" warning
-				errorMsgArray[0].innerHTML = alreadyPaidEventErr[0];
-				errorMsgArray[1].innerHTML = alreadyPaidEventErr[1];
-				enableOkButton();
-				return;
-			} else {
-				showWarning();
-				// change the error message to be "unrecognized email, please sign up" warning
-				errorMsgArray[0].innerHTML = notSignedUpUnpaidErr[0];
-				errorMsgArray[1].innerHTML = notSignedUpUnpaidErr[1];
-				enableOkButton();
-				return;
-			}
-		},
-	});
+    showLoading();
+    $.ajax({
+        cache: false,
+        url: base_url + "index.php/EnrollmentForm/validate",
+        method: "POST",
+        data: { emailAddress: emailAddress },
+        // if the validate() url functions correctly (even if it returns True/False), then success function executes.
+        success: function (data) {
+            console.log(data);
+            // data is a JSON object with the following properties:
+            // is_success: True/False (if the email validation succeeeded)
+            // message: any message
+            // extra: any further information
+            const signedUpUnpaid = "Error: signed up but not paid"; // edit these if the 'extra' message is modified
+            const alreadyPaidForEvent = "Error: already paid for event";
+            if (data.is_success === "True") {
+                showSuccess();
+                document.getElementById("name-hello").innerHTML =
+                    data.message == ""
+                        ? "Hello,"
+                        : "Hello " + data.message + ",";
+                setTimeout(() => {
+                    nextPage();
+                    enableOkButton();
+                }, 1000);
+            } else if (
+                data.is_success === "False" &&
+                data.extra === signedUpUnpaid
+            ) {
+                showWarning();
+                // change the error message to be "signed up but unpaid" warning
+                errorMsgArray[0].innerHTML = signedUpUnpaidErr[0];
+                errorMsgArray[1].innerHTML = signedUpUnpaidErr[1];
+                enableOkButton();
+                return;
+            } else if (
+                data.is_success === "False" &&
+                data.extra === alreadyPaidForEvent
+            ) {
+                showWarning();
+                // change the error message to be "already paid" warning
+                errorMsgArray[0].innerHTML = alreadyPaidEventErr[0];
+                errorMsgArray[1].innerHTML = alreadyPaidEventErr[1];
+                enableOkButton();
+                return;
+            } else {
+                showWarning();
+                // change the error message to be "unrecognized email, please sign up" warning
+                errorMsgArray[0].innerHTML = notSignedUpUnpaidErr[0];
+                errorMsgArray[1].innerHTML = notSignedUpUnpaidErr[1];
+                enableOkButton();
+                return;
+            }
+        },
+    });
 };
 
 /**
@@ -332,7 +333,7 @@ const disabledButtons = [payWeChat, payAli, payPoli];
 [payCash, payTransfer, payWeChat, payAli, payCard, payPoli].forEach(
     (item, index) => {
         if (!disabledButtons.includes(item)) {
-            item.addEventListener("click", function(e) {
+            item.addEventListener("click", function (e) {
                 toggleButton(item);
                 showButton(index);
             });
@@ -399,8 +400,7 @@ function showButton(index) {
 }
 
 // TODO: these two buttons must connect to the next step of the enrollment form
-submit.onclick = function() {
-
+submit.onclick = function () {
     $("#enrollment-form").attr(
         "action",
         base_url + "EnrollmentForm/makeOfflinePayment"
@@ -410,7 +410,7 @@ submit.onclick = function() {
     document.getElementById("enrollment-form").submit();
 };
 
-proceedPayment.onclick = function() {
+proceedPayment.onclick = function () {
     // get the active button
     var toggled_index;
     [payCash, payTransfer, payWeChat, payAli, payCard, payPoli].forEach(
