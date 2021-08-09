@@ -30,16 +30,18 @@ class Event
      * @param float $priceNZD
      * @param bool $signUpsOpen
      */
-    public function __construct(string $id,
-                                string $name,
-                                string $tagline,
-                                string $description,
-                                string $location,
-                                string $emailBannerImg,
-                                int $datetime,
-                                int $durationMins,
-                                float $priceNZD,
-                                bool $signUpsOpen)
+    public function __construct(
+      string $id,                          
+      string $name,
+      string $tagline,
+      string $description,
+      string $location,
+      string $emailBannerImg,
+      int $datetime,
+      int $durationMins,
+      float $priceNZD,
+      bool $signUpsOpen
+    )
     {
         $this->id = $id;
         $this->name = $name;
