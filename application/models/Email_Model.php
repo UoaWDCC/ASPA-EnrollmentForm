@@ -4,7 +4,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 /**
  * Handles email sending and formatting.
  */
-class Email_Model extends CI_Model {
+class l extends CI_Model {
 
     /**
      * Sends the confirmation email to the `emailAddress` with specified
