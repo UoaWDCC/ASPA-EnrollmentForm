@@ -3,20 +3,22 @@
 
 class Event
 {
+
     //Properties
-    public String $id;
-    public String $name;
-    public String $tagline;
-    public String $description;
-    public String $location;
-    public String $emailBannerImg;
+    public string $id;
+    public string $name;
+    public string $tagline;
+    public string $description;
+    public string $location;
+    public string $emailBannerImg;
     public int $datetime;
     public int $durationMins;
     public float $priceNZD;
-    public boolean $signUpsOpen;
+    public bool $signUpsOpen;
 
     /**
      * Event constructor.
+     *
      * @param String $id
      * @param String $name
      * @param String $tagline
@@ -28,7 +30,16 @@ class Event
      * @param float $priceNZD
      * @param bool $signUpsOpen
      */
-    public function __construct(string $id, string $name, string $tagline, string $description, string $location, string $emailBannerImg, int $datetime, int $durationMins, float $priceNZD, bool $signUpsOpen)
+    public function __construct(string $id,
+                                string $name,
+                                string $tagline,
+                                string $description,
+                                string $location,
+                                string $emailBannerImg,
+                                int $datetime,
+                                int $durationMins,
+                                float $priceNZD,
+                                bool $signUpsOpen)
     {
         $this->id = $id;
         $this->name = $name;
@@ -41,6 +52,5 @@ class Event
         $this->priceNZD = $priceNZD;
         $this->signUpsOpen = $signUpsOpen;
     }
-
 
 }

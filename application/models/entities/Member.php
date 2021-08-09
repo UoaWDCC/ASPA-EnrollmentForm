@@ -3,15 +3,17 @@
 
 class Member
 {
-    //Properties
-    public String $email;
-    public String$fullName;
-    public String$upi;
+
+    // Properties
+    public string $email;
+    public string $fullName;
+    public string $upi;
     public int $signUpDate; //PHP int holds 32 bits. Current epoch time is just under 32 bits I beleive
-    public Boolean $feePain;
+    public bool $feePain;
 
     /**
      * Member constructor.
+     *
      * @param String $email
      * @param String $fullName
      * @param String $upi
