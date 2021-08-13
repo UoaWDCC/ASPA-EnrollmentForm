@@ -21,11 +21,11 @@
   <meta name='viewport' content='initial-scale=1.0' />
   <meta name="author" content="UoA Web Development & Consulting Club members">
 
-  <link href="assets/css/normalize.css" rel="stylesheet" type="text/css">
-  <link href="assets/css/webflow.css" rel="stylesheet" type="text/css">
-  <link href="assets/css/aspa.webflow.css" rel="stylesheet" type="text/css">
-  <link href='assets/css/qrCode.css' rel='stylesheet' type='text/css' />
-  <link href="assets/images/favicon.png" rel="icon" type="image/png">
+  <link href="assets/css/normalize.css?random=<?php echo uniqid(); ?>" rel="stylesheet" type="text/css">
+  <link href="assets/css/webflow.css?random=<?php echo uniqid(); ?>" rel="stylesheet" type="text/css">
+  <link href="assets/css/aspa.webflow.css?random=<?php echo uniqid(); ?>" rel="stylesheet" type="text/css">
+  <link href='assets/css/qrCode.css?random=<?php echo uniqid(); ?>' rel='stylesheet' type='text/css' />
+  <link href="assets/images/favicon.png?random=<?php echo uniqid(); ?>" rel="icon" type="image/png">
 </head>
 
 <body>

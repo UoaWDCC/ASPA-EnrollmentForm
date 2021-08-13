@@ -23,15 +23,15 @@
   <meta name='viewport' content='initial-scale=1.0' />
   <meta name="author" content="UoA Web Development & Consulting Club members">
 
-  <link href="assets/images/favicon.png" rel="icon" type="image/png">
+  <link href="assets/images/favicon.png?random=<?php echo uniqid(); ?>" rel="icon" type="image/png">
 
-  <link href="assets/css/normalize.css" rel="stylesheet" type="text/css">
-  <link href="assets/css/webflow.css" rel="stylesheet" type="text/css">
-  <link href="assets/css/aspa.webflow.css" rel="stylesheet" type="text/css">
+  <link href="assets/css/normalize.css?random=<?php echo uniqid(); ?>" rel="stylesheet" type="text/css">
+  <link href="assets/css/webflow.css?random=<?php echo uniqid(); ?>" rel="stylesheet" type="text/css">
+  <link href="assets/css/aspa.webflow.css?random=<?php echo uniqid(); ?>" rel="stylesheet" type="text/css">
 
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" type="text/css">
 
-  <link href="assets/css/admin.css" rel="stylesheet" type="text/css">
+  <link href="assets/css/admin.css?random=<?php echo uniqid(); ?>" rel="stylesheet" type="text/css">
 
   <!-- QR Code Scanning Library -->
   <script type="text/javascript" src="assets/lib/qr-scanner.umd.min.js"></script>
