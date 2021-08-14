@@ -86,9 +86,10 @@
 
   <div class="page" id="message-page">
     <div id="message-page-container">
-      <h4>ID: <span id="member-identifier-span">...</span></h4>
-
-      <i id="loading-spinner" class="fa fa-circle-o-notch fa-spin" style="font-size: 2em;"></i>
+      <h4>ID:
+        <span id="member-identifier-span">...</span>
+        <i id="loading-spinner" class="fa fa-circle-o-notch fa-spin" style="font-size: 1em;"></i>
+      </h4>
 
       <div id="message1">
         <p>Member registered and paid online.</p>
