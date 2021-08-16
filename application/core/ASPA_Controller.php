@@ -32,7 +32,15 @@ class ASPA_Controller extends CI_Controller
 	* @param string 	$message 	A brief description of the output
 	* @param string 	$extra 		Any extra information
 	*/
-    public function createResponse($statusCode, $message, $payload, $display) {
+    public function createResponse($statusCode, $message, $payload) {
+        //for parameters are null
+        if (null === $payload) {
+            $payload = "no specified payload";
+        }
+        if (null === $message) {
+            $message = "no specified display";
+        }
+        //output
         $array = array(
             'message' => $message,
             'payload' => $payload
@@ -41,7 +49,7 @@ class ASPA_Controller extends CI_Controller
             ->set_status_header($statusCode)
             ->set_content_type('application/json')
             ->set_output(json_encode($array, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES))
-            ->_display($display);
+            ->_display();
         exit;
     }
 

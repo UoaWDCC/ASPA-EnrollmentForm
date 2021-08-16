@@ -55,29 +55,29 @@ class EnrollmentForm extends ASPA_Controller
 
         // If the email is of invalid format, return 412 error
         if (!isset($emailAddress) || !$this->Verification_Model->isValidEmail($emailAddress)) {
-            $this->createResponse(412, 'Error: Format of email is invalid', "", "");
+            $this->createResponse(412, 'Error: Format of email is invalid', null);
             return;
         }
 
         // If the email does not exist or is not on the membership spreadsheet, return 404 error
         if (!$this->Verification_Model->isEmailOnSheet($emailAddress, MEMBERSHIP_SPREADSHEET_ID, MEMBERSHIP_SHEET_NAME)) {
-            $this->createResponse(404, 'Error: Email incorrect or not found on sheet', "", "");
+            $this->createResponse(404, 'Error: Email incorrect or not found on sheet', null);
             return;
         }
 
         // If the user has already paid for the event, return 409 error
         if ($this->Verification_Model->hasUserPaidEvent($emailAddress, $this->eventData['gsheet_name'])) {
-            $this->createResponse(409, 'Error: already paid for event', "", "");
+            $this->createResponse(409, 'Error: already paid for event', null);
             return;
         }
 
         // If membership payment status is checked, and user's membership fee has not been paid, return 403 error
         if (CHECK_MEMBERSHIP_PAYMENT && !$this->Verification_Model->hasUserPaidMembership($emailAddress)) {
-            $this->createResponse(403, "Error: signed up but not paid", "", "");
+            $this->createResponse(403, "Error: signed up but not paid", null);
             return;
         }
 
-        $this->createResponse(200, "Success", "", "");
+        $this->createResponse(200, "Success", null);
     }
 
     /**
