@@ -65,11 +65,8 @@ class Email_Model extends CI_Model
         // A hacky solution to fix http vs https qr link
         // if on test environment, use http
         // else use https for every other server environment
-        if ($_SERVER['HTTP_HOST'] == "localhost") {
-            $QR_CODE_URL = $_SERVER['HTTP_HOST'] . "/qrCode?email=" . $EMAIL_RECEIVER . "&event=" . $EVENT_NAME;
-        } else {
-            $QR_CODE_URL = "https://" . $_SERVER['HTTP_HOST'] . "/qrCode?email=" . $EMAIL_RECEIVER . "&event=" . $EVENT_NAME;
-        }
+        $QR_CODE_URL = ($_SERVER['HTTP_HOST'] == "localhost" ? "" : "https://")
+                . $_SERVER['HTTP_HOST'] . "/qrCode?email=" . $EMAIL_RECEIVER . "&event=" . $EVENT_NAME;
 
         // Body of email in HTML format (Extracted from mailchimp template)
         // UPDATED NOTE: The new email template is in views/EmailTemplate.php
