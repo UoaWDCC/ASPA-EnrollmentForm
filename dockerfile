@@ -1,4 +1,4 @@
-FROM php:7.3-apache
+FROM php:7.4-apache
 LABEL maintainer="egdoc.dev@gmail.com"
 
 # Update the image to the latest packages

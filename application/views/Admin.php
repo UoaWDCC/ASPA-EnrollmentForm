@@ -5,6 +5,8 @@
 <head>
   <base href="<?php echo base_url(); ?>" />
 
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
 
   <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js" type="text/javascript"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
@@ -23,15 +25,15 @@
   <meta name='viewport' content='initial-scale=1.0' />
   <meta name="author" content="UoA Web Development & Consulting Club members">
 
-  <link href="assets/images/favicon.png" rel="icon" type="image/png">
+  <link href="assets/images/favicon.png?random=<?php echo uniqid(); ?>" rel="icon" type="image/png">
 
-  <link href="assets/css/normalize.css" rel="stylesheet" type="text/css">
-  <link href="assets/css/webflow.css" rel="stylesheet" type="text/css">
-  <link href="assets/css/aspa.webflow.css" rel="stylesheet" type="text/css">
+  <link href="assets/css/normalize.css?random=<?php echo uniqid(); ?>" rel="stylesheet" type="text/css">
+  <link href="assets/css/webflow.css?random=<?php echo uniqid(); ?>" rel="stylesheet" type="text/css">
+  <link href="assets/css/aspa.webflow.css?random=<?php echo uniqid(); ?>" rel="stylesheet" type="text/css">
 
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" type="text/css">
 
-  <link href="assets/css/admin.css" rel="stylesheet" type="text/css">
+  <link href="assets/css/admin.css?random=<?php echo uniqid(); ?>" rel="stylesheet" type="text/css">
 
   <!-- QR Code Scanning Library -->
   <script type="text/javascript" src="assets/lib/qr-scanner.umd.min.js"></script>
@@ -84,7 +86,10 @@
 
   <div class="page" id="message-page">
     <div id="message-page-container">
-      <h4>ID: <span id="member-identifier-span">...</span></h4>
+      <h4>ID:
+        <span id="member-identifier-span">...</span>
+        <i id="loading-spinner" class="fa fa-circle-o-notch fa-spin" style="font-size: 1em;"></i>
+      </h4>
 
       <div id="message1">
         <p>Member registered and paid online.</p>
@@ -108,7 +113,9 @@
 
     function logTextError() {
       logField.innerHTML = "Error: Wrong QR code format";
-      setTimeout(() => {logField.innerHTML = ""}, 8000);
+      setTimeout(() => {
+        logField.innerHTML = ""
+      }, 8000);
     }
 
     function onScanResult(result) {
@@ -140,6 +147,7 @@
     const emailPage = document.getElementById("email-page");
     const qrCodePage = document.getElementById("qr-code-page");
     const messagePage = document.getElementById("message-page");
+    const loadingSpinner = document.getElementById("loading-spinner");
 
     // 1 - home page, 2 - email page, 3 - qr code page, 4 - message page
     const pages = [homePage, emailPage, qrCodePage, messagePage];
@@ -177,6 +185,8 @@
         page.style.display = 'none';
       }
 
+      loadingSpinner.style.visibility = 'visible';
+
       // Unhide the specified page
       pages[pageNumber - 1].style.display = 'block';
 
@@ -212,7 +222,7 @@
           "email": memberEmail,
           "upi": memberUpi
         },
-        error: function (errorBody) {
+        error: function(errorBody) {
           console.log(`Failed to mark ${memberEmail || memberUpi} as paid: ${errorBody}`)
         }
       });
@@ -228,6 +238,9 @@
      * 4 - Not registered for the event yet
      */
     function showResponseMessage(messageIndex) {
+      // before showing response hide the loading spinner
+      loadingSpinner.style.visibility = 'hidden';
+
       switch (messageIndex) {
         case 1:
           memberIdentifierElem.style.backgroundColor = '#509350';
@@ -286,21 +299,21 @@
           "upi": memberUpi
         },
         statusCode: {
-          200: function (data) {
+          200: function(data) {
             const paymentMade = JSON.parse(data).paymentMade;
             console.log("Successfully checked for the user: " + (paymentMade ? "Paid member" : "Unpaid"));
             showResponseMessage(paymentMade ? 1 : 2);
           },
-          404: function (data) {
+          404: function(data) {
             console.log("Error, user not found!");
             showResponseMessage(4);
           },
-          409: function (data) {
+          409: function(data) {
             console.log("Error, conflicting user!");
             showResponseMessage(3);
           }
         }
-  	  });
+      });
     }
 
     // Set the page height by window for CSS and show home page by default
