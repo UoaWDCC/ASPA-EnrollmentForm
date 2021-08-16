@@ -28,18 +28,20 @@ class ASPA_Controller extends CI_Controller
 	/**
 	* This function constructs the json output.
 	*
-	* @param string    	$flag  		To determine if the request was processed successfully
-	* @param string 	$message 	A brief description of the output
-	* @param string 	$extra 		Any extra information
+	* @param integer    $statusCode     The HTTP status code
+	* @param string 	$message 	    A message to return
+	* @param string 	$payload 		Any extra data
 	*/
-    public function createResponse($statusCode, $message, $payload) {
-        //for parameters are null
+    public function createResponse(int $statusCode, $message = null, $payload = null) {
+
+        // for parameters are null
         if (null === $payload) {
             $payload = "no specified payload";
         }
         if (null === $message) {
             $message = "no specified display";
         }
+
         //output
         $array = array(
             'message' => $message,

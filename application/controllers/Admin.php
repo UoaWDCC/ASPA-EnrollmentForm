@@ -44,7 +44,7 @@ class Admin extends ASPA_Controller
 
         // If email and UPI both don't exist, return 412 to signify query params are not correct
         if (!$email && !$upi) {
-            $this->createResponse(412, '412: Precondition failed', null);
+            $this->createResponse(412, '412: Precondition failed');
             return;
         }
 
@@ -53,7 +53,7 @@ class Admin extends ASPA_Controller
             : $this->GoogleSheets_Model->getCellCoordinate($upi, 'E');
 
         if (!$cell) {
-            $this->createResponse(404, '404: Attendee not found', null);
+            $this->createResponse(404, '404: Attendee not found');
             return;
         }
 
@@ -67,7 +67,7 @@ class Admin extends ASPA_Controller
             $this->GoogleSheets_Model->highlightRow($row ,[0.968, 0.670, 0.886]);
             $this->GoogleSheets_Model->markAsPresent($this->eventData["gsheet_name"], $email, $upi);
             // Return HTTP status code 200, to signify that it has successfully marked attendee as paid
-            $this->createResponse(200, '200: Successfully, marked attendee as paid', null);
+            $this->createResponse(200, '200: Successfully, marked attendee as paid');
         }
     }
 
@@ -116,13 +116,7 @@ class Admin extends ASPA_Controller
             return false;
         }
 
-        if ($decoded->key == ADMIN_AUTH_PASSKEY) {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+        return $decoded->key == ADMIN_AUTH_PASSKEY;
     }
 
      /**
@@ -139,7 +133,7 @@ class Admin extends ASPA_Controller
 
         // If email and UPI both don't exist, return 412 to signify query params are not correct
         if (!$email && !$upi) {
-            $this->createResponse(412, 'Queries not specified', null);
+            $this->createResponse(412, 'Queries not specified');
             return;
         }
 
@@ -148,7 +142,7 @@ class Admin extends ASPA_Controller
             : $this->GoogleSheets_Model->getCellCoordinate($upi, 'E');
 
         if (!$cell) {
-            $this->createResponse(404, 'error', null);
+            $this->createResponse(404, 'No user with email address/UPI found');
             return;
         }
 
@@ -167,7 +161,7 @@ class Admin extends ASPA_Controller
          * (this means the attendee has paid)
          */
         if ($hasUserPaid && $attendance != 'P') {
-            $this->createResponse(200, 'payment made', null);
+            $this->createResponse(200, 'User has paid', [ 'paymentMade' => true ]);
             $this->GoogleSheets_Model->markAsPresent($this->eventData["gsheet_name"], $email, $upi);
             return;
         }
@@ -176,7 +170,7 @@ class Admin extends ASPA_Controller
          * 409 CONFLICT` if `green` and `attendance=true`, this means there is a duplicate email used
          */
         if ($hasUserPaid && $attendance == 'P') {
-            $this->createResponse(409, '409: Duplicate email used', null);
+            $this->createResponse(409, 'Duplicate email used');
         }
 
         /**
@@ -184,7 +178,7 @@ class Admin extends ASPA_Controller
          * (this means the user has not paid)
          */
         if (!$hasUserPaid) {
-            $this->createResponse(200, 'payment not made', null);
+            $this->createResponse(200, 'payment not made', [ 'paymentMade' => false ]);
         }
 
     }
