@@ -218,17 +218,18 @@ ok3.onclick = function () {
 		cache: false,
 		url: base_url + "index.php/EnrollmentForm/validate",
 		method: "POST",
-		data: { emailAddress: emailAddress },
-
-        complete: function (data) {
-			console.log(data);
+		data: { 
+      emailAddress: emailAddress },
+      complete: function (data) {
+			  console.log(data);
+          let name = data.responseJSON.payload;
 			// data is a JSON object with the following properties:
-            if (data.status === 200) {
-				showSuccess();
-				document.getElementById("name-hello").innerHTML =
-                    data.message == ""
-                        ? "Hello,"
-                        : "Hello " + data.message + ",";
+        if (data.status === 200) {
+				  showSuccess();
+				  document.getElementById("name-hello").innerHTML =
+            name == ""
+              ? "Hello,"
+              : "Hello " + name + ",";
         setTimeout(() => {
 					nextPage();
 					enableOkButton();
