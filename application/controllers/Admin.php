@@ -44,7 +44,7 @@ class Admin extends ASPA_Controller
 
         // If email and UPI both don't exist, return 412 to signify query params are not correct
         if (!$email && !$upi) {
-            $this->createResponse(412, '412: Precondition failed', "");
+            $this->createResponse(412, '412: Precondition failed', "", "");
             return;
         }
 
@@ -53,7 +53,7 @@ class Admin extends ASPA_Controller
             : $this->GoogleSheets_Model->getCellCoordinate($upi, 'E');
 
         if (!$cell) {
-            $this->createResponse(404, '404: Attendee not found', "");
+            $this->createResponse(404, '404: Attendee not found', "", "");
             return;
         }
 
@@ -67,7 +67,7 @@ class Admin extends ASPA_Controller
             $this->GoogleSheets_Model->highlightRow($row ,[0.968, 0.670, 0.886]);
             $this->GoogleSheets_Model->markAsPresent($this->eventData["gsheet_name"], $email, $upi);
             // Return HTTP status code 200, to signify that it has successfully marked attendee as paid
-            $this->createResponse(200, '200: Successfully, marked attendee as paid', "");
+            $this->createResponse(200, '200: Successfully, marked attendee as paid', "", "");
         }
     }
 
