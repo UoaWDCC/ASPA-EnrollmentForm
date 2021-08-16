@@ -33,25 +33,15 @@ class ASPA_Controller extends CI_Controller
 	* @param string 	$payload 		Any extra data
 	*/
     public function createResponse(int $statusCode, $message = null, $payload = null) {
+        $array = [
+                'message' => $message ?? "(empty message)",
+                'payload' => $payload ?? [],
+        ];
 
-        // for parameters are null
-        if (null === $payload) {
-            $payload = "no specified payload";
-        }
-        if (null === $message) {
-            $message = "no specified display";
-        }
-
-        //output
-        $array = array(
-            'message' => $message,
-            'payload' => $payload
-        );
         $this->output
             ->set_status_header($statusCode)
             ->set_content_type('application/json')
-            ->set_output(json_encode($array, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES))
-            ->_display();
+            ->set_output(json_encode($array, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
         exit;
     }
 
