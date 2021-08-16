@@ -314,8 +314,8 @@
 }
 
 .p.p-lastname {
-margin-top: 20px;
-font-size: 20px;
+  margin-top: 20px;
+  font-size: 20px;
 }
 
 .p.p-errormessage {
@@ -323,8 +323,8 @@ font-size: 20px;
 }
 
 .p.p-payment {
-  padding-left: 5vw;
-  font-size: 23px;
+  padding-left: 0vw;
+  text-align: center;
 }
 
 .p.p-name-hello {
@@ -907,12 +907,12 @@ font-size: 20px;
       -webkit-gradient(linear, left top, left bottom, from(hsla(0, 0%, 90%, 0.4)), to(hsla(0, 0%, 90%, 0.4))),
       url("../images/ASPA-background.png");
     background-image: radial-gradient(
-      circle farthest-corner at 50% 50%,
-       hsla(0, 0%, 100%, 0.5),
-         transparent
+        circle farthest-corner at 50% 50%,
+        hsla(0, 0%, 100%, 0.5),
+        transparent
       ),
       linear-gradient(180deg, hsla(0, 0%, 90%, 0.4), hsla(0, 0%, 90%, 0.4)),
-        url("../images/ASPA-background.png");
+      url("../images/ASPA-background.png");
     background-position: 0px 0px, 0px 0px, 50% -10%;
     background-size: auto, auto, 1400px;
     background-repeat: repeat, repeat, no-repeat;
@@ -1033,23 +1033,23 @@ font-size: 20px;
   }
   .div-background-mobile {
     background-image: radial-gradient(
-      circle farthest-corner at 50% 50%,
-    hsla(0, 0%, 100%, 0.5),
-      transparent
-    ),
+        circle farthest-corner at 50% 50%,
+        hsla(0, 0%, 100%, 0.5),
+        transparent
+      ),
       -webkit-gradient(linear, left top, left bottom, from(hsla(0, 0%, 93.3%, 0.27)), to(hsla(0, 0%, 93.3%, 0.27))),
       url("../images/ASPA-background.png");
     background-image: radial-gradient(
-      circle farthest-corner at 50% 50%,
-    hsla(0, 0%, 100%, 0.5),
-      transparent
-    ),
-    linear-gradient(
-      180deg,
-      hsla(0, 0%, 93.3%, 0.27),
-      hsla(0, 0%, 93.3%, 0.27)
-    ),
-    url("../images/ASPA-background.png");
+        circle farthest-corner at 50% 50%,
+        hsla(0, 0%, 100%, 0.5),
+        transparent
+      ),
+      linear-gradient(
+        180deg,
+        hsla(0, 0%, 93.3%, 0.27),
+        hsla(0, 0%, 93.3%, 0.27)
+      ),
+      url("../images/ASPA-background.png");
     background-position: 0px 0px, 0px 0px, 50% 50%;
     background-size: auto, auto, 1350px;
     background-repeat: repeat, repeat, no-repeat;
