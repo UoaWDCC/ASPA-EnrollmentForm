@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
-
-// Modified base CI controller 
+require('./application/models/entities/Organisation_Model.php');
+// Modified base CI controller
 // So that all controllers can inherit common controller functions
 
 /**
@@ -16,13 +16,25 @@ class ASPA_Controller extends CI_Controller
      * @var array All the information for this event (retrieved from google sheet).
      */
     protected $eventData;
-
+    protected $org;
     function __construct()
     {
         parent::__construct();
         // $this->load->helper();
 		// $this->load->model();
         $this->eventData = $this->loadEventData();
+        $this->org = $this->sendToView();
+
+    }
+
+    public function sendToView(){
+
+        $organisation = [];
+        $this->org = new Organisation_Model("John", "0", "0", "0", "0", "-", "-", "esang037@gmail.com");
+        $name = $this->org->get_name();
+
+        $organisation["name"] = $name;
+        $this->load->view('EnrollmentForm.php', $organisation);
     }
 
 	/**
@@ -47,13 +59,15 @@ class ASPA_Controller extends CI_Controller
 
     /**
      * This function handles the loading of event data from google sheets.
-     * 
+     *
      * @return array
      */
     private function loadEventData() {
         $this->load->model("GoogleSheets_Model");
 
+
         $eventTemp = [];
+
 
         // Get event details from spreadsheet from range A2 to size of spreadsheet
         $this->GoogleSheets_Model->setCurrentSheetName("CurrentEventDetails");

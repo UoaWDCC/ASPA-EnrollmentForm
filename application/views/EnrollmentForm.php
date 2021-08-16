@@ -5,7 +5,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 <html data-wf-page="5e66056a415f1ee3724d7631" data-wf-site="5e66056a415f1ee8ad4d7630">
 <head>
   <meta charset="utf-8">
-  <title>ASPA</title>
+  <title><?php echo $name ?></title>
   <meta content="width=device-width, initial-scale=1" name="viewport">
   <base href="<?php echo base_url(); ?>" >
   <link href="assets/css/normalize.css?random=<?php echo uniqid(); ?>" rel="stylesheet" type="text/css">
