@@ -25,13 +25,37 @@ class Organisation_Model
      */
     function __construct($name, $bankAccountNumber, $id, $bankRefFormat, $logoImg, $tagline, $supportEmail)
     {
-        $this->$name = $name;
+        $this->name = $name;
         $this->bankAccountNumber = $bankAccountNumber;
         $this->id = $id;
         $this->bankRefFormat = $bankRefFormat;
         $this->logoImg = $logoImg;
         $this->tagline = $tagline;
         $this->supportEmail = $supportEmail;
+    }
+
+    function get_name() {
+        return $this->name;
+    }
+
+    function get_bankAccountNumber() {
+        return $this->bankAccountNumber;
+    }
+
+    function get_id() {
+        return $this->id;
+    }
+
+    function get_bankRefFormat() {
+        return $this->bankRefFormat;
+    }
+
+    function get_logoImg() {
+        return $this->logoImg;
+    }
+
+    function get_tagline(){
+        return $this->tagline;
     }
 }
 ?>
