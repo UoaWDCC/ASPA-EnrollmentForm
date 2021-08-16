@@ -7,8 +7,6 @@ class Event
     private String $sheets_model;
     private array $events;
     private array $members;
-    private array $records;
-
 
     /**
      * Repository constructor.
@@ -16,43 +14,30 @@ class Event
      */
     public function __construct(GoogleSheets_Model $model)
     {
-        $this->sheets_model = $model;
+      //  GET ALL EVENTS
+      $this->sheets_model = $model;
 
-        $this->setCurrentSheetName("Events");
+      $this->setCurrentSheetName("Events");
 
-        $records = $model->getNumberOfRecords();
+      $records = $model->getNumberOfRecords();
 
-        for ($i = 2; $i < $records + 2; $i++) {
-          $id = $model->getCellContents($this->sheetName . "!B" . $i);
-          $name = $model->getCellContents($this->sheetName . "!C" . $i);
-          $tagline = $model->getCellContents($this->sheetName . "!D" . $i);
-          $description = $model->getCellContents($this->sheetName . "!E" . $i);
-          $location = $model->getCellContents($this->sheetName . "!F" . $i);
-          $emailBannerImg = $model->getCellContents($this->sheetName . "!G" . $i);
-          $datetime = $model->getCellContents($this->sheetName . "!H" . $i);
-          $durationMins = $model->getCellContents($this->sheetName . "!I" . $i);
-          $priceNZD = $model->getCellContents($this->sheetName . "!J" . $i);
-          $signUpsOpen =  $model->getCellContents($this->sheetName . "!K" . $i);
+      $array2d = $model->getCellContents($this->sheetName . "!A2", $this->sheetName . "!K" . $records + 2);
 
-          $events[$id] = Event($id, $name, $tagline, $description, $location, $emailBannerIng, $datetime, $durationMins, $priceNZD, $signUpsOpen);
-        }
+      for ($i = 0; $i < $records; $i++) {
+        $events[$array2d[0][i]] = Event($array2d[0][i], $array2d[1][i], $array2d[2][i], $array2d[3][i], $array2d[4][i], $array2d[5][i], $aarray2d[6][i], $array2d[7][i], $array2d[8][i], $array2d[9][i]);
+      }
 
-        //   THIS IS NOT GOING TO WORK
-        $this->setCurrentSheetName("Sheet1");
+      //   GET ALL MEMBERS
+      $this->setCurrentSheetName("Sheet1");
 
-        $records = $model->getNumberOfRecords();
+      $records = $model->getNumberOfRecords();
 
-        for ($i = 2; $i < $records + 2; $i++) {
-          $email = $model->getCellContents($this->sheetName . "!B" . $i);
-          $fullName = $model->getCellContents($this->sheetName . "!C" . $i);
-          $upi = $model->getCellContents($this->sheetName . "!H" . $i);
-          $signUpDate = $model->getCellContents($this->sheetName . "!I" . $i);
-          $feePaid = $model->getCellContents($this->sheetName . "!J" . $i);
+      $array2d = $model->getCellContents($this->sheetName . "!B2", $this->sheetName . "!C" . $records + 2);
+      $array2dInfo = $model->getCellContents($this->sheetName . "!H2", $this->sheetName . "!J" . $records + 2);
 
-          $members[$email] = Member($email, $fullName, $upi, $signUpDate, $feePaid);
-        }
-
-
+      for ($i = 0; $i < $records; $i++) {
+        $members[$array2d[0][i]] = Member($array2d[0][i], $array2d[1][i], $array2dInfo[0][i], $array2dInfo[1][i], $array2dInfo[2][i]);
+      }
     }
 
     /**
@@ -88,14 +73,50 @@ class Event
 
     /**
      * Get a member's record from an event using their email and the event id
+     * @return Record the member's record, or NULL
      */
-    public function getRecord(string $memberEmail, string $eventId) {}
+    public function getRecord(string $memberEmail, string $eventId) {
+      $this->setCurrentSheetName($eventId);
+
+      $records = $model->getNumberOfRecords();
+
+      $array2d = $model->getCellContents($this->sheetName . "!A2", $this->sheetName . "!K" . $records + 2);
+
+      $allRecords = [];
+
+      $index = -1;
+
+      for ($i = 0; $i < $records; $i++) {
+        if ($array2d[1][i] == $memberEmail) {
+          $index = $i;
+          break;
+        }
+      }
+
+      if (index >= 0)
+        return Record($array2d[1][index], $eventId, $array2d[0][index], $array2d[2][index], $array2d[4][index], $array2d[5][index], $array2d[10][index], $array2d[9][index], $array2d[6][index] = "P" ? true : false);
+      else
+        return NULL;
+    }
 
     /**
      * Get all the records for an event
+     * @return Record[] a list of all records for an event
      */
     public function getRecordsByEvent(string $eventId) {
+      $this->setCurrentSheetName($eventId);
 
+      $records = $model->getNumberOfRecords();
+
+      $array2d = $model->getCellContents($this->sheetName . "!A2", $this->sheetName . "!K" . $records + 2);
+
+      $allRecords = [];
+
+      for ($i = 0; $i < $records; $i++) {
+        $allRecords[$array2d[1][i]] = Record($array2d[1][i], $eventId, $array2d[0][i], $array2d[2][i], $array2d[4][i], $array2d[5][i], $array2d[10][i], $array2d[9][i], $array2d[6][i] = "P" ? true : false);
+      }
+
+      return $allRecords;
     }
 
     public function saveEvent(Event $event) {}
