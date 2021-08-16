@@ -70,9 +70,7 @@ class EnrollmentForm extends ASPA_Controller
             return;
         }
 
-        [$fullName, $UPI] = $this->Verification_Model->getMemberInfo($emailAddress);
-
-        $this->create_json('True', $fullName, 'Success');
+        $this->create_json('True', '', 'Success');
     }
 
     /**

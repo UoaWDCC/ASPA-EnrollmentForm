@@ -326,18 +326,10 @@ font-size: 20px;
   padding-left: 5vw;
   font-size: 23px;
 }
+
 .p.p-name-hello {
   padding-left: 5vw;
   font-size: 23px;
-}
-.p.p-name-hello {
-padding-left: 5vw;
-font-size: 23px;
-}
-
-.p.p-name-hello {
-padding-left: 0vw;
-text-align: center;
 }
 
 .p.p-paymentbutton {
@@ -907,7 +899,11 @@ text-align: center;
   }
   .div-background-mobile {
     display: block;
-    background-image: radial-gradient(circle farthest-corner at 50% 50%,hsla(0, 0%, 100%, 0.5),transparent),
+    background-image: radial-gradient(
+        circle farthest-corner at 50% 50%,
+        hsla(0, 0%, 100%, 0.5),
+        transparent
+      ),
       -webkit-gradient(linear, left top, left bottom, from(hsla(0, 0%, 90%, 0.4)), to(hsla(0, 0%, 90%, 0.4))),
       url("../images/ASPA-background.png");
     background-image: radial-gradient(
@@ -915,11 +911,7 @@ text-align: center;
        hsla(0, 0%, 100%, 0.5),
          transparent
       ),
-        linear-gradient(
-          180deg,
-          hsla(0, 0%, 90%, 0.4),
-          hsla(0, 0%, 90%, 0.4)
-        ),
+      linear-gradient(180deg, hsla(0, 0%, 90%, 0.4), hsla(0, 0%, 90%, 0.4)),
         url("../images/ASPA-background.png");
     background-position: 0px 0px, 0px 0px, 50% -10%;
     background-size: auto, auto, 1400px;

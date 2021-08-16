@@ -107,7 +107,9 @@ class Verification_Model extends CI_Model {
         }
     }
 
-   /**
+
+
+    /**
      * Get user's full name, UPI and UID on the membership spreadsheet.
      *
      * @param string $emailAddress The email of the user.

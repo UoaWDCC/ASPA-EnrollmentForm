@@ -4,7 +4,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 /**
  * Handles email sending and formatting.
  */
-class l extends CI_Model {
+class Email_Model extends CI_Model {
 
     /**
      * Sends the confirmation email to the `emailAddress` with specified
@@ -313,3 +313,4 @@ class l extends CI_Model {
     }
 
 }
+
