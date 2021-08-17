@@ -23,18 +23,21 @@ class ASPA_Controller extends CI_Controller
         // $this->load->helper();
 		// $this->load->model();
         $this->eventData = $this->loadEventData();
-        $this->org = $this->sendToView();
-
+        $this->org = $this->loadOrganisationData();
     }
 
-    public function sendToView(){
+    /**
+     * This function handles the loading the Organisation model
+     *
+     * @return array
+     */
+    public function loadOrganisationData(){
 
         $organisation = [];
-        $this->org = new Organisation_Model("John", "0", "0", "0", "0", "-", "-", "esang037@gmail.com");
-        $name = $this->org->get_name();
-
-        $organisation["name"] = $name;
-        $this->load->view('EnrollmentForm.php', $organisation);
+        $this->org = new Organisation_Model("Sanggy", "0123", "032", "30", "0", "-", "uoapool@gmail.com");
+        $elements = ['orgName', 'orgBankAccNumber', 'orgId', 'orgBankRefFormat', 'orgLogoImg', 'orgTagline', 'orgSupportEmail'];
+        $organisation = $this->org->array_Parameters($elements);
+        return $organisation;
     }
 
 	/**

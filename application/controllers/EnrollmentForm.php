@@ -38,9 +38,9 @@ class EnrollmentForm extends ASPA_Controller
     {
         log_message('debug', "-- Index Function called");
         if (filter_var($this->eventData["form_enabled"], FILTER_VALIDATE_BOOLEAN)) {
-            $this->load->view('EnrollmentForm', $this->eventData);
+            $this->load->view('EnrollmentForm', array_merge($this->eventData, $this->org));
         } else {
-            $this->load->view('FormDisabled');
+            $this->load->view('FormDisabled', $this->org);
         }
     }
 
