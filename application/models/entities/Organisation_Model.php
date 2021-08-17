@@ -57,5 +57,23 @@ class Organisation_Model
     function get_tagline(){
         return $this->tagline;
     }
+
+    function get_supportEmail(){
+        return $this->supportEmail;
+    }
+
+    function array_Parameters($elements){
+
+        $organisation = [];
+        $variables = array($this->get_name(), $this->get_bankAccountNumber(), $this->get_id(), $this->get_bankRefFormat(), $this->get_logoImg(), $this->get_tagline(), $this->get_supportEmail());
+
+                // If the data from spreadsheet contains event details we are looking for, set them.
+                for ($i = 0; $i < sizeof($variables); $i++) {
+                    if (in_array($variables[$i], $elements)) {
+                        $organisation[$variables[$i]] = $variables[$i];
+                    }
+                }
+        return $organisation;
+    }
 }
 ?>
