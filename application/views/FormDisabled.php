@@ -14,7 +14,7 @@
     });
   </script>
 
-  <title>Form disabled • ASPA</title>
+  <title>Form disabled • <?php echo $orgName?></title>
 
   <meta charset="utf-8">
   <meta name="description" content="Form Disabled">
@@ -32,9 +32,9 @@
   <div class="centre-page">
     <img src="assets/images/ASPA_logo.png" />
     <h1>Sorry about that.</h1>
-    <p>Sign up is not open yet. Stay posted to ASPA social media pages to stay up to date on the latest events!</p>
+    <p>Sign up is not open yet. Stay posted to <?php echo $orgName ?> social media pages to stay up to date on the latest events!</p>
     <p>Contact
-      <a href="mailto:uoapool@gmail.com">uoapool@gmail.com</a>
+      <a href="mailto:uoapool@gmail.com"><?php echo $orgSupportEmail ?></a>
       if you have any questions.
     </p>
   </div>

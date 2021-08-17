@@ -34,43 +34,21 @@ class Organisation_Model
         $this->supportEmail = $supportEmail;
     }
 
-    function get_name() {
-        return $this->name;
-    }
-
-    function get_bankAccountNumber() {
-        return $this->bankAccountNumber;
-    }
-
-    function get_id() {
-        return $this->id;
-    }
-
-    function get_bankRefFormat() {
-        return $this->bankRefFormat;
-    }
-
-    function get_logoImg() {
-        return $this->logoImg;
-    }
-
-    function get_tagline(){
-        return $this->tagline;
-    }
-
-    function get_supportEmail(){
-        return $this->supportEmail;
-    }
-
+    /**
+     *
+     * Setting organisation model variables to their specific element
+     *
+     * @param Array $elements
+     */
     function array_Parameters($elements){
 
         $organisation = [];
-        $variables = array($this->get_name(), $this->get_bankAccountNumber(), $this->get_id(), $this->get_bankRefFormat(), $this->get_logoImg(), $this->get_tagline(), $this->get_supportEmail());
-
+        $variables = array($this->name, $this->bankAccountNumber, $this->id, $this->bankRefFormat, $this->logoImg, $this->tagline, $this->supportEmail);
+        // $elements = ['name', 'bankAccountNumber', 'id', 'bankRefFormat', 'logoImg', 'orgTagline', 'supportEmail'];
                 // If the data from spreadsheet contains event details we are looking for, set them.
                 for ($i = 0; $i < sizeof($variables); $i++) {
+                    $organisation[$elements[$i]] = $variables[$i];
                     if (in_array($variables[$i], $elements)) {
-                        $organisation[$variables[$i]] = $variables[$i];
                     }
                 }
         return $organisation;

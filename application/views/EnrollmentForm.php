@@ -5,7 +5,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 <html data-wf-page="5e66056a415f1ee3724d7631" data-wf-site="5e66056a415f1ee8ad4d7630">
 <head>
   <meta charset="utf-8">
-  <title><?php echo $name ?></title>
+  <title><?php echo $orgName ?></title>
   <meta content="width=device-width, initial-scale=1" name="viewport">
   <base href="<?php echo base_url(); ?>" >
   <link href="assets/css/normalize.css?random=<?php echo uniqid(); ?>" rel="stylesheet" type="text/css">
@@ -48,7 +48,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                   <br /><br />Limited availability so sign up to confirm your spot! (This form will close upon reaching capacity so if you&#x27;re reading this it's not too late :D)
                   <br />‍<br /><br /><b>When:</b> <?php echo $date . ", " . $time; ?>
                   <br />‍<br /><b>Where:</b> <?php echo $location; ?>
-                  <br /><br /><b>Entry cost:</b> <?php echo "$" . (string) number_format((float) $price, 2, '.', '') . ' with ASPA membership'; ?>
+                  <br /><br /><b>Entry cost:</b> <?php echo "$" . (string) number_format((float) $price, 2, '.', '') . ' with '. $orgName . ' membership'; ?>
                   <br />‍<br /><br /><?php echo $desc; ?>
 
               </p>
@@ -74,7 +74,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 <p class="p p-errormessage">If you are not a member yet, please register first.</p>
               </div>
               <div class="sign-up">
-                <p><a class="sign-up-link" href="https://docs.google.com/forms/d/e/1FAIpQLSezUAfbTZKBV-J0yJleBn3RkvJj0xHIinqLsc5aqKCdxgzZSw/viewform">Sign up to ASPA</a> if you're not a member</p>
+                <p><a class="sign-up-link" href="https://docs.google.com/forms/d/e/1FAIpQLSezUAfbTZKBV-J0yJleBn3RkvJj0xHIinqLsc5aqKCdxgzZSw/viewform">Sign up to </a> if you're not a member</p>
               </div>
             </div>
             <div id="div-ok3" class="div-okbtn">
