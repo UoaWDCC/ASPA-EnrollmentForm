@@ -323,6 +323,11 @@
 }
 
 .p.p-payment {
+  padding-left: 0vw;
+  text-align: center;
+}
+
+.p.p-name-hello {
   padding-left: 5vw;
   font-size: 23px;
 }
@@ -867,6 +872,12 @@
     padding-left: 0vw;
     text-align: center;
   }
+
+  .p.p-name-hello {
+    padding-left: 0vw;
+    text-align: center;
+  }
+
   .p.p-paymentbutton {
     font-size: 15px;
   }

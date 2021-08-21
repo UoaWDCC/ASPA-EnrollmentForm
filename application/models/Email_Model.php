@@ -135,3 +135,4 @@ class Email_Model extends CI_Model
     }
 
 }
+

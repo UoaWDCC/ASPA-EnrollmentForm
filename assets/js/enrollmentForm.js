@@ -219,52 +219,56 @@ ok3.onclick = function () {
 		url: base_url + "index.php/EnrollmentForm/validate",
 		method: "POST",
 		data: { emailAddress: emailAddress },
-
-        complete: function (data) {
-			console.log(data);
-			// data is a JSON object with the following properties:
-            if (data.status === 200) {
+		complete: function (data) {
+			if (data.status === 200) {
 				showSuccess();
-				setTimeout(() =>{
+
+				const name = data.responseJSON.payload;
+
+				// Inject name from the response into the next page
+				document.getElementById("name-hello").innerHTML = `Hello ${name || "member"},`;
+
+				setTimeout(() => {
 					nextPage();
 					enableOkButton();
 				}, 1000);
-			} else if (data.status === 403) {
-				showWarning();
-				// change the error message to be "signed up but unpaid" warning
-				errorMsgArray[0].innerHTML = signedUpUnpaidErr[0];
-				errorMsgArray[1].innerHTML = signedUpUnpaidErr[1];
-				enableOkButton();
-				return;
-			} else if (data.status === 409) {
-				showWarning();
-				// change the error message to be "already paid" warning
-				errorMsgArray[0].innerHTML = alreadyPaidEventErr[0];
-				errorMsgArray[1].innerHTML = alreadyPaidEventErr[1];
-				enableOkButton();
-				return;
-			} else if (data.status === 404) {
-				showWarning();
-				// change the error message to be "unrecognized email, please sign up" warning
-				errorMsgArray[0].innerHTML = notSignedUpUnpaidErr[0];
-				errorMsgArray[1].innerHTML = notSignedUpUnpaidErr[1];
-				enableOkButton();
-				return;
-			} else if (data.status === 412) {
-				showWarning();
-				// change the error message to be "unrecognized email, please sign up" warning
-				errorMsgArray[0].innerHTML = invalidEmailFormatErr[0];
-				errorMsgArray[1].innerHTML = invalidEmailFormatErr[1];
-				enableOkButton();
-				return;
-			} else {
-				showWarning();
-				// change the error message to be "unrecognized email, please sign up" warning
-				errorMsgArray[0].innerHTML = otherErr[0];
-				errorMsgArray[1].innerHTML = otherErr[1];
-				enableOkButton();
 				return;
 			}
+
+			// If data was not successful, do the following
+			switch (data.status) {
+				// change the error message to be "signed up but unpaid" warning
+				case 403:
+					errorMsgArray[0].innerHTML = signedUpUnpaidErr[0];
+					errorMsgArray[1].innerHTML = signedUpUnpaidErr[1];
+					break;
+
+				// change the error message to be "already paid" warning
+				case 409:
+					errorMsgArray[0].innerHTML = alreadyPaidEventErr[0];
+					errorMsgArray[1].innerHTML = alreadyPaidEventErr[1];
+					break;
+
+				// change the error message to be "unrecognized email, please sign up" warning
+				case 404:
+					errorMsgArray[0].innerHTML = notSignedUpUnpaidErr[0];
+					errorMsgArray[1].innerHTML = notSignedUpUnpaidErr[1];
+					break;
+
+				// change the error message to be "unrecognized email, please sign up" warning
+				case 412:
+					errorMsgArray[0].innerHTML = invalidEmailFormatErr[0];
+					errorMsgArray[1].innerHTML = invalidEmailFormatErr[1];
+					break;
+
+				// change the error message to be "unrecognized email, please sign up" warning
+				default:
+					errorMsgArray[0].innerHTML = otherErr[0];
+					errorMsgArray[1].innerHTML = otherErr[1];
+			}
+
+			showWarning();
+			enableOkButton();
 		},
 	});
 };
