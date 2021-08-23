@@ -16,12 +16,14 @@ class ASPA_Controller extends CI_Controller
      * @var array All the information for this event (retrieved from google sheet).
      */
     protected $eventData;
+
     protected $org;
+
     function __construct()
     {
         parent::__construct();
         // $this->load->helper();
-		// $this->load->model();
+        // $this->load->model();
         $this->eventData = $this->loadEventData();
         $this->org = $this->loadOrganisationData();
     }
@@ -31,23 +33,24 @@ class ASPA_Controller extends CI_Controller
      *
      * @return array
      */
-    public function loadOrganisationData(){
+    public function loadOrganisationData()
+    {
 
         $organisation = [];
-        $this->org = new Organisation_Model("Sanggy", "0123", "032", "30", "0", "-", "uoapool@gmail.com");
-        $elements = ['orgName', 'orgBankAccNumber', 'orgId', 'orgBankRefFormat', 'orgLogoImg', 'orgTagline', 'orgSupportEmail'];
-        $organisation = $this->org->array_Parameters($elements);
+        $this->org = new Organisation_Model("ASPA", "42424242-424242-4242", "032", "30", "0", "-", "uoapool@gmail.com");
+        $organisation = $this->org->toArray();
         return $organisation;
     }
 
-	/**
-	* This function constructs the json output.
-	*
-	* @param string    	$flag  		To determine if the request was processed successfully
-	* @param string 	$message 	A brief description of the output
-	* @param string 	$extra 		Any extra information
-	*/
-    public function createResponse($statusCode, $message, $payload) {
+    /**
+     * This function constructs the json output.
+     *
+     * @param string    	$flag  		To determine if the request was processed successfully
+     * @param string 	$message 	A brief description of the output
+     * @param string 	$extra 		Any extra information
+     */
+    public function createResponse($statusCode, $message, $payload)
+    {
         $array = array(
             'message' => $message,
             'payload' => $payload
@@ -65,7 +68,8 @@ class ASPA_Controller extends CI_Controller
      *
      * @return array
      */
-    private function loadEventData() {
+    private function loadEventData()
+    {
         $this->load->model("GoogleSheets_Model");
 
 

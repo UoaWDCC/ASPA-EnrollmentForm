@@ -26,11 +26,6 @@ class EnrollmentForm extends ASPA_Controller
         log_message('debug', "-- from IP address: " . $this->input->ip_address());
     }
 
-    // public function test(){
-    //     $this->org = new Organisation_Model("John", "0", "0", "0", "0", "-", "-", "esang037@gmail.com");
-    //     echo $this->org;
-    // }
-
     /**
      * The "home" page.
      */
@@ -241,4 +236,3 @@ class EnrollmentForm extends ASPA_Controller
         }
     }
 }
-?>

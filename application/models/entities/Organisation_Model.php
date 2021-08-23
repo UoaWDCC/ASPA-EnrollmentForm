@@ -40,18 +40,16 @@ class Organisation_Model
      *
      * @param Array $elements
      */
-    function array_Parameters($elements)
+    function toArray()
     {
-
-        $organisation = [];
-        $variables = array($this->name, $this->bankAccountNumber, $this->id, $this->bankRefFormat, $this->logoImg, $this->tagline, $this->supportEmail);
-        // $elements = ['name', 'bankAccountNumber', 'id', 'bankRefFormat', 'logoImg', 'orgTagline', 'supportEmail'];
-        // If the data from spreadsheet contains event details we are looking for, set them.
-        for ($i = 0; $i < sizeof($variables); $i++) {
-            $organisation[$elements[$i]] = $variables[$i];
-            if (in_array($variables[$i], $elements)) {
-            }
-        }
-        return $organisation;
+        return [
+            'orgName' => $this->name,
+            'orgBankAccNumber' => $this->bankAccountNumber,
+            'orgId' => $this->id,
+            'orgBankRefFormat' => $this->bankRefFormat,
+            'orgLogoImg' => $this->logoImg,
+            'orgTagLine' => $this->tagline,
+            'orgSupportEmail' => $this->supportEmail
+        ];
     }
 }
