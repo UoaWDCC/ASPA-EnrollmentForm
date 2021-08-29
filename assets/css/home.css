@@ -2,6 +2,13 @@ body {
 	overflow: hidden;
 }
 
+.flex-container {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .container {
     width: 80%;
     margin: auto;
@@ -15,7 +22,14 @@ body {
 .events {
     position: relative;
     display: flex;
-    justify-content: center;
+    overflow-x: auto;    
+}
+
+.events::-webkit-scrollbar {    display: none;}
+
+.events {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
 }
 
 .card {

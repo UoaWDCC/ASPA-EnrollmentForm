@@ -39,35 +39,64 @@ defined('BASEPATH') or exit('No direct script access allowed');
     <div class="div-background-mobile"></div>
   </div>
 
-  <div class="container">
-    <block class="title">
-      <h1>ASPA Events Open for Signup</h1>
-      <p>Please select event to register</p>
-    </block>
+  <div class="flex-container">
+    <div class="container">
+      <block class="title">
+        <h1>ASPA Events Open for Signup</h1>
+        <p>Please select event to register</p>
+      </block>
 
-    <block class="events">
-      <div class="card">
-        <div class="card-container">
-          <h1><b>Casual Tuesdays</b></h1>
-          <h4>3rd August</h4>
-          <p>Casual Tuesdays are a lot of fun,
-            jump in with a team of 4 and pool!</p>
+      <block class="events">
+        <div class="card">
+          <div class="card-container">
+            <h1><b>Casual Tuesdays</b></h1>
+            <h4>3rd August</h4>
+            <p>Casual Tuesdays are a lot of fun,
+              jump in with a team of 4 and pool!</p>
+          </div>
         </div>
-      </div>
 
-      <div class="card">
-        <div class="card-container">
-          <h1><b>Casual Tuesdays</b></h1>
-          <h4>5th August</h4>
-          <p>Casual Tuesdays are a lot of fun,
-            jump in with a team of 4 and pool!</p>
+        <div class="card">
+          <div class="card-container">
+            <h1><b>Casual Tuesdays</b></h1>
+            <h4>5th August</h4>
+            <p>Casual Tuesdays are a lot of fun,
+              jump in with a team of 4 and pool!</p>
+          </div>
         </div>
+
+        <div class="card">
+          <div class="card-container">
+            <h1><b>Casual Tuesdays</b></h1>
+            <h4>5th August</h4>
+            <p>Casual Tuesdays are a lot of fun,
+              jump in with a team of 4 and pool!</p>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-container">
+            <h1><b>Casual Tuesdays</b></h1>
+            <h4>5th August</h4>
+            <p>Casual Tuesdays are a lot of fun,
+              jump in with a team of 4 and pool!</p>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-container">
+            <h1><b>Casual Tuesdays</b></h1>
+            <h4>5th August</h4>
+            <p>Casual Tuesdays are a lot of fun,
+              jump in with a team of 4 and pool!</p>
+          </div>
+        </div>
+
+      </block>
+
+      <div class="div-main-page"><a id="register" data-w-id="dfbe5add-65ea-95a7-6380-331c1db905e2" href="#" class="button w-button">Register</a>
+        <p class="paragraph-pressenter">press <strong class="bold-enter">Enter ↵</strong></p>
       </div>
-
-    </block>
-
-    <div class="div-main-page"><a id="register" data-w-id="dfbe5add-65ea-95a7-6380-331c1db905e2" href="#" class="button w-button">Register</a>
-      <p class="paragraph-pressenter">press <strong class="bold-enter">Enter ↵</strong></p>
     </div>
   </div>
 
