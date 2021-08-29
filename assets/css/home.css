@@ -25,14 +25,17 @@ body {
     overflow-x: auto;    
 }
 
-.events::-webkit-scrollbar {    display: none;}
-
+/* hide scroll bar but keep functionality */
+.events::-webkit-scrollbar { 
+  display: none; /* safari & opera */
+}
 .events {
   -ms-overflow-style: none;  /* IE and Edge */
   scrollbar-width: none;  /* Firefox */
 }
 
 .card {
+  flex-shrink: 0;
   box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
   transition: 0.3s;
   width: 400px;

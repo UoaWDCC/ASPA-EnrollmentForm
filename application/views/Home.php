@@ -47,50 +47,19 @@ defined('BASEPATH') or exit('No direct script access allowed');
       </block>
 
       <block class="events">
-        <div class="card">
-          <div class="card-container">
-            <h1><b>Casual Tuesdays</b></h1>
-            <h4>3rd August</h4>
-            <p>Casual Tuesdays are a lot of fun,
-              jump in with a team of 4 and pool!</p>
-          </div>
-        </div>
 
-        <div class="card">
-          <div class="card-container">
-            <h1><b>Casual Tuesdays</b></h1>
-            <h4>5th August</h4>
-            <p>Casual Tuesdays are a lot of fun,
-              jump in with a team of 4 and pool!</p>
-          </div>
-        </div>
-
-        <div class="card">
-          <div class="card-container">
-            <h1><b>Casual Tuesdays</b></h1>
-            <h4>5th August</h4>
-            <p>Casual Tuesdays are a lot of fun,
-              jump in with a team of 4 and pool!</p>
-          </div>
-        </div>
-
-        <div class="card">
-          <div class="card-container">
-            <h1><b>Casual Tuesdays</b></h1>
-            <h4>5th August</h4>
-            <p>Casual Tuesdays are a lot of fun,
-              jump in with a team of 4 and pool!</p>
-          </div>
-        </div>
-
-        <div class="card">
-          <div class="card-container">
-            <h1><b>Casual Tuesdays</b></h1>
-            <h4>5th August</h4>
-            <p>Casual Tuesdays are a lot of fun,
-              jump in with a team of 4 and pool!</p>
-          </div>
-        </div>
+        <?php
+        for ($i = 0; $i < 6; $i++) {
+          echo '
+          <div class="card">
+            <div class="card-container">
+              <h1><b>Casual Tuesdays</b></h1>
+              <h4>3rd August</h4>
+              <p>Casual Tuesdays are a lot of fun, jump in with a team of 4 and pool!</p>
+            </div>
+          </div>';
+        }
+        ?>
 
       </block>
 
