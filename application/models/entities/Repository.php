@@ -1,10 +1,10 @@
 <?php
+require("./application/models/GoogleSheets_Model.php");
 
-
-class Event
+class Repository extends CI_Model
 {
     //Properties
-    private String $sheets_model;
+    private GoogleSheets_Model $sheets_model;
     private array $events;
     private array $members;
 
@@ -21,7 +21,7 @@ class Event
 
       $records = $model->getNumberOfRecords();
 
-      $array2d = $model->getCellContents($this->sheetName . "!A2", $this->sheetName . "!K" . $records + 2);
+      $array2d = $model->getCellContents($this->sheetName . "!A2", $this->sheetName . "!K" . ($records + 2));
 
       for ($i = 0; $i < $records; $i++) {
         $events[$array2d[0][i]] = Event($array2d[0][i], $array2d[1][i], $array2d[2][i], $array2d[3][i], $array2d[4][i], $array2d[5][i], $aarray2d[6][i], $array2d[7][i], $array2d[8][i], $array2d[9][i]);
@@ -32,8 +32,8 @@ class Event
 
       $records = $model->getNumberOfRecords();
 
-      $array2d = $model->getCellContents($this->sheetName . "!B2", $this->sheetName . "!C" . $records + 2);
-      $array2dInfo = $model->getCellContents($this->sheetName . "!H2", $this->sheetName . "!J" . $records + 2);
+      $array2d = $model->getCellContents($this->sheetName . "!B2", $this->sheetName . "!C" . ($records + 2));
+      $array2dInfo = $model->getCellContents($this->sheetName . "!H2", $this->sheetName . "!J" . ($records + 2));
 
       for ($i = 0; $i < $records; $i++) {
         $members[$array2d[0][i]] = Member($array2d[0][i], $array2d[1][i], $array2dInfo[0][i], $array2dInfo[1][i], $array2dInfo[2][i]);
@@ -80,7 +80,7 @@ class Event
 
       $records = $model->getNumberOfRecords();
 
-      $array2d = $model->getCellContents($this->sheetName . "!A2", $this->sheetName . "!K" . $records + 2);
+      $array2d = $model->getCellContents($this->sheetName . "!A2", $this->sheetName . "!K" . ($records + 2));
 
       $allRecords = [];
 
@@ -108,7 +108,7 @@ class Event
 
       $records = $model->getNumberOfRecords();
 
-      $array2d = $model->getCellContents($this->sheetName . "!A2", $this->sheetName . "!K" . $records + 2);
+      $array2d = $model->getCellContents($this->sheetName . "!A2", $this->sheetName . "!K" . ($records + 2));
 
       $allRecords = [];
 
