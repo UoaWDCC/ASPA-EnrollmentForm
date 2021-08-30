@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
-
-// Modified base CI controller 
+require('./application/models/entities/Organisation_Model.php');
+// Modified base CI controller
 // So that all controllers can inherit common controller functions
 
 /**
@@ -17,26 +17,45 @@ class ASPA_Controller extends CI_Controller
      */
     protected $eventData;
 
+    protected $org;
+
+
     function __construct()
     {
         parent::__construct();
         // $this->load->helper();
-		// $this->load->model();
+        // $this->load->model();
         $this->eventData = $this->loadEventData();
+        $this->org = $this->loadOrganisationData();
     }
 
-	/**
-	* This function constructs the json output.
-	*
-	* @param integer    $statusCode     The HTTP status code
-	* @param string 	$message 	    A message to return
-	* @param string 	$payload 		Any extra data
-	*/
+    /**
+     * This function handles the loading the Organisation model
+     *
+     * @return array
+     */
+    public function loadOrganisationData()
+    {
+        $organisation = [];
+        $eventData = $this->loadEventData();
+        $this->org = new Organisation_Model("ASPA", $eventData['acc_num'], "-", "-", "-", "-", "uoapool@gmail.com");
+        $organisation = $this->org->toArray();
+        return $organisation;
+    }
+
+	  /**
+	   * This function constructs the json output.
+	   *
+	   * @param integer $statusCode     The HTTP status code
+	   * @param string 	$message 	    A message to return
+	   * @param string 	$payload 		Any extra data
+	   */
     public function createResponse(int $statusCode, $message = null, $payload = null) {
         $array = [
                 'message' => $message ?? "(empty message)",
                 'payload' => $payload ?? [],
         ];
+
 
         $this->output
             ->set_status_header($statusCode)
@@ -47,10 +66,11 @@ class ASPA_Controller extends CI_Controller
 
     /**
      * This function handles the loading of event data from google sheets.
-     * 
+     *
      * @return array
      */
-    private function loadEventData() {
+    private function loadEventData()
+    {
         $this->load->model("GoogleSheets_Model");
 
         $eventTemp = [];

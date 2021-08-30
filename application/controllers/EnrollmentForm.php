@@ -2,6 +2,7 @@
 defined('BASEPATH') or exit('No direct script access allowed');
 require('vendor/autoload.php');
 
+
 /**
  * Class EnrollmentForm
  *
@@ -32,9 +33,9 @@ class EnrollmentForm extends ASPA_Controller
     {
         log_message('debug', "-- Index Function called");
         if (filter_var($this->eventData["form_enabled"], FILTER_VALIDATE_BOOLEAN)) {
-            $this->load->view('EnrollmentForm', $this->eventData);
+            $this->load->view('EnrollmentForm', array_merge($this->eventData, $this->org));
         } else {
-            $this->load->view('FormDisabled');
+            $this->load->view('FormDisabled', $this->org);
         }
     }
 
@@ -77,7 +78,9 @@ class EnrollmentForm extends ASPA_Controller
             return;
         }
 
-        $this->createResponse(200, "Success");
+        [$fullName, $UPI] = $this->Verification_Model->getMemberInfo($emailAddress);
+
+        $this->createResponse(200, "Success", $fullName);
     }
 
     /**
