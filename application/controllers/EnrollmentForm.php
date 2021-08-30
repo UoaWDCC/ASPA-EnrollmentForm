@@ -2,11 +2,13 @@
 defined('BASEPATH') or exit('No direct script access allowed');
 require('vendor/autoload.php');
 
+
 /**
  * Class EnrollmentForm
  *
  * @property GoogleSheets_Model $GoogleSheets_Model
  * @property Verification_Model $Verification_Model
+ * @property Repository_Model $Repository_Model
  * @property Email_Model $Email_Model
  * @property Stripe_Model $Stripe_Model
  * @property CI_Input $input
@@ -23,6 +25,12 @@ class EnrollmentForm extends ASPA_Controller
 
         log_message('debug', "=====New Controller Function Initialized====");
         log_message('debug', "-- from IP address: " . $this->input->ip_address());
+    }
+
+    public function test() {
+        $this->load->model("Repository_Model");
+        $this->Repository_Model->initClass(MEMBERSHIP_SPREADSHEET_ID, MEMBERSHIP_SHEET_NAME);
+        print_r($this->Repository_Model->getMembers());
     }
 
     /**
