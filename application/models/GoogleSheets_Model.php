@@ -190,9 +190,10 @@ class GoogleSheets_Model extends CI_Model {
         if (empty($values)) {
             return NULL;
         } else {
-
             // Values returned as an array...
             // e.g input: ('A1', 'B3'), output: [[A1, A2, A3], [B1, B2, B3]]
+
+            // TODO: Ensure that all empty spaces are filled with empty string / null value
             return $values;
         }
     }

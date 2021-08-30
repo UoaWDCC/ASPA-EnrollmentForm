@@ -11,25 +11,12 @@ class Event
     public string $description;
     public string $location;
     public string $emailBannerImg;
-    public int $datetime;
+    public String $datetime;
     public int $durationMins;
     public float $priceNZD;
     public bool $signUpsOpen;
 
-    /**
-     * Event constructor.
-     *
-     * @param String $id
-     * @param String $name
-     * @param String $tagline
-     * @param String $description
-     * @param String $location
-     * @param String $emailBannerImg
-     * @param int $datetime
-     * @param int $durationMins
-     * @param float $priceNZD
-     * @param bool $signUpsOpen
-     */
+
     public function __construct(
       string $id,                          
       string $name,
@@ -37,7 +24,7 @@ class Event
       string $description,
       string $location,
       string $emailBannerImg,
-      int $datetime,
+      String $datetime,
       int $durationMins,
       float $priceNZD,
       bool $signUpsOpen
