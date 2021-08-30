@@ -35,7 +35,6 @@ class Organisation_Model
     }
 
     /**
-     *
      * Setting organisation model variables to their specific element
      *
      * @param Array $elements

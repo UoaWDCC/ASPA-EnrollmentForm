@@ -19,6 +19,7 @@ class ASPA_Controller extends CI_Controller
 
     protected $org;
 
+
     function __construct()
     {
         parent::__construct();
@@ -35,9 +36,9 @@ class ASPA_Controller extends CI_Controller
      */
     public function loadOrganisationData()
     {
-
         $organisation = [];
-        $this->org = new Organisation_Model("ASPA", "42424242-424242-4242", "032", "30", "0", "-", "uoapool@gmail.com");
+        $eventData = $this->loadEventData();
+        $this->org = new Organisation_Model("ASPA", $eventData['acc_num'], "-", "-", "-", "-", "uoapool@gmail.com");
         $organisation = $this->org->toArray();
         return $organisation;
     }
@@ -45,7 +46,7 @@ class ASPA_Controller extends CI_Controller
     /**
      * This function constructs the json output.
      *
-     * @param string    	$flag  		To determine if the request was processed successfully
+     * @param string    $flag  		To determine if the request was processed successfully
      * @param string 	$message 	A brief description of the output
      * @param string 	$extra 		Any extra information
      */
@@ -72,9 +73,7 @@ class ASPA_Controller extends CI_Controller
     {
         $this->load->model("GoogleSheets_Model");
 
-
         $eventTemp = [];
-
 
         // Get event details from spreadsheet from range A2 to size of spreadsheet
         $this->GoogleSheets_Model->setCurrentSheetName("CurrentEventDetails");
