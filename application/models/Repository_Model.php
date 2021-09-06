@@ -91,7 +91,6 @@ class Repository_Model extends CI_Model
      */
     public function getMemberByEmail(string $memberEmail) {
         return $this->members[$memberEmail];
-
     }
 
     /**
@@ -150,7 +149,25 @@ class Repository_Model extends CI_Model
         return $allRecords;
     }
 
-    public function saveEvent(Event $event) {}
+    /**
+     * Save an event to the database.
+     * @param event the event to save to the database.
+     */
+    public function saveEvent(Event $event) {
+        $this->GoogleSheets_Model->setCurrentSheetName("Events");
 
-    public function saveRecord(Record $record) {}
+        return $event;
+    }
+
+    /**
+     * Save a record to the database.
+     * @param record the record to save to the database.
+     */
+    public function saveRecord(Record $record) {
+      $this->GoogleSheets_Model->setCurrentSheetName($record->eventID);
+
+      $this->GoogleSheets_Model->addNewRecord($record->email, $record->fullName, $record->upi, $record->paymentMethod);
+
+      return $record;
+    }
 }
