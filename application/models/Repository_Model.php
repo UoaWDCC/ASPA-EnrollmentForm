@@ -156,6 +156,28 @@ class Repository_Model extends CI_Model
     public function saveEvent(Event $event) {
         $this->GoogleSheets_Model->setCurrentSheetName("Events");
 
+        $size = $this->GoogleSheets_Model->getNumberOfRecords() + 2;
+
+        $range = "A" . $size;
+
+        $values = [[
+            $event->id, 
+            $event->name, 
+            $event->tagline, 
+            $event->description, 
+            $event->datetime,
+            $event->durationMins,
+            $event->location,
+            $event->priceNZD,
+            $event->emailBannerImg,
+            $event->signUpsOpen,
+            ]];
+        $body = new Google_Service_Sheets_ValueRange(['values' => $values]);
+
+        $params = ['valueInputOption' => 'USER_ENTERED'];
+
+        $result = $this->GoogleSheets_Model->service->spreadsheets_values->update($this->GoogleSheets_Model->spreadsheetId, $range, $body, $params);
+
         return $event;
     }
 
