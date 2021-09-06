@@ -29,6 +29,22 @@ defined('BASEPATH') or exit('No direct script access allowed');
       n.className += t + "js", ("ontouchstart" in o || o.DocumentTouch && c instanceof DocumentTouch) && (n.className += t + "touch")
     }(window, document);
   </script>
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-86PRV17BN7"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag('js', new Date());
+
+    gtag('config', 'G-86PRV17BN7', {
+      cookie_flags: 'SameSite=None;Secure'
+    });
+  </script>
+  
   <link href="assets/images/favicon.png?random=<?php echo uniqid(); ?>" rel="icon" type="image/png">
   <link href="assets/images/webclip.png?random=<?php echo uniqid(); ?>" rel="apple-touch-icon">
   <link href="assets/css/enrollmentForm.css?random=<?php echo uniqid(); ?>" rel="stylesheet">
