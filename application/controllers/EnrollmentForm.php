@@ -29,8 +29,8 @@ class EnrollmentForm extends ASPA_Controller
 
     public function test() {
         $this->load->model("Repository_Model");
-        $this->Repository_Model->initClass(MEMBERSHIP_SPREADSHEET_ID, MEMBERSHIP_SHEET_NAME);
-        print_r($this->Repository_Model->getMembers());
+        $this->Repository_Model->initClass(MEMBERSHIP_SPREADSHEET_ID, MEMBERSHIP_SHEET_NAME, REGISTRATION_SPREADSHEET_ID);
+        print_r($this->Repository_Model->getRecordsByEvent("id1"));
     }
 
     /**

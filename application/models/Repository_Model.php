@@ -5,6 +5,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 require('vendor/autoload.php');
 require('./application/models/entities/Event.php');
 require('./application/models/entities/Member.php');
+require('./application/models/entities/Record.php');
 
 
 /**
@@ -21,9 +22,9 @@ class Repository_Model extends CI_Model
      * Repository constructor.
      * @param GoogleSheets_Model $model
      */
-    public function initClass(String $membershipSpreadsheetId, String $membershipSheetName)
+    public function initClass(String $membershipSpreadsheetId, String $membershipSheetName, String $registrationSheetId)
     {
-        //  GET ALL EVENT
+        //  GET ALL EVENTS
         $this->load->model('GoogleSheets_Model');
 
         $this->GoogleSheets_Model->setCurrentSheetName("Events");
@@ -79,6 +80,8 @@ class Repository_Model extends CI_Model
 
             $this->members[$email] = new Member($email, $fullName, $upi, $signUpDate, $hasPaid);
         }
+
+        $this->GoogleSheets_Model->setSpreadsheetId($registrationSheetId);
     }
 
     /**
@@ -87,7 +90,7 @@ class Repository_Model extends CI_Model
      * @return Member the member object
      */
     public function getMemberByEmail(string $memberEmail) {
-        return $members[$memberEmail];
+        return $this->members[$memberEmail];
 
     }
 
@@ -102,7 +105,7 @@ class Repository_Model extends CI_Model
      * @return Event the event object that corrosponds to the event ID
      */
     public function getEventById(string $eventId) {
-        return $events[$eventId];
+        return $this->events[$eventId];
     }
 
     /**
@@ -117,27 +120,14 @@ class Repository_Model extends CI_Model
      * @return Record the member's record, or NULL
      */
     public function getRecord(string $memberEmail, string $eventId) {
-        $this->setCurrentSheetName($eventId);
+        $records = $this->getRecordsByEvent($eventId);
 
-        $records = $model->getNumberOfRecords();
-
-        $array2d = $model->getCellContents($this->sheetName . "!A2", $this->sheetName . "!K" . ($records + 2));
-
-        $allRecords = [];
-
-        $index = -1;
-
-        for ($i = 0; $i < $records; $i++) {
-            if ($array2d[1][i] == $memberEmail) {
-                $index = $i;
-                break;
-            }
+        if (array_key_exists($memberEmail, $records)) {
+            return $records[$memberEmail];
         }
-
-        if (index >= 0)
-            return Record($array2d[1][index], $eventId, $array2d[0][index], $array2d[2][index], $array2d[4][index], $array2d[5][index], $array2d[10][index], $array2d[9][index], $array2d[6][index] = "P" ? true : false);
-        else
+        else {
             return NULL;
+        }
     }
 
     /**
@@ -145,17 +135,17 @@ class Repository_Model extends CI_Model
      * @return Record[] a list of all records for an event
      */
     public function getRecordsByEvent(string $eventId) {
-        $this->setCurrentSheetName($eventId);
+      $this->GoogleSheets_Model->setCurrentSheetName($eventId);
 
-        $records = $model->getNumberOfRecords();
+      $records = $this->GoogleSheets_Model->getNumberOfRecords();
 
-        $array2d = $model->getCellContents($this->sheetName . "!A2", $this->sheetName . "!K" . ($records + 2));
+      $array2d = $this->GoogleSheets_Model->getCellContents("A2","K" . ($records + 2));
 
-        $allRecords = [];
+      $allRecords = [];
 
-        for ($i = 0; $i < $records; $i++) {
-            $allRecords[$array2d[1][i]] = Record($array2d[1][i], $eventId, $array2d[0][i], $array2d[2][i], $array2d[4][i], $array2d[5][i], $array2d[10][i], $array2d[9][i], $array2d[6][i] = "P" ? true : false);
-        }
+      for ($i = 0; $i < $records; $i++) {
+          $allRecords[$array2d[$i][1]] = new Record($array2d[$i][1], $eventId, $array2d[$i][0], $array2d[$i][2], $array2d[$i][4], $array2d[$i][5], $array2d[$i][10], $array2d[$i][9], isset($array2d[$i][6]));
+      }
 
         return $allRecords;
     }
