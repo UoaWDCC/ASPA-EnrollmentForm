@@ -16,6 +16,7 @@ class Repository_Model extends CI_Model
 
     private array $events = [];
     private array $members = [];
+    private $service;
 
 
     /**
@@ -24,6 +25,8 @@ class Repository_Model extends CI_Model
      */
     public function initClass(String $membershipSpreadsheetId, String $membershipSheetName, String $registrationSheetId)
     {
+        $this->service = $this->GoogleSheets_Model->service_setup();
+
         //  GET ALL EVENTS
         $this->load->model('GoogleSheets_Model');
 
@@ -176,7 +179,7 @@ class Repository_Model extends CI_Model
 
         $params = ['valueInputOption' => 'USER_ENTERED'];
 
-        $result = $this->GoogleSheets_Model->service->spreadsheets_values->update($this->GoogleSheets_Model->spreadsheetId, $range, $body, $params);
+        $result = $this->service->spreadsheets_values->update($this->GoogleSheets_Model->spreadsheetId, $range, $body, $params);
 
         return $event;
     }
