@@ -8,6 +8,8 @@ require('./application/models/entities/Member.php');
 require('./application/models/entities/Record.php');
 
 
+const EVENT_SHEET_NAME = "Events";
+
 /**
  * @property GoogleSheets_Model $GoogleSheets_Model
  */
@@ -18,23 +20,23 @@ class Repository_Model extends CI_Model
     private array $members = [];
     private $service;
 
+    private string $registrationSheetId;
+
 
     /**
      * Repository constructor.
-     * @param GoogleSheets_Model $model
      */
     public function initClass(String $membershipSpreadsheetId, String $membershipSheetName, String $registrationSheetId)
     {
-        $this->service = $this->GoogleSheets_Model->service_setup();
-
-        //  GET ALL EVENTS
         $this->load->model('GoogleSheets_Model');
+        $this->service = $this->GoogleSheets_Model->getService();
 
+        // Get all the events
         $this->GoogleSheets_Model->setCurrentSheetName("Events");
-
         $records = $this->GoogleSheets_Model->getNumberOfRecords();
+        $array2d = $this->GoogleSheets_Model->getCellContents("A2", "J" . ($records + 2));
 
-        $array2d =  $this->GoogleSheets_Model->getCellContents("A2", "J" . ($records + 2));
+        $this->registrationSheetId = $registrationSheetId;
 
         for ($i = 0; $i < $records; $i++) {
             $current = $array2d[$i];
@@ -113,6 +115,7 @@ class Repository_Model extends CI_Model
     /**
      * Gets an organization
      */
+    // TODO: Replace this to return the actual organisation.
     public function getOrganisation(string $orgId) {
         return NULL;
     }
@@ -156,12 +159,12 @@ class Repository_Model extends CI_Model
      * Save an event to the database.
      * @param event the event to save to the database.
      */
-    public function saveEvent(Event $event) {
+    public function saveEvent(Event $event): Event {
         $this->GoogleSheets_Model->setCurrentSheetName("Events");
 
         $size = $this->GoogleSheets_Model->getNumberOfRecords() + 2;
 
-        $range = "A" . $size;
+        $range = EVENT_SHEET_NAME . "!A" . $size;
 
         $values = [[
             $event->id, 
@@ -179,7 +182,7 @@ class Repository_Model extends CI_Model
 
         $params = ['valueInputOption' => 'USER_ENTERED'];
 
-        $result = $this->service->spreadsheets_values->update($this->GoogleSheets_Model->spreadsheetId, $range, $body, $params);
+        $result = $this->service->spreadsheets_values->update($this->registrationSheetId, $range, $body, $params);
 
         return $event;
     }

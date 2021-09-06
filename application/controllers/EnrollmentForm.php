@@ -27,11 +27,23 @@ class EnrollmentForm extends ASPA_Controller
         log_message('debug', "-- from IP address: " . $this->input->ip_address());
     }
 
-    // public function test() {
-    //     $this->load->model("Repository_Model");
-    //     $this->Repository_Model->initClass(MEMBERSHIP_SPREADSHEET_ID, MEMBERSHIP_SHEET_NAME, REGISTRATION_SPREADSHEET_ID);
-    //     print_r($this->Repository_Model->saveEvent(new Event(1, 1, 1, 1, 1, 1, 1, 1, 1, 1)));
-    // }
+     public function test() {
+         $this->load->model("Repository_Model");
+         $this->Repository_Model->initClass(MEMBERSHIP_SPREADSHEET_ID, MEMBERSHIP_SHEET_NAME, REGISTRATION_SPREADSHEET_ID);
+         $event = new Event(
+             "id",
+             "name",
+             "tagline",
+             "desc",
+             "location",
+             "email",
+             "datetime",
+             10,
+             10.2,
+             true);
+
+         print_r($this->Repository_Model->saveEvent($event));
+     }
 
     /**
      * The "home" page.
