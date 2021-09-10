@@ -1,6 +1,6 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
-require('./application/models/entities/Organisation_Model.php');
+require('./application/models/entities/Organisation.php');
 // Modified base CI controller
 // So that all controllers can inherit common controller functions
 
@@ -38,7 +38,7 @@ class ASPA_Controller extends CI_Controller
     {
         $organisation = [];
         $eventData = $this->loadEventData();
-        $this->org = new Organisation_Model("ASPA", $eventData['acc_num'], "-", "-", "-", "-", "uoapool@gmail.com");
+        $this->org = new Organisation("ASPA", $eventData['acc_num'], "-", "-", "-", "-", "uoapool@gmail.com");
         $organisation = $this->org->toArray();
         return $organisation;
     }
