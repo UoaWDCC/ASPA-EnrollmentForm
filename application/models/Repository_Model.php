@@ -8,7 +8,8 @@ require('./application/models/entities/Member.php');
 require('./application/models/entities/Record.php');
 
 
-const EVENT_SHEET_NAME = "Events";
+const EVENT_SHEET_ID_COLUMN = "A";
+const REGISTRATIONS_SHEET_ID_COLUMN = "A";
 
 /**
  * @property GoogleSheets_Model $GoogleSheets_Model
@@ -117,7 +118,15 @@ class Repository_Model extends CI_Model
      */
     // TODO: Replace this to return the actual organisation.
     public function getOrganisation(string $orgId) {
-        return NULL;
+      return new Organisation(
+        "name",
+        "bankAccountNumber",
+        $orgId,
+        "bankRefFormat",
+        "logoImg",
+        "tagline",
+        "supportEmail",
+      );
     }
 
     /**
@@ -160,29 +169,7 @@ class Repository_Model extends CI_Model
      * @param event the event to save to the database.
      */
     public function saveEvent(Event $event): Event {
-        $this->GoogleSheets_Model->setCurrentSheetName("Events");
-
-        $size = $this->GoogleSheets_Model->getNumberOfRecords() + 2;
-
-        $range = EVENT_SHEET_NAME . "!A" . $size;
-
-        $values = [[
-            $event->id, 
-            $event->name, 
-            $event->tagline, 
-            $event->description, 
-            $event->datetime,
-            $event->durationMins,
-            $event->location,
-            $event->priceNZD,
-            $event->emailBannerImg,
-            $event->signUpsOpen,
-            ]];
-        $body = new Google_Service_Sheets_ValueRange(['values' => $values]);
-
-        $params = ['valueInputOption' => 'USER_ENTERED'];
-
-        $result = $this->service->spreadsheets_values->update($this->registrationSheetId, $range, $body, $params);
+        $this->GoogleSheets_Model->saveEvent($event->id, EVENT_SHEET_ID_COLUMN, $event->toArray());
 
         return $event;
     }
@@ -192,9 +179,7 @@ class Repository_Model extends CI_Model
      * @param record the record to save to the database.
      */
     public function saveRecord(Record $record) {
-      $this->GoogleSheets_Model->setCurrentSheetName($record->eventID);
-
-      $this->GoogleSheets_Model->addNewRecord($record->email, $record->fullName, $record->upi, $record->paymentMethod);
+      $this->GoogleSheets_Model->saveRecord($record->eventID, $record->email, REGISTRATIONS_SHEET_ID_COLUMN, $record->toArray());
 
       return $record;
     }
