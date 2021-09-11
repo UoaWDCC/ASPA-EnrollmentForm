@@ -42,4 +42,18 @@ class Event
         $this->signUpsOpen = $signUpsOpen;
     }
 
+    public function toArray() : array {
+      return [
+        $this->id, 
+        $this->name, 
+        $this->tagline, 
+        $this->description, 
+        $this->datetime,
+        $this->durationMins,
+        $this->location,
+        $this->priceNZD,
+        $this->emailBannerImg,
+        $this->signUpsOpen,
+        ];
+    }
 }
