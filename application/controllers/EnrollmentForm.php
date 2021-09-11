@@ -30,19 +30,31 @@ class EnrollmentForm extends ASPA_Controller
      public function test() {
          $this->load->model("Repository_Model");
          $this->Repository_Model->initClass(MEMBERSHIP_SPREADSHEET_ID, MEMBERSHIP_SHEET_NAME, REGISTRATION_SPREADSHEET_ID);
-         $event = new Event(
-             "id",
-             "name",
-             "tagline",
-             "desc",
-             "location",
-             "email",
-             "datetime",
-             10,
-             10.2,
-             true);
+        //  $event = new Event(
+        //      "id3",
+        //      "name",
+        //      "tagline",
+        //      "desc",
+        //      "location",
+        //      "NOT EMAIl",
+        //      "datetime",
+        //      10,
+        //      10.2,
+        //      true);
 
-         print_r($this->Repository_Model->saveEvent($event));
+        // $record = new Record(
+        //   "ray@email.email",
+        //   "id1",
+        //   "this->timestamp,",
+        //   "this->fullName",
+        //   "this->upi",
+        //   "this->paymentMethod",
+        //   "this->paymentDate",
+        //   TRUE,
+        //   TRUE,
+        // );
+
+        print_r("This is a test function."/*$this->Repository_Model->getOrganisation("1")*/);
      }
 
     /**
