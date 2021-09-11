@@ -27,11 +27,23 @@ class EnrollmentForm extends ASPA_Controller
         log_message('debug', "-- from IP address: " . $this->input->ip_address());
     }
 
-    // public function test() {
-    //     $this->load->model("Repository_Model");
-    //     $this->Repository_Model->initClass(MEMBERSHIP_SPREADSHEET_ID, MEMBERSHIP_SHEET_NAME, REGISTRATION_SPREADSHEET_ID);
-    //     print_r($this->Repository_Model->saveEvent(new Event(1, 1, 1, 1, 1, 1, 1, 1, 1, 1)));
-    // }
+     public function test() {
+         $this->load->model("Repository_Model");
+         $this->Repository_Model->initClass(MEMBERSHIP_SPREADSHEET_ID, MEMBERSHIP_SHEET_NAME, REGISTRATION_SPREADSHEET_ID);
+         $event = new Event(
+             "id",
+             "name",
+             "tagline",
+             "desc",
+             "location",
+             "email",
+             "datetime",
+             10,
+             10.2,
+             true);
+
+         print_r($this->Repository_Model->saveEvent($event));
+     }
 
     /**
      * The "home" page.
@@ -40,9 +52,9 @@ class EnrollmentForm extends ASPA_Controller
     {
         log_message('debug', "-- Index Function called");
         if (filter_var($this->eventData["form_enabled"], FILTER_VALIDATE_BOOLEAN)) {
-            $this->load->view('EnrollmentForm', $this->eventData);
+            $this->load->view('EnrollmentForm', array_merge($this->eventData, $this->org));
         } else {
-            $this->load->view('FormDisabled');
+            $this->load->view('FormDisabled', $this->org);
         }
     }
 
@@ -61,24 +73,33 @@ class EnrollmentForm extends ASPA_Controller
 
         $this->load->model('Verification_Model');
 
-        // If the email does not exist or is not on the membership spreadsheet, return false
-        if (!isset($emailAddress) || !$this->Verification_Model->isEmailOnSheet($emailAddress, MEMBERSHIP_SPREADSHEET_ID, MEMBERSHIP_SHEET_NAME)) {
-            $this->create_json('False', '', 'Error: Email incorrect or not found on sheet');
+        // If the email is of invalid format, return 412 error
+        if (!isset($emailAddress) || !$this->Verification_Model->isValidEmail($emailAddress)) {
+            $this->createResponse(412, 'Error: Format of email is invalid');
+            return;
         }
 
-        // If the user has already paid for the event, return false
+        // If the email does not exist or is not on the membership spreadsheet, return 404 error
+        if (!$this->Verification_Model->isEmailOnSheet($emailAddress, MEMBERSHIP_SPREADSHEET_ID, MEMBERSHIP_SHEET_NAME)) {
+            $this->createResponse(404, 'Error: Email incorrect or not found on sheet');
+            return;
+        }
+
+        // If the user has already paid for the event, return 409 error
         if ($this->Verification_Model->hasUserPaidEvent($emailAddress, $this->eventData['gsheet_name'])) {
-            $this->create_json('False', '', 'Error: already paid for event');
+            $this->createResponse(409, 'Error: already paid for event');
             return;
         }
 
-        // If membership payment status is checked, and user's membership fee has not been paid, return false
+        // If membership payment status is checked, and user's membership fee has not been paid, return 403 error
         if (CHECK_MEMBERSHIP_PAYMENT && !$this->Verification_Model->hasUserPaidMembership($emailAddress)) {
-            $this->create_json("False", "Error: signed up but not paid");
+            $this->createResponse(403, "Error: signed up but not paid");
             return;
         }
 
-        $this->create_json('True', '', 'Success');
+        [$fullName, $UPI] = $this->Verification_Model->getMemberInfo($emailAddress);
+
+        $this->createResponse(200, "Success", $fullName);
     }
 
     /**

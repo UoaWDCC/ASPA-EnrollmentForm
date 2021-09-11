@@ -38,6 +38,14 @@ const alreadyPaidEventErr = [
     "Oops! This email has already paid for this event.",
     "Please use a different account or email.",
 ];
+const invalidEmailFormatErr = [
+    "Oops! Email format is incorrect",
+    "Please retype your email",
+];
+const otherErr = [
+    "Oops! Unidentified error",
+    "Please retype your email",
+];
 
 // get the payment button types on page 4
 let payCash = document.getElementById("btn-cash");
@@ -211,50 +219,56 @@ ok3.onclick = function () {
 		url: base_url + "index.php/EnrollmentForm/validate",
 		method: "POST",
 		data: { emailAddress: emailAddress },
-		// if the validate() url functions correctly (even if it returns True/False), then success function executes.
-		success: function (data) {
-			console.log(data);
-			// data is a JSON object with the following properties:
-			// is_success: True/False (if the email validation succeeeded)
-			// message: any message
-			// extra: any further information
-			const signedUpUnpaid = "Error: signed up but not paid"; // edit these if the 'extra' message is modified
-			const alreadyPaidForEvent = "Error: already paid for event";
-			if (data.is_success === "True") {
+		complete: function (data) {
+			if (data.status === 200) {
 				showSuccess();
-				setTimeout(() =>{
+
+				const name = data.responseJSON.payload;
+
+				// Inject name from the response into the next page
+				document.getElementById("name-hello").innerHTML = `Hello ${name || "member"},`;
+
+				setTimeout(() => {
 					nextPage();
 					enableOkButton();
 				}, 1000);
-
-			} else if (
-				data.is_success === "False" &&
-				data.extra === signedUpUnpaid
-			) {
-				showWarning();
-				// change the error message to be "signed up but unpaid" warning
-				errorMsgArray[0].innerHTML = signedUpUnpaidErr[0];
-				errorMsgArray[1].innerHTML = signedUpUnpaidErr[1];
-				enableOkButton();
-				return;
-			} else if (
-				data.is_success === "False" &&
-				data.extra === alreadyPaidForEvent
-			) {
-				showWarning();
-				// change the error message to be "already paid" warning
-				errorMsgArray[0].innerHTML = alreadyPaidEventErr[0];
-				errorMsgArray[1].innerHTML = alreadyPaidEventErr[1];
-				enableOkButton();
-				return;
-			} else {
-				showWarning();
-				// change the error message to be "unrecognized email, please sign up" warning
-				errorMsgArray[0].innerHTML = notSignedUpUnpaidErr[0];
-				errorMsgArray[1].innerHTML = notSignedUpUnpaidErr[1];
-				enableOkButton();
 				return;
 			}
+
+			// If data was not successful, do the following
+			switch (data.status) {
+				// change the error message to be "signed up but unpaid" warning
+				case 403:
+					errorMsgArray[0].innerHTML = signedUpUnpaidErr[0];
+					errorMsgArray[1].innerHTML = signedUpUnpaidErr[1];
+					break;
+
+				// change the error message to be "already paid" warning
+				case 409:
+					errorMsgArray[0].innerHTML = alreadyPaidEventErr[0];
+					errorMsgArray[1].innerHTML = alreadyPaidEventErr[1];
+					break;
+
+				// change the error message to be "unrecognized email, please sign up" warning
+				case 404:
+					errorMsgArray[0].innerHTML = notSignedUpUnpaidErr[0];
+					errorMsgArray[1].innerHTML = notSignedUpUnpaidErr[1];
+					break;
+
+				// change the error message to be "unrecognized email, please sign up" warning
+				case 412:
+					errorMsgArray[0].innerHTML = invalidEmailFormatErr[0];
+					errorMsgArray[1].innerHTML = invalidEmailFormatErr[1];
+					break;
+
+				// change the error message to be "unrecognized email, please sign up" warning
+				default:
+					errorMsgArray[0].innerHTML = otherErr[0];
+					errorMsgArray[1].innerHTML = otherErr[1];
+			}
+
+			showWarning();
+			enableOkButton();
 		},
 	});
 };

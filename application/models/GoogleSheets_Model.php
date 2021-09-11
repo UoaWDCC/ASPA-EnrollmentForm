@@ -23,6 +23,14 @@ class GoogleSheets_Model extends CI_Model {
     }
 
     /**
+     * Returns the GSheets Service object.
+     * @return Google_Service_Sheets
+     */
+    public function getService() {
+        return $this->service;
+    }
+
+    /**
      * Sets the current sheet ID that this model will query data from.
      *
      * @param string $spreadsheetId The Google Sheet ID.
