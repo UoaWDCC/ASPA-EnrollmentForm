@@ -118,6 +118,65 @@ class GoogleSheets_Model extends CI_Model {
     }
 
     /**
+     * Update or add an event.
+     * 
+     * @param string $id The unique ID of the row.
+     * @param string $idColumn The letter of the column that stores the ID.
+     * @param array $data The array containing the ordered data to be entered onto the sheet.
+     */
+    public function saveEvent($id, $idColumn, $data) {
+      $this->saveRow(REGISTRATION_SPREADSHEET_ID, "Events", $id, $idColumn, $data);
+    }
+
+    /**
+     * Update or add a record.
+     * 
+     * @param string $eventID The ID of the event.
+     * @param string $id The unique ID of the row.
+     * @param string $idColumn The letter of the column that stores the ID.
+     * @param array $data The array containing the ordered data to be entered onto the sheet.
+     */
+    public function saveRecord($eventID, $id, $idColumn, $data) {
+      $this->saveRow(REGISTRATION_SPREADSHEET_ID, $eventID, $id, $idColumn, $data);
+    }
+
+    /**
+     * Add a new row to a spreadsheet.
+     * 
+     * @param string $sheetID The ID of the sheet to be added to.
+     * @param string $sheetName The name of the sheet to be added to.
+     * @param string $id The unique ID of the row.
+     * @param string $idColumn The letter of the column that stores the ID.
+     * @param array $data The array containing the ordered data to be entered onto the sheet.
+     */
+    private function saveRow($sheetID, $sheetName, $id, $idColumn, $data) 
+    { 
+      $this->setSpreadsheetId($sheetID);
+      $this->setCurrentSheetName($sheetName);
+
+      $records = $this->GoogleSheets_Model->getNumberOfRecords();
+      $array = $this->GoogleSheets_Model->getCellContents($idColumn . "2", $idColumn . ($records + 2));
+
+      $position = $records;
+
+      foreach ($array as $index => $record) {
+        if ($record[0] == $id) {
+          $position = $index;
+          break;
+        }
+      }
+
+      $position = $this->sheetName . '!A' . ($position + 2);
+      $body = new Google_Service_Sheets_ValueRange(['values' => [$data]]);
+      $params = ['valueInputOption' => 'USER_ENTERED'];
+
+      $result = $this->service->spreadsheets_values->update($this->spreadsheetId, $position, $body, $params);
+      print_r($array);
+    }
+
+
+
+    /**
      * Mark an attendees attendance in the google sheets
      *
      * @param string $eventName The name of the event
