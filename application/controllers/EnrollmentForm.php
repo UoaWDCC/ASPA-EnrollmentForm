@@ -98,8 +98,10 @@ class EnrollmentForm extends ASPA_Controller
 
         // Stopping direct access to this method
         if (!isset($data['name']) || !isset($data['email'])) {
-            show_error("Sorry, this page you are requesting is either not found or you don't have permission to access this page. Error Code:001",
-                       "404");
+            show_error(
+                "Sorry, this page you are requesting is either not found or you don't have permission to access this page. Error Code:001",
+                "404"
+            );
         }
 
         if (CHECK_MEMBERSHIP_PAYMENT) {
@@ -145,9 +147,9 @@ class EnrollmentForm extends ASPA_Controller
         $this->load->model('Email_Model');
         log_message('debug', "-- makeOfflinePayment function called");
 
-        $this->load->model("GoogleSheets_Model");
-        $this->load->model("Verification_Model");
-        $this->load->model('Email_Model');
+        // $this->load->model("GoogleSheets_Model");
+        // $this->load->model("Verification_Model");
+        // $this->load->model('Email_Model');
 
         $data['has_paid'] = false;
         $data["email"] = $this->input->post("email");
