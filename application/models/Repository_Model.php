@@ -19,9 +19,6 @@ class Repository_Model extends CI_Model
 
     private array $events = [];
     private array $members = [];
-    private $service;
-
-    private string $registrationSheetId;
 
 
     /**
@@ -30,14 +27,11 @@ class Repository_Model extends CI_Model
     public function initClass(String $membershipSpreadsheetId, String $membershipSheetName, String $registrationSheetId)
     {
         $this->load->model('GoogleSheets_Model');
-        $this->service = $this->GoogleSheets_Model->getService();
 
         // Get all the events
         $this->GoogleSheets_Model->setCurrentSheetName("Events");
         $records = $this->GoogleSheets_Model->getNumberOfRecords();
         $array2d = $this->GoogleSheets_Model->getCellContents("A2", "J" . ($records + 2));
-
-        $this->registrationSheetId = $registrationSheetId;
 
         for ($i = 0; $i < $records; $i++) {
             $current = $array2d[$i];
@@ -119,13 +113,13 @@ class Repository_Model extends CI_Model
     // TODO: Replace this to return the actual organisation.
     public function getOrganisation(string $orgId) {
       return new Organisation(
-        "name",
-        "bankAccountNumber",
+        "ASPA",
+        "01-0129-0469512-00",
         $orgId,
-        "bankRefFormat",
-        "logoImg",
-        "tagline",
-        "supportEmail",
+        "-",
+        "-",
+        "Auckland Students Pool Association",
+        "uoapool@gmail.com",
       );
     }
 
