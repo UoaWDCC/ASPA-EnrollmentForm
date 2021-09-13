@@ -101,6 +101,13 @@ class Repository_Model extends CI_Model
     }
 
     /**
+     * @return Event[] a list of all events
+     */
+    public function getEvents() {
+        return $this->events;
+    }
+
+    /**
      * @return Event the event object that corrosponds to the event ID
      */
     public function getEventById(string $eventId) {
