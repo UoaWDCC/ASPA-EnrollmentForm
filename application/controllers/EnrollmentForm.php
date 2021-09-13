@@ -8,6 +8,7 @@ require('vendor/autoload.php');
  *
  * @property GoogleSheets_Model $GoogleSheets_Model
  * @property Verification_Model $Verification_Model
+ * @property Repository_Model $Repository_Model
  * @property Email_Model $Email_Model
  * @property Stripe_Model $Stripe_Model
  * @property CI_Input $input
@@ -26,6 +27,36 @@ class EnrollmentForm extends ASPA_Controller
         log_message('debug', "-- from IP address: " . $this->input->ip_address());
     }
 
+     public function test() {
+         $this->load->model("Repository_Model");
+         $this->Repository_Model->initClass(MEMBERSHIP_SPREADSHEET_ID, MEMBERSHIP_SHEET_NAME, REGISTRATION_SPREADSHEET_ID);
+        //  $event = new Event(
+        //      "id3",
+        //      "name",
+        //      "tagline",
+        //      "desc",
+        //      "location",
+        //      "NOT EMAIl",
+        //      "datetime",
+        //      10,
+        //      10.2,
+        //      true);
+
+        // $record = new Record(
+        //   "ray@email.email",
+        //   "id1",
+        //   "this->timestamp,",
+        //   "this->fullName",
+        //   "this->upi",
+        //   "this->paymentMethod",
+        //   "this->paymentDate",
+        //   TRUE,
+        //   TRUE,
+        // );
+
+        print_r("This is a test function."/*$this->Repository_Model->getOrganisation("1")*/);
+     }
+
     /**
      * The "home" page.
      */
@@ -33,9 +64,9 @@ class EnrollmentForm extends ASPA_Controller
     {
         log_message('debug', "-- Index Function called");
         if (filter_var($this->eventData["form_enabled"], FILTER_VALIDATE_BOOLEAN)) {
-            $this->load->view('EnrollmentForm', array_merge($this->eventData, $this->org));
+            $this->load->view('EnrollmentForm', array_merge($this->eventData, $this->orgData));
         } else {
-            $this->load->view('FormDisabled', $this->org);
+            $this->load->view('FormDisabled', $this->orgData);
         }
     }
 
