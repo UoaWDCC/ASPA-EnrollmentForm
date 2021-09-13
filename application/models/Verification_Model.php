@@ -1,12 +1,13 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
 /**
  * Class Verification_Model
  *
  * @property GoogleSheets_Model $GoogleSheets_Model
  */
-class Verification_Model extends CI_Model {
+class Verification_Model extends CI_Model
+{
 
     private $addresses = array();
 
@@ -34,7 +35,7 @@ class Verification_Model extends CI_Model {
         $sheetSize = $this->GoogleSheets_Model->getNumberOfRecords();
 
         // An array of array of all existing emails, i.e. [[email1], [email2], [email3]]
-        $this->addresses = array_column($this->GoogleSheets_Model->getCellContents('B2', 'B' . ($sheetSize+1)), 0);
+        $this->addresses = array_column($this->GoogleSheets_Model->getCellContents('B2', 'B' . ($sheetSize + 1)), 0);
 
         // Return true if email exists in google sheet
         return in_array($emailAddress, $this->addresses);
@@ -57,7 +58,7 @@ class Verification_Model extends CI_Model {
         $emailKey = array_search($emailAddress, $this->addresses);
 
         // Convert key to google coordinate
-        $emailIndex = 'B' . ($emailKey+2);
+        $emailIndex = 'B' . ($emailKey + 2);
 
         // Check the cell colour of the email cell
         $colourIs = $this->GoogleSheets_Model->getCellColour($emailIndex);
@@ -89,7 +90,7 @@ class Verification_Model extends CI_Model {
         $emailKey = array_search($emailAddress, $this->addresses);
 
         // Convert key to google coordinate
-        $emailIndex = 'B' . ($emailKey+2);
+        $emailIndex = 'B' . ($emailKey + 2);
 
         log_message("debug", "INDEX: " . $emailIndex);
 
@@ -124,12 +125,12 @@ class Verification_Model extends CI_Model {
             log_message("error", "The member is was not found on the sheet when recording to sheet");
         }
 
-         // Given that the email exists in the sheet, find its index
+        // Given that the email exists in the sheet, find its index
         $emailKey = array_search($emailAddress, $this->addresses);
 
         // Convert key to google coordinate
-        $nameIndex = 'C' . ($emailKey+2);
-        $upiIndex = 'H' . ($emailKey+2);
+        $nameIndex = 'C' . ($emailKey + 2);
+        $upiIndex = 'H' . ($emailKey + 2);
 
         // Get member's full name and UPI – these are by default blank string ('') if they do not exist
         $memberFullName = $this->GoogleSheets_Model->getCellContents($nameIndex, $nameIndex)[0][0] ?? '';
@@ -157,5 +158,4 @@ class Verification_Model extends CI_Model {
         // Returns bool variable for whether the sanitised email is valid
         return (bool) filter_var($emailAddress, FILTER_VALIDATE_EMAIL);
     }
-
 }
