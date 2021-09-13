@@ -49,4 +49,17 @@ class Record
         $this->attendance = $attendance;
     }
 
+    public function toArray() : array {
+      return [
+        $this->email,
+        $this->eventID,
+        $this->timestamp,
+        $this->fullName,
+        $this->upi,
+        $this->paymentMethod,
+        $this->paymentDate,
+        $this->paymentMade,
+        $this->attendance,
+        ];
+    }
 }

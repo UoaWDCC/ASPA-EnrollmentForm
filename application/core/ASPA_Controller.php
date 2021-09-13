@@ -1,13 +1,13 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
-require('./application/models/entities/Organisation_Model.php');
-// Modified base CI controller
-// So that all controllers can inherit common controller functions
+require('./application/models/entities/Organisation.php');
+
 
 /**
- * Class ASPA_Controller
+ * BaseController so that all controllers inherit some basic information that's needed across the application.
  *
  * @property GoogleSheets_Model $GoogleSheets_Model
+ * @property Repository_Model $Repository_Model
  */
 class ASPA_Controller extends CI_Controller
 {
@@ -15,45 +15,31 @@ class ASPA_Controller extends CI_Controller
     /**
      * @var array All the information for this event (retrieved from google sheet).
      */
-    protected $eventData;
-
-    protected $org;
-
+    protected array $eventData;
+    protected array $orgData;
 
     function __construct()
     {
         parent::__construct();
-        // $this->load->helper();
-        // $this->load->model();
+        $this->load->model("Repository_Model");
+        $this->load->model("GoogleSheets_Model");
+
         $this->eventData = $this->loadEventData();
-        $this->org = $this->loadOrganisationData();
+        $this->orgData = $this->Repository_Model->getOrganisation("")->toArray();
     }
 
     /**
-     * This function handles the loading the Organisation model
+     * This function constructs the json output.
      *
-     * @return array
+     * @param integer $statusCode The HTTP status code
+     * @param string $message A message to return
+     * @param string $payload Any extra data
      */
-    public function loadOrganisationData()
+    public function createResponse(int $statusCode, $message = null, $payload = null)
     {
-        $organisation = [];
-        $eventData = $this->loadEventData();
-        $this->org = new Organisation_Model("ASPA", $eventData['acc_num'], "-", "-", "-", "-", "uoapool@gmail.com");
-        $organisation = $this->org->toArray();
-        return $organisation;
-    }
-
-	  /**
-	   * This function constructs the json output.
-	   *
-	   * @param integer $statusCode     The HTTP status code
-	   * @param string 	$message 	    A message to return
-	   * @param string 	$payload 		Any extra data
-	   */
-    public function createResponse(int $statusCode, $message = null, $payload = null) {
         $array = [
-                'message' => $message ?? "(empty message)",
-                'payload' => $payload ?? [],
+            'message' => $message ?? "(empty message)",
+            'payload' => $payload ?? [],
         ];
 
 
@@ -70,10 +56,8 @@ class ASPA_Controller extends CI_Controller
      *
      * @return array
      */
-    private function loadEventData()
+    private function loadEventData(): array
     {
-        $this->load->model("GoogleSheets_Model");
-
         $eventTemp = [];
 
         // Get event details from spreadsheet from range A2 to size of spreadsheet
@@ -98,7 +82,6 @@ class ASPA_Controller extends CI_Controller
         }
         return $eventTemp;
     }
+
 }
 
-/* End of file ASPA_Controller.php */
-/* Location: ./application/controllers/ASPA_Controller.php */
