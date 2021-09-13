@@ -46,7 +46,8 @@ class ASPA_Controller extends CI_Controller
         $this->output
             ->set_status_header($statusCode)
             ->set_content_type('application/json')
-            ->set_output(json_encode($array, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
+            ->set_output(json_encode($array, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES))
+            ->_display();
         exit;
     }
 
