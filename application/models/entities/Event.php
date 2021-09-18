@@ -15,6 +15,7 @@ class Event
     public int $durationMins;
     public float $priceNZD;
     public bool $signUpsOpen;
+    public int $signUpsCap;
 
 
     public function __construct(
@@ -27,7 +28,8 @@ class Event
       String $datetime,
       int $durationMins,
       float $priceNZD,
-      bool $signUpsOpen
+      bool $signUpsOpen,
+      int $signUpsCap
     )
     {
         $this->id = $id;
@@ -40,6 +42,7 @@ class Event
         $this->durationMins = $durationMins;
         $this->priceNZD = $priceNZD;
         $this->signUpsOpen = $signUpsOpen;
+        $this->signUpsCap = $signUpsCap;
     }
 
     public function toArray() : array {
@@ -54,6 +57,7 @@ class Event
         $this->priceNZD,
         $this->emailBannerImg,
         $this->signUpsOpen,
+        $this->signUpsCap
         ];
     }
 }

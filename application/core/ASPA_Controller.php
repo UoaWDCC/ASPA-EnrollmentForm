@@ -80,6 +80,10 @@ class ASPA_Controller extends CI_Controller
             // disable form if no event sheet is found.
             $eventTemp["form_enabled"] = False;
         }
+        
+        // TODO: Change this after repository model is used to retrieve event data.
+        $eventTemp["signups_cap"] = 5;
+
         return $eventTemp;
     }
 

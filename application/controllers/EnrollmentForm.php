@@ -68,6 +68,15 @@ class EnrollmentForm extends ASPA_Controller
         } else {
             $this->load->view('FormDisabled', $this->orgData);
         }
+
+        $maxSignups = $this->eventData['signups_cap'];
+        $currentSignups = count($this->Repository_Model->getRecordsByEvent($this->eventData['gsheet_name']));
+
+        if ($maxSignups <= $currentSignups) {
+            $this->load->view('FormDisabled', $this->orgData);
+        } else {
+            $this->load->view('EnrollmentForm', array_merge($this->eventData, $this->orgData));
+        }
     }
 
     /**

@@ -31,7 +31,7 @@ class Repository_Model extends CI_Model
         // Get all the events
         $this->GoogleSheets_Model->setCurrentSheetName("Events");
         $records = $this->GoogleSheets_Model->getNumberOfRecords();
-        $array2d = $this->GoogleSheets_Model->getCellContents("A2", "J" . ($records + 2));
+        $array2d = $this->GoogleSheets_Model->getCellContents("A2", "K" . ($records + 2));
 
         for ($i = 0; $i < $records; $i++) {
             $current = $array2d[$i];
@@ -45,6 +45,7 @@ class Repository_Model extends CI_Model
             $priceNzd = floatval($current[7]);
             $emailBannerImg = $current[8];
             $signUpsOpen = boolval($current[9]);
+            $signUpsCap = intval($current[10]);
 
             $this->events[$id] = new Event(
                 $id,
@@ -56,7 +57,8 @@ class Repository_Model extends CI_Model
                 $datetime,
                 $durationMins,
                 $priceNzd,
-                $signUpsOpen
+                $signUpsOpen,
+                $signupsCap
             );
         }
 
