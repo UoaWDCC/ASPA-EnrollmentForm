@@ -1,12 +1,11 @@
 body {
-	overflow: hidden;
+    overflow: hidden;
 }
 
 .flex-container {
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .container {
@@ -16,41 +15,96 @@ body {
     flex-direction: column;
 }
 
-.title h1 {
-}
+.title h1 {}
 
 .events {
     position: relative;
     display: flex;
-    overflow-x: auto;    
-}
-
-/* hide scroll bar but keep functionality */
-.events::-webkit-scrollbar { 
-  display: none; /* safari & opera */
-}
-.events {
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;  /* Firefox */
+    overflow-x: auto;
 }
 
 .card {
-  flex-shrink: 0;
-  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
-  transition: 0.3s;
-  width: 400px;
-  margin: 20px;
-  border-radius: 25px;
-  background: #A0D4FF;
-  padding: 16px;
+    flex-shrink: 0;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    transition: 0.3s;
+    width: 400px;
+    height: 300px;
+    margin: 20px;
+    border-radius: 5px;
+    background: #A0D4FF;
+    padding: 16px;
 }
 
 .card:hover {
-  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.5);
+    box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.5);
 }
 
 .card-container {
-    
     text-align: center;
 }
 
+@media screen and (max-width: 450px) {
+    body {
+        background-color: rgb(246, 246, 246);
+        overflow: auto;
+    }
+    h1 {
+        font-size: 2.5em;
+    }
+    .events {
+        display: block;
+        overflow-y: auto;
+        height: 70vh;
+    }
+    .card {
+        flex-shrink: 0;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+        transition: 0.3s;
+        width: 60vw;
+        height: 30vh;
+        margin: auto;
+        margin-bottom: 10px;
+        border-radius: 5px;
+        background: #A0D4FF;
+        padding: 16px;
+        align-items: center;
+    }
+    .flex-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+}
+
+@media screen and (max-width: 900px) {
+    body {
+        background-color: rgb(246, 246, 246);
+        overflow: auto;
+    }
+    h1 {
+        font-size: 2.5em;
+    }
+    .events {
+        display: block;
+        overflow-y: auto;
+        height: 70vh;
+    }
+    .card {
+        flex-shrink: 0;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+        transition: 0.3s;
+        width: 60vw;
+        height: 30vh;
+        margin: auto;
+        margin-bottom: 10px;
+        border-radius: 5px;
+        background: #A0D4FF;
+        padding: 16px;
+        align-items: center;
+    }
+    .flex-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+}
