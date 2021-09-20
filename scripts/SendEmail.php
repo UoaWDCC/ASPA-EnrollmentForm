@@ -57,6 +57,10 @@ class MailService
         $this->mail->isHTML(true);
         $this->mail->Subject = $subject;
         $this->mail->Body = $bodyContent;
+
+        // Attachments
+        // $this->mail->addAttachment('../assets/pdf/enggen204.pdf');
+
         $this->mail->send();
     }
 
