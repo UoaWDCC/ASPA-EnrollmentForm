@@ -26,6 +26,7 @@
   <link href="assets/css/aspa.webflow.css?random=<?php echo uniqid(); ?>" rel="stylesheet" type="text/css">
   <link href='assets/css/qrCode.css?random=<?php echo uniqid(); ?>' rel='stylesheet' type='text/css' />
   <link href="assets/images/favicon.png?random=<?php echo uniqid(); ?>" rel="icon" type="image/png">
+  <script src="../../assets/lib/kjua-0.9.0.min.js"></script>
 </head>
 
 <body>
@@ -40,7 +41,9 @@
   </div>
 
   <script type="module">
-    import kjua from '../../assets/lib/kjua-0.9.0.min.js';
+    var kjua = window.kjua;
+
+    console.log(kjua);
 
     // get url params
     const queryString = window.location.search;
@@ -59,6 +62,15 @@
     const qrEncoding = JSON.stringify(qrData);
     console.log(qrEncoding);
 
+   width scaling
+    var qrsize = 256;
+    if (window.innerWidth < 450) {
+      qrsize = 225;
+    } else {
+      qrsize = 256;
+    }
+
+
     var options = {
       render: 'div',
       text: qrEncoding,
@@ -73,14 +85,7 @@
 
     document.querySelector('#qr-code').appendChild(initialCode)
 
-    // width scaling
-    // var qrsize = 256;
-    // if (window.innerWidth < 450) {
-    //   qrsize = 225;
-    // } else {
-    //   qrsize = 256;
-    // }
-
+ 
     // // render QR code, note this is a canvas element
     // QrCreator.render({
     //   render: 'div',
