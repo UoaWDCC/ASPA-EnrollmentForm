@@ -40,7 +40,7 @@
   </div>
 
   <script type="module">
-    import QrCreator from '../../assets/lib/qr-creator.js';
+    import kjua from '../../assets/lib/kjua-0.9.0.min.js';
 
     // get url params
     const queryString = window.location.search;
@@ -59,23 +59,38 @@
     const qrEncoding = JSON.stringify(qrData);
     console.log(qrEncoding);
 
-    // width scaling
-    var qrsize = 256;
-    if (window.innerWidth < 450) {
-      qrsize = 225;
-    } else {
-      qrsize = 256;
-    }
-
-    // render QR code, note this is a canvas element
-    QrCreator.render({
+    var options = {
+      render: 'div',
       text: qrEncoding,
       radius: 0.5, // 0.0 to 0.5
       ecLevel: 'H', // L, M, Q, H
       fill: '#333', // foreground color
       background: null, // color or null for transparent
       size: qrsize // in pixels
-    }, document.querySelector('#qr-code'));
+    }
+
+    var initialCode = kjua(options)
+
+    document.querySelector('#qr-code').appendChild(initialCode)
+
+    // width scaling
+    // var qrsize = 256;
+    // if (window.innerWidth < 450) {
+    //   qrsize = 225;
+    // } else {
+    //   qrsize = 256;
+    // }
+
+    // // render QR code, note this is a canvas element
+    // QrCreator.render({
+    //   render: 'div',
+    //   text: qrEncoding,
+    //   radius: 0.5, // 0.0 to 0.5
+    //   ecLevel: 'H', // L, M, Q, H
+    //   fill: '#333', // foreground color
+    //   background: null, // color or null for transparent
+    //   size: qrsize // in pixels
+    // }, document.querySelector('#qr-code'));
   </script>
 </body>
 
