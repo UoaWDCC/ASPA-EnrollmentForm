@@ -26,7 +26,6 @@
   <link href="assets/css/aspa.webflow.css?random=<?php echo uniqid(); ?>" rel="stylesheet" type="text/css">
   <link href='assets/css/qrCode.css?random=<?php echo uniqid(); ?>' rel='stylesheet' type='text/css' />
   <link href="assets/images/favicon.png?random=<?php echo uniqid(); ?>" rel="icon" type="image/png">
-  <script src="../../assets/lib/kjua-0.9.0.min.js"></script>
 </head>
 
 <body>
@@ -40,7 +39,8 @@
     </p>
   </div>
 
-  <script type="module">
+  <script src="../../assets/lib/kjua-0.9.0.min.js"></script>
+  <script type="text/javascript">
     var kjua = window.kjua;
 
     console.log(kjua);
@@ -69,7 +69,6 @@
     } else {
       qrsize = 256;
     }
-
 
     var options = {
       render: 'div',
