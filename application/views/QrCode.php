@@ -43,8 +43,6 @@
   <script>
     var kjua = window.kjua;
 
-    console.log(kjua);
-
     // get url params
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
@@ -60,8 +58,6 @@
 
     // convert qrData json to string
     const qrEncoding = JSON.stringify(qrData);
-    console.log(qrEncoding);
-
   
     var qrsize = 256;
     if (window.innerWidth < 450) {
@@ -83,18 +79,6 @@
     var initialCode = kjua(options)
 
     document.querySelector('#qr-code').appendChild(initialCode)
-
- 
-    // // render QR code, note this is a canvas element
-    // QrCreator.render({
-    //   render: 'div',
-    //   text: qrEncoding,
-    //   radius: 0.5, // 0.0 to 0.5
-    //   ecLevel: 'H', // L, M, Q, H
-    //   fill: '#333', // foreground color
-    //   background: null, // color or null for transparent
-    //   size: qrsize // in pixels
-    // }, document.querySelector('#qr-code'));
   </script>
 </body>
 
