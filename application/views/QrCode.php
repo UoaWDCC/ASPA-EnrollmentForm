@@ -28,6 +28,7 @@
   <link href="assets/images/favicon.png?random=<?php echo uniqid(); ?>" rel="icon" type="image/png">
 
   <script src="assets/lib/qrcode.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.2/jspdf.debug.js"></script>
 
 </head>
 
@@ -78,6 +79,17 @@
       colorLight: "#ffffff",
       correctLevel: QRCode.CorrectLevel.H
     });
+
+    var doc = new jsPDF();
+
+    doc.setFontSize(15);
+
+    setTimeout(() => {
+      var base64Image = document.querySelector('#qr-code img').attributes.src.value;
+
+      doc.addImage(base64Image, 'png', 0, 0, 40, 40);
+      doc.save('generated.pdf');
+    }, 1000);
   </script>
 </body>
 
