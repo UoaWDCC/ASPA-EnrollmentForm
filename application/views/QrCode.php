@@ -39,8 +39,8 @@
     </p>
   </div>
 
-  <script src="../../assets/lib/kjua-0.9.0.min.js"></script>
-  <script type="text/javascript">
+  <script src="assets/lib/kjua-0.9.0.min.js"></script>
+  <script>
     var kjua = window.kjua;
 
     console.log(kjua);
@@ -62,7 +62,7 @@
     const qrEncoding = JSON.stringify(qrData);
     console.log(qrEncoding);
 
-   width scaling
+  
     var qrsize = 256;
     if (window.innerWidth < 450) {
       qrsize = 225;
@@ -71,9 +71,9 @@
     }
 
     var options = {
-      render: 'div',
+      render: 'image',
       text: qrEncoding,
-      radius: 0.5, // 0.0 to 0.5
+      rounded: 100, // 0 to 100
       ecLevel: 'H', // L, M, Q, H
       fill: '#333', // foreground color
       background: null, // color or null for transparent
