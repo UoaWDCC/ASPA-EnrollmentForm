@@ -27,35 +27,6 @@ class EnrollmentForm extends ASPA_Controller
         log_message('debug', "-- from IP address: " . $this->input->ip_address());
     }
 
-     public function test() {
-         $this->load->model("Repository_Model");
-         $this->Repository_Model->initClass(MEMBERSHIP_SPREADSHEET_ID, MEMBERSHIP_SHEET_NAME, REGISTRATION_SPREADSHEET_ID);
-        //  $event = new Event(
-        //      "id3",
-        //      "name",
-        //      "tagline",
-        //      "desc",
-        //      "location",
-        //      "NOT EMAIl",
-        //      "datetime",
-        //      10,
-        //      10.2,
-        //      true);
-
-        // $record = new Record(
-        //   "ray@email.email",
-        //   "id1",
-        //   "this->timestamp,",
-        //   "this->fullName",
-        //   "this->upi",
-        //   "this->paymentMethod",
-        //   "this->paymentDate",
-        //   TRUE,
-        //   TRUE,
-        // );
-
-        print_r("This is a test function."/*$this->Repository_Model->getOrganisation("1")*/);
-     }
 
     /**
      * The "home" page.
@@ -63,10 +34,18 @@ class EnrollmentForm extends ASPA_Controller
     public function index()
     {
         log_message('debug', "-- Index Function called");
-        if (filter_var($this->eventData["form_enabled"], FILTER_VALIDATE_BOOLEAN)) {
-            $this->load->view('EnrollmentForm', array_merge($this->eventData, $this->orgData));
+        // Get the url and trim it for eventId
+        $eventId = substr($_SERVER['REQUEST_URI'], 1);
+        $this->eventData = $this->Repository_Model->getEventById($eventId);
+        // print_r($this->eventData);
+        if (is_null($this->eventData)) {
+            $this->load->view('Home', $this);
         } else {
-            $this->load->view('FormDisabled', $this->orgData);
+            if ($this->eventData->signUpsOpen) {
+                $this->load->view('EnrollmentForm', array_merge($this->eventData->toViewArray(), $this->orgData));
+            } else {
+                $this->load->view('FormDisabled', $this->orgData);
+            }
         }
     }
 
@@ -80,6 +59,9 @@ class EnrollmentForm extends ASPA_Controller
      */
     public function validate()
     {
+        // Check whihc event they want to sign up to , 
+        // and then get record for the eventid
+        // Then make comparison
         log_message('debug', "-- validate function called");
         $emailAddress = $this->input->post('emailAddress');
 
@@ -129,8 +111,10 @@ class EnrollmentForm extends ASPA_Controller
 
         // Stopping direct access to this method
         if (!isset($data['name']) || !isset($data['email'])) {
-            show_error("Sorry, this page you are requesting is either not found or you don't have permission to access this page. Error Code:001",
-                       "404");
+            show_error(
+                "Sorry, this page you are requesting is either not found or you don't have permission to access this page. Error Code:001",
+                "404"
+            );
         }
 
         if (CHECK_MEMBERSHIP_PAYMENT) {
@@ -183,6 +167,7 @@ class EnrollmentForm extends ASPA_Controller
         $data['has_paid'] = false;
         $data["email"] = $this->input->post("email");
         $data['paymentMethod'] = $this->input->post("paymentMethod");
+        //  $data['paymentMethod'] = $this->input->post("EVENTID");
         [$data['name'], $data['upi']] = $this->Verification_Model->getMemberInfo($data["email"]);
 
         if (!isset($data['name']) || !isset($data["email"]) || !isset($data['paymentMethod'])) {

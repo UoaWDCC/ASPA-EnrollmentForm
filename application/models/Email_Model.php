@@ -15,11 +15,12 @@ class Email_Model extends CI_Model
      * @param string $paymentMethod The payment method used.
      * @param array $eventData Any event information.
      */
-    public function sendConfirmationEmail(string $recipientName,
-                                          string $recipientEmail,
-                                          string $paymentMethod,
-                                          array $eventData)
-    {
+    public function sendConfirmationEmail(
+        string $recipientName,
+        string $recipientEmail,
+        string $paymentMethod,
+        array $eventData
+    ) {
         // Email details
         $EMAIL_RECEIVER = $recipientEmail;
 
@@ -66,7 +67,7 @@ class Email_Model extends CI_Model
         // if on test environment, use http
         // else use https for every other server environment
         $QR_CODE_URL = ($_SERVER['HTTP_HOST'] == "localhost" ? "" : "https://")
-                . $_SERVER['HTTP_HOST'] . "/qrCode?email=" . $EMAIL_RECEIVER . "&event=" . $EVENT_NAME;
+            . $_SERVER['HTTP_HOST'] . "/qrCode?email=" . $EMAIL_RECEIVER . "&event=" . $EVENT_NAME;
 
         // Body of email in HTML format (Extracted from mailchimp template)
         // UPDATED NOTE: The new email template is in views/EmailTemplate.php
@@ -75,30 +76,30 @@ class Email_Model extends CI_Model
 
         // Change the variables here and make sure it matches with the {Var} in the template
         $data = array(
-                '$EVENT_NAME' => $EVENT_NAME,
-                '$EVENT_IMAGE' => $EVENT_IMAGE,
-                '$MSG_COLOUR' => $MSG_COLOUR,
-                '$RECIPIENT_NAME' => $RECIPIENT_NAME,
-                '$EVENT_TIME' => $EVENT_TIME,
-                '$PAYMENT_DETAIL' => $PAYMENT_DETAIL,
-                '$TRANSFER_DETAIL' => $TRANSFER_DETAIL,
-                '$EVENT_MONTH' => $EVENT_MONTH,
-                '$EVENT_DAY' => $EVENT_DAY,
-                '$EVENT_DATETIME' => $EVENT_DATETIME,
-                '$EVENT_LOCATION' => $EVENT_LOCATION,
-                '$QR_CODE_URL' => $QR_CODE_URL,
+            '$EVENT_NAME' => $EVENT_NAME,
+            '$EVENT_IMAGE' => $EVENT_IMAGE,
+            '$MSG_COLOUR' => $MSG_COLOUR,
+            '$RECIPIENT_NAME' => $RECIPIENT_NAME,
+            '$EVENT_TIME' => $EVENT_TIME,
+            '$PAYMENT_DETAIL' => $PAYMENT_DETAIL,
+            '$TRANSFER_DETAIL' => $TRANSFER_DETAIL,
+            '$EVENT_MONTH' => $EVENT_MONTH,
+            '$EVENT_DAY' => $EVENT_DAY,
+            '$EVENT_DATETIME' => $EVENT_DATETIME,
+            '$EVENT_LOCATION' => $EVENT_LOCATION,
+            '$QR_CODE_URL' => $QR_CODE_URL,
         );
 
         // The third parameter `true` stops CI3 from sending the parsed template to the output
         $message = $this->parser->parse('templates/EmailTemplate', $data, true);
 
         $cmdlineArgs = [
-                self::sanitize(MAIL_AUTH_EMAIL),
-                self::sanitize(MAIL_AUTH_PASSWORD),
-                self::sanitize($recipientEmail),
-                self::sanitize($recipientName),
-                self::sanitize($EMAIL_SUBJECT),
-                self::sanitize(self::cleanString($message))
+            self::sanitize(MAIL_AUTH_EMAIL),
+            self::sanitize(MAIL_AUTH_PASSWORD),
+            self::sanitize($recipientEmail),
+            self::sanitize($recipientName),
+            self::sanitize($EMAIL_SUBJECT),
+            self::sanitize(self::cleanString($message))
         ];
 
         // Build the command that will be executed
@@ -133,6 +134,4 @@ class Email_Model extends CI_Model
     {
         return "'" . str_replace("'", "", $str) . "'";
     }
-
 }
-

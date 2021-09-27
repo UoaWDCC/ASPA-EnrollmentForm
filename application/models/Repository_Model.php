@@ -1,6 +1,6 @@
 <?php
 
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
 require('vendor/autoload.php');
 require('./application/models/entities/Event.php');
@@ -45,8 +45,7 @@ class Repository_Model extends CI_Model
             $priceNzd = floatval($current[7]);
             $emailBannerImg = $current[8];
             $signUpsOpen = boolval($current[9]);
-            // echo $id;
-            
+
             $this->events[$id] = new Event(
                 $id,
                 $name,
@@ -89,7 +88,8 @@ class Repository_Model extends CI_Model
      * Get a member from their email
      * @return Array[Event] Array of event objects
      */
-    public function getAllEvents() {
+    public function getAllEvents()
+    {
         return $this->events;
     }
 
@@ -98,52 +98,59 @@ class Repository_Model extends CI_Model
      * @param string the email of the member
      * @return Member the member object
      */
-    public function getMemberByEmail(string $memberEmail) {
+    public function getMemberByEmail(string $memberEmail)
+    {
         return $this->members[$memberEmail];
     }
 
     /**
      * @return Member[] a list of all members
      */
-    public function getMembers() {
+    public function getMembers()
+    {
         return $this->members;
     }
 
     /**
      * @return Event the event object that corrosponds to the event ID
      */
-    public function getEventById(string $eventId) {
-        // print_r($this->events);
-        return $this->events[$eventId];
+    public function getEventById(string $eventId)
+    {
+        if (array_key_exists($eventId, $this->events)) {
+
+            return $this->events[$eventId];
+        }
+        return null;
     }
 
     /**
      * Gets an organization
      */
     // TODO: Replace this to return the actual organisation.
-    public function getOrganisation(string $orgId) {
-      return new Organisation(
-        "ASPA",
-        "01-0129-0469512-00",
-        $orgId,
-        "-",
-        "-",
-        "Auckland Students Pool Association",
-        "uoapool@gmail.com",
-      );
+    public function getOrganisation(string $orgId)
+    {
+        return new Organisation(
+            "ASPA",
+            "01-0129-0469512-00",
+            $orgId,
+            "-",
+            "-",
+            "Auckland Students Pool Association",
+            "uoapool@gmail.com",
+        );
     }
 
     /**
      * Get a member's record from an event using their email and the event id
      * @return Record the member's record, or NULL
      */
-    public function getRecord(string $memberEmail, string $eventId) {
+    public function getRecord(string $memberEmail, string $eventId)
+    {
         $records = $this->getRecordsByEvent($eventId);
 
         if (array_key_exists($memberEmail, $records)) {
             return $records[$memberEmail];
-        }
-        else {
+        } else {
             return NULL;
         }
     }
@@ -152,18 +159,19 @@ class Repository_Model extends CI_Model
      * Get all the records for an event
      * @return Record[] a list of all records for an event
      */
-    public function getRecordsByEvent(string $eventId) {
-      $this->GoogleSheets_Model->setCurrentSheetName($eventId);
+    public function getRecordsByEvent(string $eventId)
+    {
+        $this->GoogleSheets_Model->setCurrentSheetName($eventId);
 
-      $records = $this->GoogleSheets_Model->getNumberOfRecords();
+        $records = $this->GoogleSheets_Model->getNumberOfRecords();
 
-      $array2d = $this->GoogleSheets_Model->getCellContents("A2","K" . ($records + 2));
+        $array2d = $this->GoogleSheets_Model->getCellContents("A2", "K" . ($records + 2));
 
-      $allRecords = [];
+        $allRecords = [];
 
-      for ($i = 0; $i < $records; $i++) {
-          $allRecords[$array2d[$i][1]] = new Record($array2d[$i][1], $eventId, $array2d[$i][0], $array2d[$i][2], $array2d[$i][4], $array2d[$i][5], $array2d[$i][10], $array2d[$i][9], isset($array2d[$i][6]));
-      }
+        for ($i = 0; $i < $records; $i++) {
+            $allRecords[$array2d[$i][1]] = new Record($array2d[$i][1], $eventId, $array2d[$i][0], $array2d[$i][2], $array2d[$i][4], $array2d[$i][5], $array2d[$i][10], $array2d[$i][9], isset($array2d[$i][6]));
+        }
 
         return $allRecords;
     }
@@ -172,7 +180,8 @@ class Repository_Model extends CI_Model
      * Save an event to the database.
      * @param event the event to save to the database.
      */
-    public function saveEvent(Event $event): Event {
+    public function saveEvent(Event $event): Event
+    {
         $this->GoogleSheets_Model->saveEvent($event->id, EVENT_SHEET_ID_COLUMN, $event->toArray());
 
         return $event;
@@ -182,9 +191,10 @@ class Repository_Model extends CI_Model
      * Save a record to the database.
      * @param record the record to save to the database.
      */
-    public function saveRecord(Record $record) {
-      $this->GoogleSheets_Model->saveRecord($record->eventID, $record->email, REGISTRATIONS_SHEET_ID_COLUMN, $record->toArray());
+    public function saveRecord(Record $record)
+    {
+        $this->GoogleSheets_Model->saveRecord($record->eventID, $record->email, REGISTRATIONS_SHEET_ID_COLUMN, $record->toArray());
 
-      return $record;
+        return $record;
     }
 }
