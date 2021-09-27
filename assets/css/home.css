@@ -86,7 +86,7 @@ h3 {
     .events {
         display: block;
         overflow-y: auto;
-        height: calc(100vh - 300px);
+        height: calc(100vh - 250px);
     }
     .card {
         flex-shrink: 0;
