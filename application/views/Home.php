@@ -36,7 +36,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
 </head>
 
 <body>
-  <div id="div-background" class="div-background"><img src="assets/images/ASPA-home-background.png">
+  <div id="div-background" class="div-background">
+    <img src="assets/images/ASPA-home-background.png">
     <div class="div-background-mobile"></div>
   </div>
 
@@ -44,7 +45,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
     <div class="container">
       <block class="title">
         <h1>ASPA Events Open for Signup</h1>
-        <p>Please select event to register</p>
+        <h3>Please select event to register</h3>
       </block>
 
       <block class="events">
