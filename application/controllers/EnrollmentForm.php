@@ -86,7 +86,7 @@ class EnrollmentForm extends ASPA_Controller
 
         $this->load->model('Verification_Model');
 
-        $members = $this->Repository_Model->getMemberByEmail($emailAddress);
+        $member = $this->Repository_Model->getMemberByEmail($emailAddress);
 
         // If the email is of invalid format, return 412 error
         if (!isset($emailAddress) || !$this->Verification_Model->isValidEmail($emailAddress)) {
@@ -95,25 +95,25 @@ class EnrollmentForm extends ASPA_Controller
         }
 
         // If the email does not exist or is not on the membership spreadsheet, return 404 error
-        if (is_null($members)) {
+        if ($member === null) {
             $this->createResponse(404, 'Error: Email incorrect or not found on sheet');
             return;
         }
 
         // If the user has already paid for the event, return 409 error
-        if (!$members->feePaid) {
+        if ($this->Verification_Model->hasUserPaidEvent($emailAddress, $this->eventData['gsheet_name'])) {
             $this->createResponse(409, 'Error: already paid for event');
             return;
         }
 
         // If membership payment status is checked, and user's membership fee has not been paid, return 403 error
-        if (CHECK_MEMBERSHIP_PAYMENT && !$this->Verification_Model->hasUserPaidMembership($emailAddress)) {
+        if (CHECK_MEMBERSHIP_PAYMENT && !$member->feePaid) {
             $this->createResponse(403, "Error: signed up but not paid");
             return;
         }
 
         // [$fullName, $UPI] = $this->Verification_Model->getMemberInfo($emailAddress);
-        $fullName = $members->fullName;
+        $fullName = $member->fullName;
 
         $this->createResponse(200, "Success", $fullName);
     }
@@ -129,7 +129,10 @@ class EnrollmentForm extends ASPA_Controller
 
         // Receive data from form, method=POST
         $data['email'] = $this->input->post('email');
-        [$data['name'], $data['upi']] = $this->Verification_Model->getMemberInfo($data["email"]);
+        $member = $this->Repository_Model->getMemberByEmail($data["email"]);
+        // [$data['name'], $data['upi']] = $this->Verification_Model->getMemberInfo($data["email"]);
+        $data['name'] = $member->fullName;
+        $data['upi'] = $member->upi;
 
         // Stopping direct access to this method
         if (!isset($data['name']) || !isset($data['email'])) {
@@ -140,14 +143,15 @@ class EnrollmentForm extends ASPA_Controller
         }
 
         if (CHECK_MEMBERSHIP_PAYMENT) {
-            $paid_member = ($this->Verification_Model->hasUserPaidMembership($data['email']));
-            if (!$paid_member) {
+            // $paid_member = ($this->Verification_Model->hasUserPaidMembership($data['email']));
+            if (!$member->feePaid) {
                 show_error("Something went wrong, your email was not found in the ASPA member list or haven't paid. Error Code: 002", "500");
             }
         }
 
         // Only record if the email is not found
-        if (!($this->Verification_Model->isEmailOnSheet($data['email'], REGISTRATION_SPREADSHEET_ID, $this->eventData['gsheet_name']))) {
+        // !($this->Verification_Model->isEmailOnSheet($data['email'], REGISTRATION_SPREADSHEET_ID, $this->eventData['gsheet_name']))
+        if (!array_key_exists($member->email, $this->Repository_Model->getMembers())) {
             $this->GoogleSheets_Model->addNewRecord($data['email'], $data['name'], $data['upi'], 'Stripe');
         } else {
             // Email is found, so find the cell
@@ -178,13 +182,8 @@ class EnrollmentForm extends ASPA_Controller
     public function makeOfflinePayment()
     {
         $this->load->model("GoogleSheets_Model");
-        $this->load->model("Verification_Model");
         $this->load->model('Email_Model');
         log_message('debug', "-- makeOfflinePayment function called");
-
-        // $this->load->model("GoogleSheets_Model");
-        // $this->load->model("Verification_Model");
-        // $this->load->model('Email_Model');
 
         $data['has_paid'] = false;
         $data["email"] = $this->input->post("email");
