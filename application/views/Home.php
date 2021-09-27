@@ -37,7 +37,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 <body>
   <div id="div-background" class="div-background">
-    <img src="assets/images/ASPA-home-background.png">
+    <img class="bg-img" src="assets/images/ASPA-home-background.png">
     <div class="div-background-mobile"></div>
   </div>
 
