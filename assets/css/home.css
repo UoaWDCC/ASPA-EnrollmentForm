@@ -46,6 +46,7 @@ h3 {
     padding-top: 30px;
     padding-bottom: 40px;
     align-items: center;
+    cursor: pointer;
 }
 
 .card:hover {
@@ -101,6 +102,7 @@ h3 {
         padding: 16px;
         padding-bottom: 24px;
         align-items: center;
+        cursor: pointer;
     }
     .flex-container {
         display: flex;
@@ -148,6 +150,7 @@ h3 {
         padding-top: 1px;
         padding-bottom: 20px;
         align-items: center;
+        cursor: pointer;
     }
     .flex-container {
         padding: 10px;
