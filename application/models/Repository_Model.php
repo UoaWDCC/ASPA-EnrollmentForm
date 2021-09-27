@@ -45,7 +45,8 @@ class Repository_Model extends CI_Model
             $priceNzd = floatval($current[7]);
             $emailBannerImg = $current[8];
             $signUpsOpen = boolval($current[9]);
-
+            // echo $id;
+            
             $this->events[$id] = new Event(
                 $id,
                 $name,
@@ -86,6 +87,14 @@ class Repository_Model extends CI_Model
 
     /**
      * Get a member from their email
+     * @return Array[Event] Array of event objects
+     */
+    public function getAllEvents() {
+        return $this->events;
+    }
+
+    /**
+     * Get a member from their email
      * @param string the email of the member
      * @return Member the member object
      */
@@ -104,6 +113,7 @@ class Repository_Model extends CI_Model
      * @return Event the event object that corrosponds to the event ID
      */
     public function getEventById(string $eventId) {
+        // print_r($this->events);
         return $this->events[$eventId];
     }
 

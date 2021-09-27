@@ -23,8 +23,9 @@ class ASPA_Controller extends CI_Controller
         parent::__construct();
         $this->load->model("Repository_Model");
         $this->load->model("GoogleSheets_Model");
-
-        $this->eventData = $this->loadEventData();
+        $this->Repository_Model->initClass(MEMBERSHIP_SPREADSHEET_ID, MEMBERSHIP_SHEET_NAME, REGISTRATION_SPREADSHEET_ID);
+        $this->allEvents = $this->Repository_Model->getAllEvents();
+        $this->eventData = $this->loadEventData("id2");
         $this->orgData = $this->Repository_Model->getOrganisation("")->toArray();
     }
 
@@ -53,34 +54,63 @@ class ASPA_Controller extends CI_Controller
 
     /**
      * This function handles the loading of event data from google sheets.
+     * @param string $eventId The input eventId for repository 
      *
      * @return array
      */
-    private function loadEventData(): array
+    private function loadEventData(string $eventId): array
     {
-        $eventTemp = [];
+        // $test = $this->Repository_Model->$events;
+        // print_r($test);
+        $eventtest = $this->Repository_Model->getEventById($eventId)->toArray();
+        
+        // print_r($eventtest);
+        // echo $eventtest[1];
+        // Get event details from spreadsheet from range A2 to size of spreadsheet\
+        $this->GoogleSheets_Model->setCurrentSheetName($eventtest[0]);
 
-        // Get event details from spreadsheet from range A2 to size of spreadsheet
-        $this->GoogleSheets_Model->setCurrentSheetName("CurrentEventDetails");
-        $data = $this->GoogleSheets_Model->getCellContents('A2', 'C' . ($this->GoogleSheets_Model->getNumberOfRecords() + 2));
-
-        // Important variables we care about
-        $elements = ['time', 'date', 'location', 'title', 'tagline', 'price', 'acc_num', 'desc', 'gsheet_name', 'form_enabled'];
-
-        // If the data from spreadsheet contains event details we are looking for, set them.
-        for ($i = 0; $i < sizeof($data); $i++) {
-            if (in_array($data[$i][0], $elements)) {
-                $eventTemp[$data[$i][0]] = $data[$i][2];
-            }
+        // Variables in the event google sheet. Could be automated but for now stay in manuel changes
+        // Make sure the $elements order is the same on the google sheet
+        $elements = ['id', 'title', 'tagline', 'description', 'time', 'duration_mins', 'location', 'price', 'email_banner_img', 'form_enabled'];
+        for ($i = 0; $i < sizeof($eventtest); $i++) {
+            $eventtest[$elements[$i]] = $eventtest[$i];
+            unset($eventtest[$i]);
         }
 
-        if ($eventTemp['gsheet_name']) {
-            $this->GoogleSheets_Model->setCurrentSheetName($eventTemp['gsheet_name']);
+
+
+        if ($eventtest['id']) {
+            $this->GoogleSheets_Model->setCurrentSheetName($eventtest['id']);
         } else {
             // disable form if no event sheet is found.
-            $eventTemp["form_enabled"] = False;
+            $eventtest["sign_ups_open"] = False;
         }
-        return $eventTemp;
+        // print_r($eventtest);
+        return $eventtest;
+
+
+
+        // // Get event details from spreadsheet from range A2 to size of spreadsheet\
+        // $this->GoogleSheets_Model->setCurrentSheetName("CurrentEventDetails");
+        // $data = $this->GoogleSheets_Model->getCellContents('A2', 'C' . ($this->GoogleSheets_Model->getNumberOfRecords() + 2));
+
+        // // Important variables we care about
+        // $elements = ['time', 'date', 'location', 'title', 'tagline', 'price', 'acc_num', 'desc', 'gsheet_name', 'form_enabled'];
+
+        // // If the data from spreadsheet contains event details we are looking for, set them.
+        // for ($i = 0; $i < sizeof($data); $i++) {
+        //     if (in_array($data[$i][0], $elements)) {
+        //         $eventTemp[$data[$i][0]] = $data[$i][2];
+        //     }
+        // }
+
+        // if ($eventTemp['gsheet_name']) {
+        //     $this->GoogleSheets_Model->setCurrentSheetName($eventTemp['gsheet_name']);
+        // } else {
+        //     // disable form if no event sheet is found.
+        //     $eventTemp["form_enabled"] = False;
+        // }
+        // return $eventTemp;
     }
 
 }
