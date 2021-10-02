@@ -30,10 +30,11 @@ class Repository_Model extends CI_Model
 
         // Get all the events
         $this->GoogleSheets_Model->setCurrentSheetName("Events");
-        $records = $this->GoogleSheets_Model->getNumberOfRecords();
-        $array2d = $this->GoogleSheets_Model->getCellContents("A2", "J" . ($records + 2));
 
-        for ($i = 0; $i < $records; $i++) {
+        $array2d = $this->GoogleSheets_Model->getCellContents("A2", "J");
+
+        log_message('debug', "size of event1 records " . sizeof($array2d));
+        for ($i = 0; $i < sizeof($array2d); $i++) {
             $current = $array2d[$i];
             $id = $current[0];
             $name = $current[1];
@@ -65,11 +66,10 @@ class Repository_Model extends CI_Model
 
         $this->GoogleSheets_Model->setCurrentSheetName($membershipSheetName);
 
-        $records = $this->GoogleSheets_Model->getNumberOfRecords();
+        $array2d = $this->GoogleSheets_Model->getCellContents("A2", "I");
 
-        $array2d = $this->GoogleSheets_Model->getCellContents("A2", "I" . ($records + 2));
-
-        for ($i = 0; $i < $records; $i++) {
+        log_message('debug', "size of members1 records " . sizeof($array2d));
+        for ($i = 0; $i < sizeof($array2d); $i++) {
             $current = $array2d[$i];
 
             $signUpDate = intval($current[0]);
@@ -80,8 +80,7 @@ class Repository_Model extends CI_Model
 
             $this->members[$email] = new Member($email, $fullName, $upi, $signUpDate, $hasPaid);
         }
-        // $member = $this->getMemberByEmail('rick@gmail.com');
-        // print_r($this->members['rick@gmail.com']);
+
         $this->GoogleSheets_Model->setSpreadsheetId($registrationSheetId);
     }
 
@@ -92,7 +91,6 @@ class Repository_Model extends CI_Model
      */
     public function getMemberByEmail(string $memberEmail)
     {
-        // return $this->members[$memberEmail];
         return array_key_exists($memberEmail, $this->members) ? $this->members[$memberEmail] : null;
     }
 

@@ -62,8 +62,9 @@ class ASPA_Controller extends CI_Controller
 
         // Get event details from spreadsheet from range A2 to size of spreadsheet
         $this->GoogleSheets_Model->setCurrentSheetName("CurrentEventDetails");
-        $data = $this->GoogleSheets_Model->getCellContents('A2', 'C' . ($this->GoogleSheets_Model->getNumberOfRecords() + 2));
 
+        $data = $this->GoogleSheets_Model->getCellContents('A2', 'C');
+        log_message('debug', "size of main event records " . sizeof($data));
         // Important variables we care about
         $elements = ['time', 'date', 'location', 'title', 'tagline', 'price', 'acc_num', 'desc', 'gsheet_name', 'form_enabled'];
 
