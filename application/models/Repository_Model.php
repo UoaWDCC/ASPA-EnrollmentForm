@@ -144,7 +144,7 @@ class Repository_Model extends CI_Model
 
     /**
      * Get all the records for an event
-     * @return Record[] a list of all records for an event
+     * @return Record[] returns an map of Records where the member's email is the key. 
      */
     public function getRecordsByEvent(string $eventId)
     {

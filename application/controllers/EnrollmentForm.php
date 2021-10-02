@@ -112,10 +112,7 @@ class EnrollmentForm extends ASPA_Controller
             return;
         }
 
-        // [$fullName, $UPI] = $this->Verification_Model->getMemberInfo($emailAddress);
-        $fullName = $member->fullName;
-
-        $this->createResponse(200, "Success", $fullName);
+        $this->createResponse(200, "Success", $member->fullName);
     }
 
     /**
@@ -128,36 +125,27 @@ class EnrollmentForm extends ASPA_Controller
         $this->load->model('Verification_Model');
 
         // Receive data from form, method=POST
-        $data['email'] = $this->input->post('email');
-        $member = $this->Repository_Model->getMemberByEmail($data["email"]);
-        // [$data['name'], $data['upi']] = $this->Verification_Model->getMemberInfo($data["email"]);
-        $data['name'] = $member->fullName;
-        $data['upi'] = $member->upi;
+        $memberEmail = $this->input->post('email');
+        $member = $this->Repository_Model->getMemberByEmail($memberEmail);
 
         // Stopping direct access to this method
-        if (!isset($data['name']) || !isset($data['email'])) {
-            show_error(
-                "Sorry, this page you are requesting is either not found or you don't have permission to access this page. Error Code:001",
-                "404"
-            );
+        if (!isset($member->fullName) || !isset($member->email)) {
+            show_error("Sorry, this page you are requesting is either not found or you don't have permission to access this page. Error Code:001", "404");
         }
 
-        if (CHECK_MEMBERSHIP_PAYMENT) {
-            // $paid_member = ($this->Verification_Model->hasUserPaidMembership($data['email']));
-            if (!$member->feePaid) {
-                show_error("Something went wrong, your email was not found in the ASPA member list or haven't paid. Error Code: 002", "500");
-            }
+        if (CHECK_MEMBERSHIP_PAYMENT && !$member->feePaid) {
+            show_error("Something went wrong, your email was not found in the ASPA member list or haven't paid. Error Code: 002", "500");
         }
 
         // Only record if the email is not found
-        // !($this->Verification_Model->isEmailOnSheet($data['email'], REGISTRATION_SPREADSHEET_ID, $this->eventData['gsheet_name']))
-        if (!array_key_exists($member->email, $this->Repository_Model->getMembers())) {
-            $this->GoogleSheets_Model->addNewRecord($data['email'], $data['name'], $data['upi'], 'Stripe');
+        //TODO: WE NEED TO PASS THE PROPER EVENT 
+        if (!array_key_exists($member->email, $this->Repository_Model->getRecordsByEvent(''))) {
+            $this->GoogleSheets_Model->addNewRecord($member->email, $member->fullName, $member->upi, 'Stripe');
         } else {
             // Email is found, so find the cell
             // Then edit the "How would you like your payment" to be of Stripe payment
             // Get the row of the specific email from google sheets
-            $cell = $this->GoogleSheets_Model->getCellCoordinate($data['email'], 'B');
+            $cell = $this->GoogleSheets_Model->getCellCoordinate($member->email, 'B');
             if (!isset($cell)) {
                 show_error("Something went wrong, your email was not found in the ASPA member list.Error Code: 002", "500");
             }
@@ -170,10 +158,15 @@ class EnrollmentForm extends ASPA_Controller
 
         // Generate the stripe session ID
         $this->load->model('Stripe_Model');
-        $data['session_id'] = $this->Stripe_Model->generateNewSessionId($data['email'], $this->eventData);
+        $stripeSessionId = $this->Stripe_Model->generateNewSessionId($member->email, $this->eventData);
 
         // Initiate the stripe payment
-        $this->load->view('stripe.php', $data);
+        $this->load->view('stripe.php', [
+            'email' => $member->email,
+            'name' => $member->fullName,
+            'upi' => $member->upi,
+            'session_id' => $stripeSessionId
+        ]);
     }
 
     /**
