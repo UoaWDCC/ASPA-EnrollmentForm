@@ -64,7 +64,6 @@ class ASPA_Controller extends CI_Controller
         $this->GoogleSheets_Model->setCurrentSheetName("CurrentEventDetails");
 
         $data = $this->GoogleSheets_Model->getCellContents('A2', 'C');
-        log_message('debug', "size of main event records " . sizeof($data));
         // Important variables we care about
         $elements = ['time', 'date', 'location', 'title', 'tagline', 'price', 'acc_num', 'desc', 'gsheet_name', 'form_enabled'];
 

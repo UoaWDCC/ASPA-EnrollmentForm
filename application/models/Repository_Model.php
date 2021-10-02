@@ -33,7 +33,6 @@ class Repository_Model extends CI_Model
 
         $array2d = $this->GoogleSheets_Model->getCellContents("A2", "J");
 
-        log_message('debug', "size of event1 records " . sizeof($array2d));
         for ($i = 0; $i < sizeof($array2d); $i++) {
             $current = $array2d[$i];
             $id = $current[0];
@@ -68,7 +67,6 @@ class Repository_Model extends CI_Model
 
         $array2d = $this->GoogleSheets_Model->getCellContents("A2", "I");
 
-        log_message('debug', "size of members1 records " . sizeof($array2d));
         for ($i = 0; $i < sizeof($array2d); $i++) {
             $current = $array2d[$i];
 
