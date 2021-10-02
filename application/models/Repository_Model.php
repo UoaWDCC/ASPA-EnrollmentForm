@@ -148,13 +148,11 @@ class Repository_Model extends CI_Model
     {
         $this->GoogleSheets_Model->setCurrentSheetName($eventId);
 
-        $records = $this->GoogleSheets_Model->getNumberOfRecords();
-
-        $array2d = $this->GoogleSheets_Model->getCellContents("A2", "K" . ($records + 2));
+        $array2d = $this->GoogleSheets_Model->getCellContents("A2", "K");
 
         $allRecords = [];
 
-        for ($i = 0; $i < $records; $i++) {
+        for ($i = 0; $i < sizeof($array2d); $i++) {
             $allRecords[$array2d[$i][1]] = new Record($array2d[$i][1], $eventId, $array2d[$i][0], $array2d[$i][2], $array2d[$i][4], $array2d[$i][5], $array2d[$i][10], $array2d[$i][9], isset($array2d[$i][6]));
         }
 
