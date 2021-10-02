@@ -138,7 +138,7 @@ class EnrollmentForm extends ASPA_Controller
         }
 
         // Only record if the email is not found
-        //TODO: WE NEED TO PASS THE PROPER EVENT 
+        //TODO: WE NEED TO PASS THE PROPER EVENT ID
         if (!array_key_exists($member->email, $this->Repository_Model->getRecordsByEvent(''))) {
             $this->GoogleSheets_Model->addNewRecord($member->email, $member->fullName, $member->upi, 'Stripe');
         } else {
@@ -191,7 +191,8 @@ class EnrollmentForm extends ASPA_Controller
         }
 
         // Only record if the email is not found
-        if (!array_key_exists($member->email, $this->Repository_Model->getMembers())) {
+        //TODO: WE NEED TO PASS THE PROPER EVENT ID
+        if (!array_key_exists($member->email, $this->Repository_Model->getRecordsByEvent(''))) {
             $this->GoogleSheets_Model->addNewRecord($data['email'], $data['name'], $data['upi'], ucfirst($data['paymentMethod']));
         } else {
             // Email is found, so find the cell then edit the "How would you like your payment" to be of Offline payment
