@@ -41,7 +41,21 @@ class Event
         $this->priceNZD = $priceNZD;
         $this->signUpsOpen = $signUpsOpen;
     }
-
+    public function toViewArray(): array {
+      return [
+        'id' => $this->id, 
+        'title' => $this->name, 
+        'tagline' => $this->tagline, 
+        'desc' => $this->description, 
+        'time' => '6:15 – 8:15 PM',
+        'date' => $this->datetime,
+        'durationMins' => $this->durationMins,
+        'location' => $this->location,
+        'price' => $this->priceNZD,
+        'emailBannerImg' => $this->emailBannerImg,
+        'signUpsOpen' => $this->signUpsOpen
+      ];
+    }
     public function toArray() : array {
       return [
         $this->id, 

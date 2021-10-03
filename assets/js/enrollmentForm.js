@@ -222,7 +222,7 @@ ok3.onclick = function () {
 		complete: function (data) {
 			if (data.status === 200) {
 				showSuccess();
-
+                console.log(data)
 				const name = data.responseJSON.payload;
 
 				// Inject name from the response into the next page

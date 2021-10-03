@@ -4,9 +4,10 @@ use Stripe\Checkout\Session;
 use Stripe\Event;
 use Stripe\Stripe;
 
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
-class Stripe_Model extends CI_Model {
+class Stripe_Model extends CI_Model
+{
 
     /**
      * Generates a new stripe session with a customer email.
@@ -20,18 +21,19 @@ class Stripe_Model extends CI_Model {
         Stripe::setApiKey(STRIPE_PRIVATE_KEY);
 
         $session = Session::create([
-        'payment_method_types' => ['card'],
-        'line_items' => [[
-            'name' => $eventData["title"],
-            'description' => $eventData["tagline"],
-            'images' => [(base_url() . 'assets/images/ASPA_logo.png')],
-            'amount' => (float) $eventData["price"] * 100,
-            'currency' => 'NZD',
-            'quantity' => 1,
-        ]],
-        'success_url' => base_url().'EnrollmentForm/StripePaymentSuccessful?session_id={CHECKOUT_SESSION_ID}',
-        'cancel_url' => base_url(),
-        'customer_email' => $customer_email,
+            'payment_method_types' => ['card'],
+            'line_items' => [[
+                // Change it to $eventData->title
+                'name' => $eventData->title,
+                'description' => $eventData["tagline"],
+                'images' => [(base_url() . 'assets/images/ASPA_logo.png')],
+                'amount' => (float) $eventData["price"] * 100,
+                'currency' => 'NZD',
+                'quantity' => 1,
+            ]],
+            'success_url' => base_url() . 'EnrollmentForm/StripePaymentSuccessful?session_id={CHECKOUT_SESSION_ID}?event_id=' . $eventData['id'] . '',
+            'cancel_url' => base_url(),
+            'customer_email' => $customer_email,
 
         ]);
         $stripeSession = array($session);

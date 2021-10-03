@@ -1,6 +1,13 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-
+function console_log($output, $with_script_tags = true) {
+    $js_code = 'console.log(' . json_encode($output, JSON_HEX_TAG) . 
+');';
+    if ($with_script_tags) {
+        $js_code = '<script>' . $js_code . '</script>';
+    }
+    echo $js_code;
+}
 /**
  * Class Verification_Model
  *
@@ -79,8 +86,10 @@ class Verification_Model extends CI_Model {
      *
      * @return bool
      */
+
     public function hasUserPaidEvent($emailAddress, $sheetName)
     {
+
         if (!$this->isEmailOnSheet($emailAddress, REGISTRATION_SPREADSHEET_ID, $sheetName)) {
             return false;
         }

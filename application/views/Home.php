@@ -47,22 +47,20 @@ defined('BASEPATH') or exit('No direct script access allowed');
       </block>
 
       <block class="events">
-
         <?php
-        for ($i = 0; $i < 6; $i++) {
+        foreach ($allEvents as &$event) {
           echo '
-          <div class="card">
+          <a class="card" href="/'. $event->id .'" target="_blank">
             <div class="card-container">
-              <h1><b>Casual Tuesdays</b></h1>
-              <h4>3rd August</h4>
-              <p>Casual Tuesdays are a lot of fun, jump in with a team of 4 and pool!</p>
+              <h1><b>'. $event->name .'</b></h1>
+              <h4>'. $event->datetime .'</h4>
+              <p>'. $event->description .'</p>
             </div>
-          </div>';
+          </a>';
         }
         ?>
 
       </block>
-
       <div class="div-main-page"><a id="register" data-w-id="dfbe5add-65ea-95a7-6380-331c1db905e2" href="#" class="button w-button">Register</a>
         <p class="paragraph-pressenter">press <strong class="bold-enter">Enter ↵</strong></p>
       </div>

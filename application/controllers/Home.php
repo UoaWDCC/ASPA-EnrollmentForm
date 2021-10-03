@@ -6,6 +6,9 @@ class Home extends ASPA_Controller
 {
     public function index()
     {
-        $this->load->view('Home');
+        // print_r($this->allEvents);
+        // print_r($this->eventData);
+
+        $this->load->view('Home', $this);
     }
 }
