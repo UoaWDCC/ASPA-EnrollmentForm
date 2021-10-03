@@ -24,7 +24,7 @@ class Stripe_Model extends CI_Model
             'payment_method_types' => ['card'],
             'line_items' => [[
                 // Change it to $eventData->title
-                'name' => $eventData["title"],
+                'name' => $eventData->title,
                 'description' => $eventData["tagline"],
                 'images' => [(base_url() . 'assets/images/ASPA_logo.png')],
                 'amount' => (float) $eventData["price"] * 100,

@@ -15,7 +15,9 @@ require('vendor/autoload.php');
  */
 class EnrollmentForm extends ASPA_Controller
 {
-
+    private $eventId;
+    private $eventData;
+    private $test;
     /**
      * EnrollmentForm constructor that runs every time before the web page loads.
      */
@@ -25,6 +27,9 @@ class EnrollmentForm extends ASPA_Controller
 
         log_message('debug', "=====New Controller Function Initialized====");
         log_message('debug', "-- from IP address: " . $this->input->ip_address());
+        $this->eventId = "10";
+        print_r('in constr', $this->eventId);
+
     }
 
 
@@ -34,10 +39,12 @@ class EnrollmentForm extends ASPA_Controller
     public function index()
     {
         log_message('debug', "-- Index Function called");
-        // Get the url and trim it for eventId
-        $eventId = substr($_SERVER['REQUEST_URI'], 1);
-        $this->eventData = $this->Repository_Model->getEventById($eventId);
-        // print_r($this->eventData);
+        // Get the url and trim it for
+        $this->eventId = substr($_SERVER['REQUEST_URI'], 1);
+        $this->eventData = $this->Repository_Model->getEventById($this->eventId);
+        $this->test = "12210";
+        // print_r($this->eventId);
+
         if (is_null($this->eventData)) {
             $this->load->view('Home', $this);
         } else {
@@ -64,9 +71,11 @@ class EnrollmentForm extends ASPA_Controller
         // Then make comparison
         log_message('debug', "-- validate function called");
         $emailAddress = $this->input->post('emailAddress');
-
         $this->load->model('Verification_Model');
-
+        // print_r($this->eventId);
+        // log_message('debug', $this->eventId);
+        // $this->eventData = $this->Repository_Model->getEventById($eventId);
+        
         // If the email is of invalid format, return 412 error
         if (!isset($emailAddress) || !$this->Verification_Model->isValidEmail($emailAddress)) {
             $this->createResponse(412, 'Error: Format of email is invalid');
@@ -80,10 +89,10 @@ class EnrollmentForm extends ASPA_Controller
         }
 
         // If the user has already paid for the event, return 409 error
-        if ($this->Verification_Model->hasUserPaidEvent($emailAddress, $this->eventData['gsheet_name'])) {
-            $this->createResponse(409, 'Error: already paid for event');
-            return;
-        }
+        // if ($this->Verification_Model->hasUserPaidEvent($emailAddress, $this->eventId)) {
+        //     $this->createResponse(409, 'Error: already paid for event');
+        //     return;
+        // }
 
         // If membership payment status is checked, and user's membership fee has not been paid, return 403 error
         if (CHECK_MEMBERSHIP_PAYMENT && !$this->Verification_Model->hasUserPaidMembership($emailAddress)) {
@@ -93,7 +102,7 @@ class EnrollmentForm extends ASPA_Controller
 
         [$fullName, $UPI] = $this->Verification_Model->getMemberInfo($emailAddress);
 
-        $this->createResponse(200, "Success", $fullName);
+        $this->createResponse(200, "Success", $this->test);
     }
 
     /**
@@ -159,6 +168,7 @@ class EnrollmentForm extends ASPA_Controller
         $this->load->model("Verification_Model");
         $this->load->model('Email_Model');
         log_message('debug', "-- makeOfflinePayment function called");
+        log_message('debug', "thois", $this->eventId);
 
         $this->load->model("GoogleSheets_Model");
         $this->load->model("Verification_Model");
@@ -167,6 +177,7 @@ class EnrollmentForm extends ASPA_Controller
         $data['has_paid'] = false;
         $data["email"] = $this->input->post("email");
         $data['paymentMethod'] = $this->input->post("paymentMethod");
+
         //  $data['paymentMethod'] = $this->input->post("EVENTID");
         [$data['name'], $data['upi']] = $this->Verification_Model->getMemberInfo($data["email"]);
 
@@ -175,7 +186,7 @@ class EnrollmentForm extends ASPA_Controller
         }
 
         // Only record if the email is not found
-        if (!($this->Verification_Model->isEmailOnSheet($data['email'], REGISTRATION_SPREADSHEET_ID, $this->eventData['gsheet_name']))) {
+        if (!($this->Verification_Model->isEmailOnSheet($data['email'], REGISTRATION_SPREADSHEET_ID, $this->eventData->id))) {
             $this->GoogleSheets_Model->addNewRecord($data['email'], $data['name'], $data['upi'], ucfirst($data['paymentMethod']));
         } else {
             // Email is found, so find the cell then edit the "How would you like your payment" to be of Offline payment
@@ -189,7 +200,7 @@ class EnrollmentForm extends ASPA_Controller
         }
 
         // Send offline confirmation email
-        $this->Email_Model->sendConfirmationEmail($data["name"], $data["email"], $data['paymentMethod'], $this->eventData);
+        $this->Email_Model->sendConfirmationEmail($data["name"], $data["email"], $data['paymentMethod'], $this->eventData->toViewArray());
 
         // Redirect to the page with grey tick
         $this->load->view('PaymentSuccessful.php', array_merge($this->eventData, $data));
@@ -241,7 +252,7 @@ class EnrollmentForm extends ASPA_Controller
             $alreadyHighlighted = $this->Verification_Model->hasUserPaidEvent($data['email'], $this->eventData['gsheet_name']);
             if (!$alreadyHighlighted) {
                 $this->load->model('Email_Model');
-                $this->Email_Model->sendConfirmationEmail($data['name'], $data['email'], "online", $this->eventData);
+                $this->Email_Model->sendConfirmationEmail($data['name'], $data['email'], "online", $this->eventData->toViewArray());
 
                 // Highlight this row since it is paid, placed inside this code block to prevent unnecessary calls
                 $this->GoogleSheets_Model->highlightRow($row, [0.69803923, 0.8980392, 0.69803923]);
