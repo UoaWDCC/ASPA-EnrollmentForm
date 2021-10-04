@@ -3,8 +3,8 @@ require('./vendor/autoload.php');
 
 require("assets/tcpdf/tcpdf.php");
 
-class CreatePdf {
-    public static function getEncoding(string $jsonEncoding) {
+class PdfMaker {
+    public static function generatePdfEncoding(string $jsonEncoding) {
         // create a new pdf document
         $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 

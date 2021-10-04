@@ -1,7 +1,7 @@
 <?php
 
 require('./vendor/autoload.php');
-require('scripts/CreatePdf.php');
+require('scripts/PdfMaker.php');
 
 use PHPMailer\PHPMailer\Exception;
 use PHPMailer\PHPMailer\PHPMailer;
@@ -61,7 +61,7 @@ class MailService
 
         // Attachments
         // Note: CreatePdf is ran inside this script, might be bad practice
-        $this->mail->addStringAttachment(CreatePdf::getEncoding($qrJson), 'QR.pdf');
+        $this->mail->addStringAttachment(PdfMaker::generatePdfEncoding($qrJson), 'QR.pdf');
 
         $this->mail->send();
     }
