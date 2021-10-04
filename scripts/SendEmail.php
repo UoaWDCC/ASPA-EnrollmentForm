@@ -1,6 +1,7 @@
 <?php
 
 require('./vendor/autoload.php');
+require('scripts/CreatePdf.php');
 
 use PHPMailer\PHPMailer\Exception;
 use PHPMailer\PHPMailer\PHPMailer;
@@ -49,7 +50,7 @@ class MailService
      *
      * @throws Exception
      */
-    public function sendEmail(string $recipientEmail, string $recipientName, string $subject, string $bodyContent) {
+    public function sendEmail(string $recipientEmail, string $recipientName, string $subject, string $bodyContent, $qrJson) {
         // Set the recipient and their name
         $this->mail->addAddress($recipientEmail, $recipientName);
 
@@ -59,7 +60,8 @@ class MailService
         $this->mail->Body = $bodyContent;
 
         // Attachments
-        // $this->mail->addAttachment('assets/pdf/enggen204.pdf');
+        // Note: CreatePdf is ran inside this script, might be bad practice
+        $this->mail->addStringAttachment(CreatePdf::getEncoding($qrJson), 'QR.pdf');
 
         $this->mail->send();
     }
@@ -74,7 +76,7 @@ class MailService
 try {
     // Take in arguments from the command line and pass them to the functions as needed
     $mailService = new MailService($argv[1], $argv[2]);
-    $mailService->sendEmail($argv[3], $argv[4], $argv[5], $argv[6]);
+    $mailService->sendEmail($argv[3], $argv[4], $argv[5], $argv[6], $argv[7]);
 } catch (Exception $e) {
     // TODO: Create an error file inside the logs directory and load error messages there with timestamps and details
     echo "";
