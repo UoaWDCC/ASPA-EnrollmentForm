@@ -23,7 +23,7 @@ class ASPA_Controller extends CI_Controller
         parent::__construct();
         $this->load->model("Repository_Model");
         $this->load->model("GoogleSheets_Model");
-
+        $this->Repository_Model->initClass(MEMBERSHIP_SPREADSHEET_ID, MEMBERSHIP_SHEET_NAME, REGISTRATION_SPREADSHEET_ID);
         $this->eventData = $this->loadEventData();
         $this->orgData = $this->Repository_Model->getOrganisation("")->toArray();
     }
@@ -62,8 +62,8 @@ class ASPA_Controller extends CI_Controller
 
         // Get event details from spreadsheet from range A2 to size of spreadsheet
         $this->GoogleSheets_Model->setCurrentSheetName("CurrentEventDetails");
-        $data = $this->GoogleSheets_Model->getCellContents('A2', 'C' . ($this->GoogleSheets_Model->getNumberOfRecords() + 2));
 
+        $data = $this->GoogleSheets_Model->getCellContents('A2', 'C');
         // Important variables we care about
         $elements = ['time', 'date', 'location', 'title', 'tagline', 'price', 'acc_num', 'desc', 'gsheet_name', 'form_enabled'];
 
@@ -82,6 +82,4 @@ class ASPA_Controller extends CI_Controller
         }
         return $eventTemp;
     }
-
 }
-
