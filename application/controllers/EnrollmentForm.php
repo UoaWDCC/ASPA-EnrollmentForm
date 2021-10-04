@@ -167,6 +167,55 @@ class EnrollmentForm extends ASPA_Controller
     }
 
     /**
+     * When the Polipay payment method is selected.
+     */
+    public function makePoliPayment() 
+    {
+        log_message('debug', "-- makePoliPayment function called");
+        $this->load->model('GoogleSheets_Model');
+        $this->load->model('Verification_Model');
+
+        // Receive data from form, method=POST
+        $data['email'] = $this->input->post('email');
+        [$data['name'], $data['upi']] = $this->Verification_Model->getMemberInfo($data["email"]);
+
+        // Stopping direct access to this method
+        if (!isset($data['name']) || !isset($data['email'])) {
+            show_error("Sorry, this page you are requesting is either not found or you don't have permission to access this page. Error Code:001",
+                       "404");
+        }
+
+        if (CHECK_MEMBERSHIP_PAYMENT) {
+            $paid_member = ($this->Verification_Model->hasUserPaidMembership($data['email']));
+            if (!$paid_member) {
+                show_error("Something went wrong, your email was not found in the ASPA member list or haven't paid. Error Code: 002", "500");
+            }
+        }
+
+        // Only record if the email is not found
+        if (!($this->Verification_Model->isEmailOnSheet($data['email'], REGISTRATION_SPREADSHEET_ID, $this->eventData['gsheet_name']))) {
+            $this->GoogleSheets_Model->addNewRecord($data['email'], $data['name'], $data['upi'], 'Polipay');
+        } else {
+            // Email is found, so find the cell
+            // Then edit the "How would you like your payment" to be of Stripe payment
+            // Get the row of the specific email from google sheets
+            $cell = $this->GoogleSheets_Model->getCellCoordinate($data['email'], 'B');
+            if (!isset($cell)) {
+                show_error("Something went wrong, your email was not found in the ASPA member list.Error Code: 002", "500");
+            }
+
+            // Split up the cell column and row
+            list(, $row) = $this->GoogleSheets_Model->convertCoordinateToArray($cell);
+            // Edit Payment method column (Column F)
+            $this->GoogleSheets_Model->updatePaymentMethod($row, 'Polipay');
+        }
+
+        $this->load->model('Polipay_Model');
+
+        $this->Polipay_Model->makePolipayPayment($data['email'], $this->eventData);
+    }
+
+    /**
      * When an "offline" payment method (i.e. cash and bank transfer) was selected.
      */
     public function makeOfflinePayment()

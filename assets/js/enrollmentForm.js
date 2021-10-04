@@ -337,7 +337,7 @@ function showWarning() {
 // ==========================================
 
 // Buttons which are to be temporarily disabled
-const disabledButtons = [payWeChat, payAli, payPoli];
+const disabledButtons = [payWeChat, payAli];
 
 /*
 	sets up event listener for button click except for the buttons which are disabled
@@ -443,6 +443,13 @@ proceedPayment.onclick = function() {
         );
         document.getElementById("enrollment-form").submit();
         //window.open('http://localhost/ASPA-EnrollmentForm/EnrollmentForm/MakeStripePayment?email=');
+    } else if (toggled_index == 5) {
+        //Polipay payment
+        $("#enrollment-form").attr(
+            "action",
+            base_url + "EnrollmentForm/MakePoliPayment"
+        );
+        document.getElementById("enrollment-form").submit();
     } else {
         //IEpay
     }
