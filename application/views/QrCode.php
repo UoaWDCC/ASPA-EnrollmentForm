@@ -79,17 +79,6 @@
       colorLight: "#ffffff",
       correctLevel: QRCode.CorrectLevel.H
     });
-
-    var doc = new jsPDF();
-
-    doc.setFontSize(15);
-
-    setTimeout(() => {
-      var base64Image = document.querySelector('#qr-code img').attributes.src.value;
-
-      doc.addImage(base64Image, 'png', 0, 0, 40, 40);
-      doc.save('generated.pdf');
-    }, 1000);
   </script>
 </body>
 
