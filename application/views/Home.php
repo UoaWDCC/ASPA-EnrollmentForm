@@ -6,6 +6,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 <head>
   <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ASPA | Welcome</title>
   <meta content="width=device-width, initial-scale=1" name="viewport">
   <base href="<?php echo base_url(); ?>">
@@ -35,7 +36,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
 </head>
 
 <body>
-  <div id="div-background" class="div-background"><img src="assets/images/ASPA-home-background.png">
+  <div id="div-background" class="div-background">
+    <img class="bg-img" src="assets/images/ASPA-home-background.png">
     <div class="div-background-mobile"></div>
   </div>
 
@@ -43,7 +45,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
     <div class="container">
       <block class="title">
         <h1>ASPA Events Open for Signup</h1>
-        <p>Please select event to register</p>
+        <h3>Please select event to register</h3>
       </block>
 
       <block class="events">
@@ -63,13 +65,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
       </block>
 
-      <div class="div-main-page"><a id="register" data-w-id="dfbe5add-65ea-95a7-6380-331c1db905e2" href="#" class="button w-button">Register</a>
-        <p class="paragraph-pressenter">press <strong class="bold-enter">Enter ↵</strong></p>
-      </div>
     </div>
   </div>
-
-  <div id="div-back-page3" class="div-back div-page-page3"><a id="btn-back-page3" href="#" class="btn-back w-button">← Back</a></div>
 
 </body>
 
