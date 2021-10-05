@@ -4,6 +4,12 @@ require('./vendor/autoload.php');
 require("assets/tcpdf/tcpdf.php");
 
 class PdfMaker {
+    
+    /**
+     * Method generates pdf and returns as base64 encoded string.
+     * 
+     * @param string $jsonEncoding
+     */
     public static function generatePdfEncoding(string $jsonEncoding) {
         // pdf testing
         // create new PDF document
