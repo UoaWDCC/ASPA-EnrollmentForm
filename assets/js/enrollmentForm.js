@@ -337,7 +337,7 @@ function showWarning() {
 // ==========================================
 
 // Buttons which are to be temporarily disabled
-const disabledButtons = [payWeChat, payAli, payPoli];
+const disabledButtons = [payCash, payWeChat, payAli, payPoli];
 
 /*
 	sets up event listener for button click except for the buttons which are disabled
@@ -374,6 +374,10 @@ disabledButtons.forEach((buttonToDisable) => {
         case payPoli:
             $(".div-polipay").css("opacity", "0.2");
             $(".btn-online.btn-polipay").css("pointer-events", "none");
+            break;
+        case payCash:
+            $(".div-cash").css("opacity", "0.2");
+            $("#btn-cash").css("pointer-events", "none");
             break;
     }
 });

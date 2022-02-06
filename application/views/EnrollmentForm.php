@@ -114,7 +114,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 <p class="p p-errormessage">If you are not a member yet, please register first.</p>
               </div>
               <div class="sign-up">
-                <p><a class="sign-up-link" href="https://docs.google.com/forms/d/e/1FAIpQLSezUAfbTZKBV-J0yJleBn3RkvJj0xHIinqLsc5aqKCdxgzZSw/viewform">Sign up to <?php echo $orgName ?> </a> if you're not a member</p>
+                <p><a class="sign-up-link" href="https://forms.gle/ZSm4Y6BxwcM8nXPKA">Sign up to <?php echo $orgName ?> for 2022</a> if you're not a member</p>
               </div>
             </div>
             <div id="div-ok3" class="div-okbtn">
@@ -129,33 +129,38 @@ defined('BASEPATH') or exit('No direct script access allowed');
               <p class="p p-payment">Please choose your method of payment: </p>
             </div>
             <div class="div-grid-wrapper">
-              <div class="w-layout-grid grid grid-offline">
-                <div id="w-node-2a7cf43bcd10-724d7631" class="div-block-5">
+              <div class="grid grid-offline">
+                <div class="div-block-5">
                   <p class="p">Pay on the day:</p>
                 </div>
-                <div id="w-node-2922c9864b4c-724d7631" class="div-offlinepay"><a id="btn-cash" href="#" class="btn-offline w-button"></a>
-                  <p class="p p-paymentbutton">Cash</p>
-                </div>
-                <div id="w-node-b3c547ea4b4f-724d7631" class="div-offlinepay"><a id="btn-banktransfer" href="#" class="btn-offline btn-banktransfer w-button"></a>
-                  <p class="p p-paymentbutton">Bank Transfer</p>
-                </div>
+                  <div style="display: flex">
+                      <div id="w-node-2922c9864b4c-724d7631" class="div-cash"><a id="btn-cash" href="#" class="btn-offline w-button"></a>
+                          <p class="p p-paymentbutton">Cash</p>
+                      </div>
+                  </div>
               </div>
-              <div id="grid" class="w-layout-grid grid grid-online">
-                <div id="w-node-0da87d7818b8-724d7631" class="div-creditcard"><a id="btn-creditcard" href="#" class="btn-online w-button"></a>
-                  <p class="p p-paymentbutton p-setwidth">Credit/Debit Card</p>
-                </div>
-                <div id="w-node-0da87d7818bc-724d7631" class="div-wechatpay"><a id="btn-wechat" href="#" class="btn-online btn-wechatpay w-button"></a>
-                  <p class="p p-paymentbutton">Wechat Pay</p>
-                </div>
-                <div id="w-node-0da87d7818c0-724d7631" class="div-polipay"><a id="btn-poliay" href="#" class="btn-online btn-polipay w-button"></a>
-                  <p class="p p-paymentbutton">PoLi Pay</p>
-                </div>
-                <div id="w-node-0da87d7818c4-724d7631" class="div-alipay"><a id="btn-alipay" href="#" class="btn-online btn-alipay w-button"></a>
-                  <p class="p p-paymentbutton">AliPay</p>
-                </div>
-                <div id="w-node-0da87d7818c8-724d7631" class="div-block-6">
-                  <p class="p">Pay online to avoid the queue:</p>
-                </div>
+              <div id="grid" class="grid grid-online">
+                  <div id="w-node-0da87d7818c8-724d7631" class="div-block-6">
+                      <p class="p">Pay online to avoid the queue:</p>
+                  </div>
+
+                  <div style="display: flex">
+                      <div id="w-node-0da87d7818b8-724d7631" class="div-creditcard"><a id="btn-creditcard" href="#" class="btn-online w-button"></a>
+                          <p class="p p-paymentbutton p-setwidth">Credit/Debit Card</p>
+                      </div>
+                      <div id="w-node-b3c547ea4b4f-724d7631" class="div-offlinepay"><a id="btn-banktransfer" href="#" class="btn-offline btn-banktransfer w-button"></a>
+                          <p class="p p-paymentbutton">Bank Transfer</p>
+                      </div>
+                      <div id="w-node-0da87d7818bc-724d7631" class="div-wechatpay" style="display: none"><a id="btn-wechat" href="#" class="btn-online btn-wechatpay w-button"></a>
+                          <p class="p p-paymentbutton">Wechat Pay</p>
+                      </div>
+                      <div id="w-node-0da87d7818c0-724d7631" class="div-polipay" style="display: none"><a id="btn-poliay" href="#" class="btn-online btn-polipay w-button"></a>
+                          <p class="p p-paymentbutton">PoLi Pay</p>
+                      </div>
+                      <div id="w-node-0da87d7818c4-724d7631" class="div-alipay" style="display: none"><a id="btn-alipay" href="#" class="btn-online btn-alipay w-button"></a>
+                          <p class="p p-paymentbutton">AliPay</p>
+                      </div>
+                  </div>
               </div>
             </div>
             <div id="div-submit" class="div-okbtn div-submit">
