@@ -26,11 +26,15 @@
   <link href="assets/css/aspa.webflow.css?random=<?php echo uniqid(); ?>" rel="stylesheet" type="text/css">
   <link href='assets/css/qrCode.css?random=<?php echo uniqid(); ?>' rel='stylesheet' type='text/css' />
   <link href="assets/images/favicon.png?random=<?php echo uniqid(); ?>" rel="icon" type="image/png">
+
+  <script src="assets/lib/qrcode.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.2/jspdf.debug.js"></script>
+
 </head>
 
 <body>
   <div class="centre-page">
-    <div class="qr" id="qr-code"></div>
+    <div id="qr-code"></div>
     <h1>Scan me! 📷</h1>
     <p>Have this QR code ready to check-in to the event.</p>
     <p>Contact
@@ -39,9 +43,7 @@
     </p>
   </div>
 
-  <script type="module">
-    import QrCreator from '../../assets/lib/qr-creator.js';
-
+  <script>
     // get url params
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
@@ -50,6 +52,7 @@
     const email = urlParams.get('email');
     const eventName = urlParams.get('event');
 
+    // qr data to object
     const qrData = {
       email: email,
       eventName: eventName,
@@ -67,15 +70,15 @@
       qrsize = 256;
     }
 
-    // render QR code, note this is a canvas element
-    QrCreator.render({
+    // qr code generation and display as png image
+    var qrcode = new QRCode("qr-code", {
       text: qrEncoding,
-      radius: 0.5, // 0.0 to 0.5
-      ecLevel: 'H', // L, M, Q, H
-      fill: '#333', // foreground color
-      background: null, // color or null for transparent
-      size: qrsize // in pixels
-    }, document.querySelector('#qr-code'));
+      width: qrsize,
+      height: qrsize,
+      colorDark: "#000000",
+      colorLight: "#ffffff",
+      correctLevel: QRCode.CorrectLevel.H
+    });
   </script>
 </body>
 

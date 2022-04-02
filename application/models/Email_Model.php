@@ -92,13 +92,20 @@ class Email_Model extends CI_Model
         // The third parameter `true` stops CI3 from sending the parsed template to the output
         $message = $this->parser->parse('templates/EmailTemplate', $data, true);
 
+        // Encode QR data as Json
+        $qrJson = new stdClass();
+        $qrJson->email = $EMAIL_RECEIVER;
+        $qrJson->eventName = $EVENT_NAME;
+        $qrJson = json_encode($qrJson);
+
         $cmdlineArgs = [
                 self::sanitize(MAIL_AUTH_EMAIL),
                 self::sanitize(MAIL_AUTH_PASSWORD),
                 self::sanitize($recipientEmail),
                 self::sanitize($recipientName),
                 self::sanitize($EMAIL_SUBJECT),
-                self::sanitize(self::cleanString($message))
+                self::sanitize(self::cleanString($message)),
+                self::sanitize($qrJson)
         ];
 
         // Build the command that will be executed
